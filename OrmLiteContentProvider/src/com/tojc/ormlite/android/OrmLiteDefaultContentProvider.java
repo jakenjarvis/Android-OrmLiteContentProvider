@@ -54,7 +54,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	 * and registration information in table, the pattern required to UriMatcher.
 	 * In addition, the registration is complete, you must call initialize method in the end.
 	 */
-	protected final static MatcherController Controller = new MatcherController();
+	protected MatcherController Controller = null;
 
 	/**
 	 * Before ContentProvider instance is created, you need to register a pattern to UriMatcher.
@@ -171,8 +171,9 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		/**
 		 * initialized with the contents that are registered by the add method.
 		 * This method checks the registration details.
+		 * @return Instance of the MatcherController class.
 		 */
-		public void initialize()
+		public MatcherController initialize()
 		{
 			this.lastAddTableInfo = null;
 			this.lastAddMatcherPattern = null;
@@ -187,8 +188,9 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 				entry.isValid(true);
 				entry.setPreinitialized();
 			}
-			
+
 			this.preinitialized = true;
+			return this;
 		}
 
 		/**
@@ -252,7 +254,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	        return result;
 		}
 
-		private boolean hasPreinitialized()
+		public boolean hasPreinitialized()
 		{
 			return this.preinitialized;
 		}
@@ -262,7 +264,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		 */
 		public UriMatcher getUriMatcher()
 		{
-			if(!this.hasPreinitialized())
+			if(!this.preinitialized)
 			{
 				throw new IllegalStateException("Controller has not been initialized.");
 			}
@@ -274,7 +276,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		 */
 		public Map<Class<?>, TableInfo> getTables()
 		{
-			if(!this.hasPreinitialized())
+			if(!this.preinitialized)
 			{
 				throw new IllegalStateException("Controller has not been initialized.");
 			}
@@ -286,7 +288,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		 */
 		public List<MatcherPattern> getMatcherPatterns()
 		{
-			if(!this.hasPreinitialized())
+			if(!this.preinitialized)
 			{
 				throw new IllegalStateException("Controller has not been initialized.");
 			}
@@ -340,6 +342,11 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	@Override
 	public String getType(Uri uri)
 	{
+		if(!Controller.hasPreinitialized())
+		{
+			throw new IllegalStateException("Controller has not been initialized.");
+		}
+
 		int patternCode = Controller.getUriMatcher().match(uri);
 		MatcherPattern pattern = Controller.findMatcherPattern(patternCode);
 		if(pattern == null)
@@ -356,7 +363,12 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)
 	{
 		Cursor result = null;
-		
+
+		if(!Controller.hasPreinitialized())
+		{
+			throw new IllegalStateException("Controller has not been initialized.");
+		}
+
 		int patternCode = Controller.getUriMatcher().match(uri);
 		MatcherPattern pattern = Controller.findMatcherPattern(patternCode);
 		if(pattern == null)
@@ -382,6 +394,11 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	{
 		Uri result = null;
 
+		if(!Controller.hasPreinitialized())
+		{
+			throw new IllegalStateException("Controller has not been initialized.");
+		}
+
 		int patternCode = Controller.getUriMatcher().match(uri);
 		MatcherPattern pattern = Controller.findMatcherPattern(patternCode);
 		if(pattern == null)
@@ -406,7 +423,12 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	public int delete(Uri uri, String selection, String[] selectionArgs)
 	{
 		int result = -1;
-		
+
+		if(!Controller.hasPreinitialized())
+		{
+			throw new IllegalStateException("Controller has not been initialized.");
+		}
+
 		int patternCode = Controller.getUriMatcher().match(uri);
 		MatcherPattern pattern = Controller.findMatcherPattern(patternCode);
 		if(pattern == null)
@@ -431,7 +453,12 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
 	{
 		int result = -1;
-		
+
+		if(!Controller.hasPreinitialized())
+		{
+			throw new IllegalStateException("Controller has not been initialized.");
+		}
+
 		int patternCode = Controller.getUriMatcher().match(uri);
 		MatcherPattern pattern = Controller.findMatcherPattern(patternCode);
 		if(pattern == null)

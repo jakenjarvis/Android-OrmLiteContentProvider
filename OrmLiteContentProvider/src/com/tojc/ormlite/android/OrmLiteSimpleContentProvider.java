@@ -21,7 +21,6 @@
 package com.tojc.ormlite.android;
 
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,7 +28,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.support.ConnectionSource;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.InsertParameters;
@@ -42,52 +40,13 @@ import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
  * 
  * @author Jaken
  */
-public abstract class OrmLiteSimpleContentProvider extends OrmLiteDefaultContentProvider<OrmLiteSimpleContentProvider.OrmLiteSqliteSimpleHelper> implements OrmLiteSimpleHelperCallback
+public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T>
 {
-	/**
-	 * It is a simple implementation class OrmLiteSqliteOpenHelper.
-	 * It takes the necessary information from OrmLiteSimpleContentProvider.
-	 * 
-	 * @author Jaken
-	 */
-	public class OrmLiteSqliteSimpleHelper extends OrmLiteSqliteOpenHelper
-	{
-		public OrmLiteSqliteSimpleHelper(Context context)
-		{
-			super(context,
-				OrmLiteSimpleContentProvider.this.getDatabaseName(),
-				null,
-				OrmLiteSimpleContentProvider.this.getDatabaseVersion()
-				);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource)
-		{
-			OrmLiteSimpleContentProvider.this.onHelperCreate(database, connectionSource);
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion)
-		{
-			OrmLiteSimpleContentProvider.this.onHelperUpgrade(database, connectionSource, oldVersion, newVersion);
-		}
-	}
-
-	/*
-	 * @see com.tojc.ormlite.android.OrmLiteBaseContentProvider#getHelperClass()
-	 */
-	@Override
-	protected Class<OrmLiteSqliteSimpleHelper> getHelperClass()
-	{
-		return OrmLiteSqliteSimpleHelper.class;
-	}
-
 	/*
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
 	 */
 	@Override
-	public Cursor onQuery(OrmLiteSqliteSimpleHelper helper, MatcherPattern target, QueryParameters parameter)
+	public Cursor onQuery(T helper, MatcherPattern target, QueryParameters parameter)
 	{
 		Cursor result = null;
 
@@ -134,7 +93,7 @@ public abstract class OrmLiteSimpleContentProvider extends OrmLiteDefaultContent
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
 	 */
 	@Override
-	public Uri onInsert(OrmLiteSqliteSimpleHelper helper, MatcherPattern target, InsertParameters parameter)
+	public Uri onInsert(T helper, MatcherPattern target, InsertParameters parameter)
 	{
 		Uri result = null;
 		
@@ -156,7 +115,7 @@ public abstract class OrmLiteSimpleContentProvider extends OrmLiteDefaultContent
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
 	 */
 	@Override
-	public int onDelete(OrmLiteSqliteSimpleHelper helper, MatcherPattern target, DeleteParameters parameter)
+	public int onDelete(T helper, MatcherPattern target, DeleteParameters parameter)
 	{
 		int result = -1;
 
@@ -186,7 +145,7 @@ public abstract class OrmLiteSimpleContentProvider extends OrmLiteDefaultContent
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
 	 */
 	@Override
-	public int onUpdate(OrmLiteSqliteSimpleHelper helper, MatcherPattern target, UpdateParameters parameter)
+	public int onUpdate(T helper, MatcherPattern target, UpdateParameters parameter)
 	{
 		int result = -1;
 
