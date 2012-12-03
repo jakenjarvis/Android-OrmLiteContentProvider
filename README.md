@@ -5,7 +5,7 @@ Android-OrmLiteContentProvider
 See [ORMLite](http://ormlite.com/) and [ORMLite : Android Supports](http://ormlite.com/sqlite_java_android_orm.shtml)
 , [ORMLite : Using With Android](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_4.html#SEC40).
 
-# What ContentProvider
+# What ContentProvider?
 See [Android Developers : Content Provider](http://developer.android.com/intl/ja/guide/topics/providers/content-providers.html)
 
 # This is what can be done?
@@ -26,7 +26,7 @@ About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
 ## Downloading ORMLite and OrmLiteContentProvider Jar
 * ormlite-core-4.42.jar
 * ormlite-android-4.42.jar
-* ormlitecontentprovider.jar (this project)
+* ormlitecontentprovider.jar (this library)
 
 Add these to your project.
 
@@ -69,11 +69,14 @@ You define the column name as a string. You are free to define it.
 
 ## Configuring a Class
 See [ORMLite documents : Configuring a Class](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_1.html#SEC3)  
-You can use the annotations added by OrmLiteContentProvider library. For added annotations, see the javadoc.
+You can use the annotations added by OrmLiteContentProvider library.
+
 * @DefaultContentUri
 * @DefaultContentMimeTypeVnd
 * @DefaultSortOrder
 * @ProjectionMap
+
+For added annotations, see the javadoc.
 
     @DatabaseTable(tableName = Contract.Account.TABLENAME)
     @DefaultContentUri(authority=Contract.AUTHORITY, path=Contract.Account.CONTENT_URI_PATH)
@@ -176,18 +179,17 @@ Implement an abstract class OrmLiteSimpleContentProvider.
         }
     }
 
-## The <provider> Element
-See [Android Developers : The <provider> Element](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ProviderElement).
+## The &lt;provider&gt; Element
+See [Android Developers : The &lt;provider&gt; Element](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ProviderElement).
 
 Add AndroidManifest.xml
 
-    <provider android:name=".MyProvider"
-        android:authorities="com.example.testapp.provider"
+    <provider android:name=".provider.MyProvider"
+        android:authorities="com.tojc.ormlite.android.ormlitecontentprovidersample"
         android:exported="false"/>
 
-
 ## Accessing a provider
-See [Android Developers : Content Provider Basics](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-basics.html).
+See [Android Developers : Content Provider Basics](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-basics.html).  
 Run the test program.
 
     public class MainActivity extends Activity
