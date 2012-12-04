@@ -24,7 +24,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+//import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 /**
  * Class to access the standard OrmLite annotation.
@@ -41,15 +42,16 @@ public class OrmLiteAnnotationAccessor
 	public static String getAnnotationTableName(AnnotatedElement element)
 	{
 		String result = "";
-		DatabaseTable databaseTable = element.getAnnotation(DatabaseTable.class);
-		if(databaseTable != null)
-		{
-			result = databaseTable.tableName();
-			if(result.length() <= 0)
-			{
-				result = ((Class<?>)element).getSimpleName();
-			}
-		}
+//		DatabaseTable databaseTable = element.getAnnotation(DatabaseTable.class);
+//		if(databaseTable != null)
+//		{
+//			result = databaseTable.tableName();
+//			if(result.length() <= 0)
+//			{
+//				result = ((Class<?>)element).getSimpleName();
+//			}
+//		}
+		result = DatabaseTableConfig.extractTableName((Class<?>)element);
 		return result;
 	}
 	
