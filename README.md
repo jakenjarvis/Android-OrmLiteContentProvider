@@ -179,6 +179,10 @@ Implement an abstract class OrmLiteSimpleContentProvider.
         }
     }
 
+By getHelperClass() method to register the Helper class.
+To register for a pattern in onCreate(). Creates an instance of MatcherController To do so, call add() method.
+After registering all patterns, please call the initialize() method.
+
 ## The &lt;provider&gt; Element
 See [Android Developers : The &lt;provider&gt; Element](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ProviderElement).
 
