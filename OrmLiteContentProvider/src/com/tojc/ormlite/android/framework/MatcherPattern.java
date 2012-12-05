@@ -123,7 +123,7 @@ public class MatcherPattern implements Validity
 				throw new IllegalStateException("patternCode is zero.");
 			}
 		}
-		else if(!this.contentUriInfo.isValid())
+		else if((this.contentUriInfo == null) || (!this.contentUriInfo.isValid()))
 		{
 			result = false;
 			if(throwException && !result)
@@ -131,7 +131,7 @@ public class MatcherPattern implements Validity
 				throw new IllegalStateException("contentUriInfo is invalid.");
 			}
 		}
-		else if(!this.contentMimeTypeVndInfo.isValid())
+		else if((this.contentMimeTypeVndInfo == null) || (!this.contentMimeTypeVndInfo.isValid()))
 		{
 			result = false;
 			if(throwException && !result)
@@ -139,7 +139,7 @@ public class MatcherPattern implements Validity
 				throw new IllegalStateException("contentMimeTypeVndInfo is invalid.");
 			}
 		}
-		else if(!this.mimeTypeVnd.isValid())
+		else if((this.mimeTypeVnd == null) || (!this.mimeTypeVnd.isValid()))
 		{
 			result = false;
 			if(throwException && !result)

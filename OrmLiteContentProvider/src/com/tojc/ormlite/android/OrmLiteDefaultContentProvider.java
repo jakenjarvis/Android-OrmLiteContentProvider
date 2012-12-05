@@ -39,6 +39,8 @@ import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
 import com.tojc.ormlite.android.framework.TableInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentUriInfo;
 
 /**
  * To take advantage of the framework, it provides a standard class.
@@ -71,9 +73,6 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		private List<MatcherPattern> matcherPatterns = null;
 
 		private TableInfo lastAddTableInfo = null;
-		// TODO: add MatcherPattern info.  addContentUri etc..
-		@SuppressWarnings("unused")
-		private MatcherPattern lastAddMatcherPattern = null;
 
 		public MatcherController()
 		{
@@ -82,7 +81,6 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 			this.matcherPatterns = new ArrayList<MatcherPattern>();
 
 			this.lastAddTableInfo = null;
-			this.lastAddMatcherPattern = null;
 		}
 
 		/**
@@ -144,9 +142,8 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		 * @param matcherPattern register MatcherPattern.
 		 * @return Instance of the MatcherController class.
 		 */
-		public MatcherPattern add(MatcherPattern matcherPattern)
+		public MatcherController add(MatcherPattern matcherPattern)
 		{
-			MatcherPattern result = matcherPattern;
 			int patternCode = matcherPattern.getPatternCode();
 
 			if(this.lastAddTableInfo == null)
@@ -159,15 +156,46 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 				throw new IllegalArgumentException("patternCode has been specified already exists.");
 			}
 
-			this.matcherPatterns.add(result);
-
-	        this.matcher.addURI(this.lastAddTableInfo.getDefaultContentUriInfo().getAuthority(), result.getPathAndPatternString(), patternCode);
-
-			// referenced in xxxxxxxxxxx (reservation)
-	        this.lastAddMatcherPattern = result;
-	        return result;
+			this.matcherPatterns.add(matcherPattern);
+	        return this;
 		}
-		
+
+		/**
+		 * Set the DefaultContentUri.
+		 * If you did not use the DefaultContentUri annotation, you must call this method.
+		 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
+		 * @param authority
+		 * @param path
+		 * @return Instance of the MatcherController class.
+		 */
+		public MatcherController setDefaultContentUri(String authority, String path)
+		{
+			if(this.lastAddTableInfo == null)
+			{
+				throw new IllegalStateException("There is a problem with the order of function call.");
+			}
+			this.lastAddTableInfo.setDefaultContentUriInfo(new ContentUriInfo(authority, path));
+	        return this;
+		}
+
+		/**
+		 * Set the DefaultContentMimeTypeVnd.
+		 * If you did not use the DefaultContentMimeTypeVnd annotation, you must call this method.
+		 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
+		 * @param name
+		 * @param type
+		 * @return Instance of the MatcherController class.
+		 */
+		public MatcherController setDefaultContentMimeTypeVnd(String name, String type)
+		{
+			if(this.lastAddTableInfo == null)
+			{
+				throw new IllegalStateException("There is a problem with the order of function call.");
+			}
+			this.lastAddTableInfo.setDefaultContentMimeTypeVndInfo(new ContentMimeTypeVndInfo(name, type));
+	        return this;
+		}
+
 		/**
 		 * initialized with the contents that are registered by the add method.
 		 * This method checks the registration details.
@@ -176,7 +204,6 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 		public MatcherController initialize()
 		{
 			this.lastAddTableInfo = null;
-			this.lastAddMatcherPattern = null;
 
 			for(Map.Entry<Class<?>, TableInfo> entry : this.tables.entrySet())
 			{
@@ -186,6 +213,10 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 			for(MatcherPattern entry : matcherPatterns)
 			{
 				entry.isValid(true);
+		        this.matcher.addURI(
+	        		entry.getTableInfo().getDefaultContentUriInfo().getAuthority(),
+	        		entry.getPathAndPatternString(),
+	        		entry.getPatternCode());
 				entry.setPreinitialized();
 			}
 
@@ -246,11 +277,6 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
 			result = new MatcherPattern(this.lastAddTableInfo, subType, pattern, patternCode);
 			this.matcherPatterns.add(result);
-
-	        this.matcher.addURI(this.lastAddTableInfo.getDefaultContentUriInfo().getAuthority(), result.getPathAndPatternString(), patternCode);
-
-			// referenced in xxxxxxxxxxx (reservation)
-	        this.lastAddMatcherPattern = result;
 	        return result;
 		}
 

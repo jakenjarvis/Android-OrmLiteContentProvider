@@ -227,6 +227,17 @@ public class TableInfo implements Validity
 	}
 
 	/**
+	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#setDefaultContentUri(String, String)
+	 * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultContentUriInfo()
+	 * @see com.tojc.ormlite.android.framework.MatcherPattern#getContentUriInfo()
+	 * @param defaultContentUriInfo
+	 */
+	public void setDefaultContentUriInfo(ContentUriInfo defaultContentUriInfo)
+	{
+		this.defaultContentUriInfo = defaultContentUriInfo;
+	}
+	
+	/**
 	 * @see com.tojc.ormlite.android.framework.MatcherPattern#getMimeTypeVnd()
 	 * @return Gets the default value that is specified in the annotation.
 	 *         If you want to know the state to match the pattern, see MatcherPattern#getMimeTypeVnd.
@@ -234,6 +245,17 @@ public class TableInfo implements Validity
 	public ContentMimeTypeVndInfo getDefaultContentMimeTypeVndInfo()
 	{
 		return this.defaultContentMimeTypeVndInfo;
+	}
+
+	/**
+	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#setDefaultContentMimeTypeVnd(String, String)
+	 * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultContentMimeTypeVndInfo()
+	 * @see com.tojc.ormlite.android.framework.MatcherPattern#getMimeTypeVnd()
+	 * @param defaultContentMimeTypeVndInfo
+	 */
+	public void setDefaultContentMimeTypeVndInfo(ContentMimeTypeVndInfo defaultContentMimeTypeVndInfo)
+	{
+		this.defaultContentMimeTypeVndInfo = defaultContentMimeTypeVndInfo;
 	}
 
 	/**
