@@ -13,22 +13,32 @@ This is a library that easy to make using ContentProvider with OrmLite.
 With this library, you can focus on the operation of the table.  
 You can from among the following three of the abstract class, select the inheritance class.  
 
-android.content.ContentProvider  
-　　└OrmLiteBaseContentProvider  
-　　　└OrmLiteDefaultContentProvider  
-　　　　└OrmLiteSimpleContentProvider  
+    android.content.ContentProvider  
+    　　└OrmLiteBaseContentProvider  
+    　　　└OrmLiteDefaultContentProvider  
+    　　　　└OrmLiteSimpleContentProvider  
 
 Can be used to match the level of your implementation.  
 
 # How to use.
 About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
 
-## Downloading ORMLite and OrmLiteContentProvider Jar
+## Downloading ORMLite Jar
+Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
+
 * ormlite-core-4.42.jar
 * ormlite-android-4.42.jar
-* ormlitecontentprovider.jar (this library)
+* ormlite-jdbc-4.42.jar(If you need)
 
-Add these to your project.
+Add these to your project.  
+See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)
+
+## Downloading Android-OrmLiteContentProvider
+
+    git clone git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git <Anywhere>
+
+Add the LibraryProject to your project.  
+See [Android Developers : Referencing a library project](http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject)
 
 ## Implementing a Contract Class
 See [Android Developers : Implementing a Contract Class](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ContractClass)  
