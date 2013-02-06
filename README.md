@@ -26,9 +26,9 @@ About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
 ## Downloading ORMLite Jar
 Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
 
-* ormlite-core-4.42.jar
-* ormlite-android-4.42.jar
-* ormlite-jdbc-4.42.jar(If you need)
+* ormlite-core-4.43.jar
+* ormlite-android-4.43.jar
+* ormlite-jdbc-4.43.jar(If you need)
 
 Add these to your project.  
 See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)
