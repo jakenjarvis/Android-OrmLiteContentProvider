@@ -14,9 +14,9 @@ With this library, you can focus on the operation of the table.
 You can from among the following three of the abstract class, select the inheritance class.  
 
     android.content.ContentProvider  
-    　　└OrmLiteBaseContentProvider  
-    　　　└OrmLiteDefaultContentProvider  
-    　　　　└OrmLiteSimpleContentProvider  
+    　　└ OrmLiteBaseContentProvider  
+    　　　└ OrmLiteDefaultContentProvider  
+    　　　　└ OrmLiteSimpleContentProvider  
 
 Can be used to match the level of your implementation.  
 
@@ -192,6 +192,64 @@ Implement an abstract class OrmLiteSimpleContentProvider.
 By getHelperClass() method to register the Helper class.
 To register for a pattern in onCreate(). Creates an instance of MatcherController To do so, call add() method.
 After registering all patterns, please call the initialize() method.
+
+### Flexibility
+This is more flexible precisely because the user can set MatcherController arbitrarily.
+This is the most important key points of the Android-OrmLiteContentProvider library.
+
+    // Undefined @DefaultContentUri and @DefaultContentMimeTypeVnd annotations.
+    // This can be defined using MatcherController.
+    @DatabaseTable(tableName = Contract.NewTable.TABLENAME)
+    public class NewTable
+    {
+        @DatabaseField(columnName = Contract.NewTable._ID, generatedId = true)
+        private int key;
+
+        @DatabaseField
+        private String name;
+
+        public NewTable()
+        {
+            // ORMLite needs a no-arg constructor
+        }
+
+        // etc..
+    }
+
+    public class MyProvider extends OrmLiteSimpleContentProvider<OrmLiteSqliteSampleHelper>
+    {
+        @Override
+        protected Class<OrmLiteSqliteSampleHelper> getHelperClass()
+        {
+            return OrmLiteSqliteSampleHelper.class;
+        }
+
+        @Override
+        public boolean onCreate()
+        {
+            Controller = new MatcherController()
+                .add(Account.class)
+                    .add(SubType.Directory, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
+                    .add(SubType.Item, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
+                // Add new table. You can add more than one table.
+                // Is considered to be set to the table(class) that you have added to end.
+                .add(NewTable.class)
+                    // Defined DefaultContentUri and DefaultContentMimeTypeVnd.
+                    .setDefaultContentUri(
+                            Contract.AUTHORITY,
+                            Contract.NewTable.CONTENT_URI_PATH)
+                    .setDefaultContentMimeTypeVnd(
+                            Contract.NewTable.MIMETYPE_NAME,
+                            Contract.NewTable.MIMETYPE_TYPE)
+                    // (NewTable.class)
+                    .add(SubType.Directory, "", Contract.NewTable.CONTENT_URI_PATTERN_MANY)
+                    .add(SubType.Item, "#", Contract.NewTable.CONTENT_URI_PATTERN_ONE)
+                    // add other pattern. 'content://com.example.app.provider/newtable/dataset'
+                    .add(SubType.Directory, "dataset", Contract.NewTable.CONTENT_URI_PATTERN_DATASET)
+                .initialize();
+            return true;
+        }
+    }
 
 ## The &lt;provider&gt; Element
 See [Android Developers : The &lt;provider&gt; Element](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ProviderElement).
