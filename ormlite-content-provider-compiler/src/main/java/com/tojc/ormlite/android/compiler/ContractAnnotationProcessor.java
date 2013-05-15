@@ -28,6 +28,8 @@ import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
@@ -36,8 +38,8 @@ import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import com.squareup.java.JavaWriter;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
@@ -46,7 +48,8 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUr
  * @author <a href=\"mailto:christoffer@christoffer.me\">Christoffer Pettersson</a>
  */
 
-@SupportedAnnotationTypes("com.j256.ormlite.table.DatabaseTable")
+@SupportedAnnotationTypes("com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract")
+@SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ContractAnnotationProcessor extends AbstractProcessor {
 
     @Override
@@ -56,29 +59,57 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
         StringBuilder debug = new StringBuilder();
 
         // Get all classes that has the annotation
-        Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(DatabaseTable.class);
+        Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
 
         // For each class that has the annotation
         for (final Element classElement : classElements) {
 
             // Get the annotation information
-            DatabaseTable databaseTableAnnotation = classElement.getAnnotation(DatabaseTable.class);
-            String dataBaseTableName = databaseTableAnnotation.tableName();
+            Contract contractAnnotation = classElement.getAnnotation(Contract.class);
+            String contractClassName = contractAnnotation.contractClassName();
+
+            String targetPackageName;
+            String targetClassName;
+            if (contractClassName == null || contractClassName.length() == 0) {
+                PackageElement targetPackage;
+                targetPackage = CodeGen.getPackage(classElement);
+                targetPackageName = targetPackage.getQualifiedName().toString();
+                targetClassName = targetPackage.getQualifiedName().toString() + "." + classElement.getSimpleName() + "Contract";
+            } else {
+                targetPackageName = contractClassName.substring(0, contractClassName.lastIndexOf('.'));
+                targetClassName = contractClassName;
+            }
+            System.out.println("filename " + targetClassName);
 
             DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
-            String contentUriAuthority = defaultContentUriAnnotation.authority();
-            String contentUriPath = defaultContentUriAnnotation.path();
+            String contentUriAuthority = "";
+            String contentUriPath = "";
+            if (defaultContentUriAnnotation != null) {
+                contentUriAuthority = defaultContentUriAnnotation.authority();
+                contentUriPath = defaultContentUriAnnotation.path();
+            }
+            if (contentUriAuthority == null || contentUriAuthority.length() == 0) {
+                contentUriAuthority = targetPackageName;
+            }
+            if (contentUriPath == null || contentUriPath.length() == 0) {
+                // TODO use DataBase annotation
+                contentUriPath = classElement.getSimpleName().toString().toLowerCase();
+            }
 
-            DefaultContentMimeTypeVnd defaultContentMimeTypeVnd = classElement.getAnnotation(DefaultContentMimeTypeVnd.class);
-            String mimeTypeVndName = defaultContentMimeTypeVnd.name();
-            String mimeTypeVndType = defaultContentMimeTypeVnd.type();
+            DefaultContentMimeTypeVnd defaultContentMimeTypeVndAnnotation = classElement.getAnnotation(DefaultContentMimeTypeVnd.class);
+            String mimeTypeVndName = "";
+            String mimeTypeVndType = "";
+            if (defaultContentMimeTypeVndAnnotation != null) {
+                mimeTypeVndName = defaultContentMimeTypeVndAnnotation.name();
+                mimeTypeVndType = defaultContentMimeTypeVndAnnotation.type();
+            }
+            if (mimeTypeVndName == null || mimeTypeVndName.length() == 0) {
+                mimeTypeVndName = targetPackageName + ".provider";
+            }
+            if (mimeTypeVndType == null || mimeTypeVndType.length() == 0) {
+                mimeTypeVndType = classElement.getSimpleName().toString().toLowerCase();
+            }
 
-            // Add some debug information
-            debug.append("annotation-table-name:" + dataBaseTableName + "\n");
-
-            PackageElement targetPackage = CodeGen.getPackage(classElement);
-            String targetClassName = targetPackage.getQualifiedName().toString() + "." + classElement.getSimpleName() + "Contract";
-            System.out.println("filename " + targetClassName);
             Writer out = null;
             try {
                 JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(targetClassName, (Element[]) null);
@@ -86,7 +117,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
 
                 out = sourceFile.openWriter();
                 JavaWriter writer = new JavaWriter(out);
-                writer.emitPackage(targetPackage.getQualifiedName().toString())//
+                writer.emitPackage(targetPackageName)//
                         .emitEmptyLine()//
                         .emitImports("android.net.Uri")//
                         .emitImports("android.content.ContentResolver")//
@@ -99,7 +130,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
 
                 writer.beginType(targetClassName, "class", Modifier.PUBLIC | Modifier.FINAL, null, "BaseColumns") //
                         .emitField("String", "AUTHORITY", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(contentUriAuthority))//
-                        .emitField("String", "TABLENAME", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(dataBaseTableName))//
                         .emitEmptyLine()//
                         .emitField("String", "CONTENT_URI_PATH", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(contentUriPath))//
                         .emitEmptyLine()//
@@ -117,8 +147,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 for (Element field : fields) {
                     String fieldName = field.getSimpleName().toString();
                     if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
-                        writer.emitField("String", fieldName.toUpperCase(), Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(fieldName))//
-                                .emitEmptyLine();//
+                        writer.emitField("String", fieldName.toUpperCase(), Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(fieldName));
                     }
                 }
                 writer.endType();

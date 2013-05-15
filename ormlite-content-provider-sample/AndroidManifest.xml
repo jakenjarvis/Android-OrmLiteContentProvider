@@ -24,7 +24,7 @@
         </activity>
 
 	    <provider android:name=".provider.MyProvider"
-	        android:authorities="com.tojc.ormlite.android.ormlitecontentprovidersample"
+	        android:authorities="com.tojc.ormlite.android.ormlitecontentprovidersample.provider"
 	        android:exported="false"/>
 
     </application>
