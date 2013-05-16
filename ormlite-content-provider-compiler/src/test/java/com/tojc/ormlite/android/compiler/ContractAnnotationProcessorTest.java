@@ -9,6 +9,7 @@ import javax.annotation.processing.Processor;
 import org.junit.Test;
 
 import com.tojc.ormlite.android.compiler.sample.Pojo;
+import com.tojc.ormlite.android.compiler.sample.Pojo2;
 
 public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessorTest {
 
@@ -23,10 +24,18 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
     // }
 
     @Test
-    public void validContractAnnotation() {
+    public void validVerySimpleContractAnnotation() {
         assertCompilationSuccessful(compileTestCase(Pojo.class));
         String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/PojoContract.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoContract.java";
+        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoContract.javasource";
+        assertOutput(new File(string), new File(string2));
+    }
+
+    @Test
+    public void validLessSimpleContractAnnotation() {
+        assertCompilationSuccessful(compileTestCase(Pojo2.class));
+        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.java";
+        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.javasource";
         assertOutput(new File(string), new File(string2));
     }
 }
