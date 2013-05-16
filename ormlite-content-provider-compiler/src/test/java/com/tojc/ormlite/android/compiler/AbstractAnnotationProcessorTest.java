@@ -31,7 +31,13 @@ import org.springframework.util.ClassUtils;
 
 /**
  * A base test class for {@link Processor annotation processor} testing that attempts to compile
- * source test cases that can be found on the classpath.
+ * source test cases that can be found on the classpath. Mixed with
+ * https://code.google.com/p/acris/source
+ * /browse/sesam/branches/1.1.0/sesam-annotations-support/src/test
+ * /java/sk/seges/sesam/core/pap/AnnotationTest.java?r=5769 <br>
+ * https://code.google.com/p/aphillips/source/browse/at-composite/trunk/pom.xml <br>
+ * http://blog.xebia.com/2009/07/21/testing-annotation-processors/ <br>
+ * https://code.google.com/p/acris/wiki/AnnotationProcessing_Testing<br>
  * @author aphillips
  * @since 5 Jun 2009
  */
@@ -294,6 +300,22 @@ abstract class AbstractAnnotationProcessorTest {
         }
 
         return content.toArray(new String[] {});
+    }
+
+    protected String toPath(Package packageName) {
+        return toPath(packageName.getName());
+    }
+
+    protected String toPath(String packageName) {
+        return packageName.replace(".", "/");
+    }
+
+    protected File getResourceFile(Class<?> clazz) {
+        return new File(getClass().getResource("/" + toPath(clazz.getPackage()) + "/" + clazz.getSimpleName() + OUTPUT_FILE_SUFFIX).getFile());
+    }
+
+    protected File getOutputFile(String file) {
+        return new File(OUTPUT_DIRECTORY, file);
     }
 
 }

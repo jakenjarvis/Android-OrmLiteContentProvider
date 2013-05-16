@@ -31,8 +31,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tojc.ormlite.android</groupId>
+			<artifactId>ormlite-content-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+				<dependency>
+			<groupId>com.tojc.ormlite.android</groupId>
 			<artifactId>ormlite-content-provider-compiler</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
