@@ -8,6 +8,10 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMi
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
 
+/**
+ * Did you know ? All annotations and parameters are optionnal ! You just need the @Contract
+ * @author SNI
+ */
 @Contract()
 // @DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovidersample", path =
 // "accounts")
