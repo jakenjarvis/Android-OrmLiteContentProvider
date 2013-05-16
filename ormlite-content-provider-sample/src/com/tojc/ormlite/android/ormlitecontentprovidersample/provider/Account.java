@@ -3,6 +3,7 @@ package com.tojc.ormlite.android.ormlitecontentprovidersample.provider;
 import android.provider.BaseColumns;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
@@ -13,10 +14,9 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder
  * @author SNI
  */
 @Contract()
-// @DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovidersample", path =
-// "accounts")
-@DefaultContentUri()
-@DefaultContentMimeTypeVnd()
+@DatabaseTable(tableName = "accounts")
+@DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovidersample.provider", path = "accounts")
+@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.ormlitecontentprovidersample", type = "accounts")
 public class Account {
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
