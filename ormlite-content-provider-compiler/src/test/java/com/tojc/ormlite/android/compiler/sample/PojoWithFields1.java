@@ -10,6 +10,7 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 @Contract()
 public class PojoWithFields1 {
 
+    @SuppressWarnings("unused")
     private String nonContractualField;
 
     @DatabaseField
