@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.tojc.ormlite.android.compiler.sample.Pojo;
 import com.tojc.ormlite.android.compiler.sample.Pojo2;
 import com.tojc.ormlite.android.compiler.sample.Pojo3;
+import com.tojc.ormlite.android.compiler.sample.Pojo4;
 
 public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessorTest {
 
@@ -48,4 +49,11 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
         assertOutput(new File(string), new File(string2));
     }
 
+    @Test
+    public void validDefaultContentUriAndDefaultContentMimeTypeVndContractAnnotation() {
+        assertCompilationSuccessful(compileTestCase(Pojo4.class));
+        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.java";
+        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.javasource";
+        assertOutput(new File(string), new File(string2));
+    }
 }
