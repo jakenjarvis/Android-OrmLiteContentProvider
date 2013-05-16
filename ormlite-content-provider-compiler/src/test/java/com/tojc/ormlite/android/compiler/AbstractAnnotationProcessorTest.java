@@ -272,7 +272,7 @@ abstract class AbstractAnnotationProcessorTest {
         return file;
     }
 
-    protected static void assertOutput(File expectedResult, File output) {
+    protected static void assertOutput(File expectedResult, File output) throws IOException {
         String[] expectedContent = getContents(expectedResult);
         String[] outputContent = getContents(output);
         assertEquals(expectedContent.length, outputContent.length);
@@ -282,21 +282,17 @@ abstract class AbstractAnnotationProcessorTest {
         }
     }
 
-    private static String[] getContents(File file) {
+    private static String[] getContents(File file) throws IOException {
         List<String> content = new ArrayList<String>();
 
+        BufferedReader input = new BufferedReader(new FileReader(file));
         try {
-            BufferedReader input = new BufferedReader(new FileReader(file));
-            try {
-                String line = null; // not declared within while loop
-                while ((line = input.readLine()) != null) {
-                    content.add(line);
-                }
-            } finally {
-                input.close();
+            String line = null; // not declared within while loop
+            while ((line = input.readLine()) != null) {
+                content.add(line);
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } finally {
+            input.close();
         }
 
         return content.toArray(new String[] {});
