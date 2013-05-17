@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.tojc.ormlite.android</groupId>
+		<artifactId>ormlite-content-provider-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ormlite-content-provider-compiler</artifactId>
+	<name>Android-OrmLiteContentProvider Annotation processor</name>
+	<packaging>jar</packaging>
+	<description>Processes annotations to create a ContentProvider with OrmLite.</description>
+
+	<properties>
+		<android-maven-plugin.version>3.5.0</android-maven-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-android</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javawriter</artifactId>
+			<version>1.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tojc.ormlite.android</groupId>
+			<artifactId>ormlite-content-provider</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/src/test/resources</directory>
+			</testResource>
+
+			<!-- add a directory of source files which need to be compiled during 
+				a test -->
+			<testResource>
+				<directory>${project.build.testSourceDirectory}/com/tojc/ormlite/android/compiler/sample</directory>
+				<targetPath>com/tojc/ormlite/android/compiler/sample</targetPath>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>lint</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.lewisd</groupId>
+						<artifactId>lint-maven-plugin</artifactId>
+						<version>0.0.6</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>ant</id>
+			<build>
+				<plugins>
+					<!-- This configuration is only meant to provide compatibility for ant 
+						users -->
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>${maven-clean-plugin.version}</version>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${project.basedir}/libs-for-ant</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<!-- This configuration is only meant to provide compatibility for ant 
+						users -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>${maven-dependency-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/libs-for-ant</outputDirectory>
+									<overWriteReleases>true</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<overWriteIfNewer>true</overWriteIfNewer>
+									<excludeArtifactIds>xpp3,httpclient,httpcore,android,xmlParserAPIs,opengl-api</excludeArtifactIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
