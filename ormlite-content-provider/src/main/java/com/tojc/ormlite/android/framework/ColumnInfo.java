@@ -23,9 +23,9 @@ package com.tojc.ormlite.android.framework;
 import java.lang.reflect.Field;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ProjectionMapInfo;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SortOrderInfo;
 import com.tojc.ormlite.android.annotation.OrmLiteAnnotationAccessor;
+import com.tojc.ormlite.android.annotation.info.ProjectionMapInfo;
+import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
 
 /**
  * Manage the database column information.

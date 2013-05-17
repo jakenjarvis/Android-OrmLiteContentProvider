@@ -17,6 +17,7 @@
 	<properties>
 		<android-maven-plugin.version>3.5.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
 	</properties>
 
 	<dependencies>
@@ -32,6 +33,11 @@
 		<dependency>
 			<groupId>com.j256.ormlite</groupId>
 			<artifactId>ormlite-android</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 	</dependencies>
 

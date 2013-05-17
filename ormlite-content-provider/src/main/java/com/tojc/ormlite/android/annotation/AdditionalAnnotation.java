@@ -24,12 +24,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.AnnotatedElement;
-
-import android.content.ContentResolver;
-import android.net.Uri;
-
-import com.tojc.ormlite.android.framework.Validity;
 
 /**
  * It is the annotations that are added in OrmLiteContentProvider library. It is also a class to
@@ -44,7 +38,7 @@ public class AdditionalAnnotation {
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.TYPE })
+    @Target({ElementType.TYPE})
     public @interface Contract {
         String contractClassName() default "";
     }
@@ -56,7 +50,7 @@ public class AdditionalAnnotation {
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.TYPE })
+    @Target({ElementType.TYPE})
     public @interface DefaultContentUri {
         String authority() default "";
 
@@ -71,7 +65,7 @@ public class AdditionalAnnotation {
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.TYPE })
+    @Target({ElementType.TYPE})
     public @interface DefaultContentMimeTypeVnd {
         String name() default "";
 
@@ -86,7 +80,7 @@ public class AdditionalAnnotation {
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD })
+    @Target({ElementType.FIELD})
     public @interface DefaultSortOrder {
         SortOrder order() default SortOrder.Default;
 
@@ -106,7 +100,7 @@ public class AdditionalAnnotation {
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD })
+    @Target({ElementType.FIELD})
     public @interface ProjectionMap {
         String value();
     }
@@ -142,261 +136,4 @@ public class AdditionalAnnotation {
             return this.name;
         }
     }
-
-    /**
-     * Base class that manages the annotation information.
-     * @author Jaken
-     */
-    public static abstract class AnnotationInfoBase implements Validity {
-        private boolean validFlag = false;
-
-        public AnnotationInfoBase() {
-            validFlagOff();
-        }
-
-        protected void validFlagOn() {
-            this.validFlag = true;
-        }
-
-        protected void validFlagOff() {
-            this.validFlag = false;
-        }
-
-        protected abstract boolean isValidValue();
-
-        @Override
-        public boolean isValid() {
-            return this.validFlag && isValidValue();
-        }
-
-        @Override
-        public boolean isValid(boolean throwException) {
-            boolean result = this.isValid();
-            if (throwException && !result) {
-                throw new IllegalStateException(this.getClass().getSimpleName() + " class status is abnormal.");
-            }
-            return result;
-        }
-    }
-
-    /**
-     * Manage the Contract information.
-     * @author Jaken
-     */
-    public static class ContractInfo extends AnnotationInfoBase {
-        private String contractClassName;
-
-        public ContractInfo(AnnotatedElement element) {
-            super();
-            Contract contract = element.getAnnotation(Contract.class);
-            if (contract != null) {
-                this.contractClassName = contract.contractClassName();
-                validFlagOn();
-            }
-        }
-
-        public ContractInfo(String contractClassName) {
-            super();
-            this.contractClassName = contractClassName;
-            validFlagOn();
-        }
-
-        public String getContractClassName() {
-            return this.contractClassName;
-        }
-
-        @Override
-        protected boolean isValidValue() {
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "[contractClassName=" + contractClassName.toString() + "]";
-        }
-    }
-
-    /**
-     * Manage the ContentUri information.
-     * @author Jaken
-     */
-    public static class ContentUriInfo extends AnnotationInfoBase {
-        private String authority;
-        private String path;
-
-        public ContentUriInfo(AnnotatedElement element) {
-            super();
-            DefaultContentUri contentUri = element.getAnnotation(DefaultContentUri.class);
-            if (contentUri != null) {
-                this.authority = contentUri.authority();
-                this.path = contentUri.path();
-                validFlagOn();
-            }
-        }
-
-        public ContentUriInfo(String authority, String path) {
-            super();
-            this.authority = authority;
-            this.path = path;
-            validFlagOn();
-        }
-
-        public String getAuthority() {
-            return this.authority;
-        }
-
-        public String getPath() {
-            return this.path;
-        }
-
-        public Uri getContentUri() {
-            return new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(this.authority).appendPath(this.path).build();
-        }
-
-        @Override
-        protected boolean isValidValue() {
-            return this.authority.length() >= 1 && this.path.length() >= 1;
-        }
-
-        @Override
-        public String toString() {
-            return getContentUri().toString();
-        }
-    }
-
-    /**
-     * Manage the MIME Types information.
-     * @author Jaken
-     */
-    public static class ContentMimeTypeVndInfo extends AnnotationInfoBase {
-        public static final String VND = "vnd";
-
-        private String name;
-        private String type;
-
-        public ContentMimeTypeVndInfo(AnnotatedElement element) {
-            super();
-            DefaultContentMimeTypeVnd contentMimeTypeVnd = element.getAnnotation(DefaultContentMimeTypeVnd.class);
-            if (contentMimeTypeVnd != null) {
-                this.name = contentMimeTypeVnd.name();
-                this.type = contentMimeTypeVnd.type();
-                validFlagOn();
-            }
-        }
-
-        public ContentMimeTypeVndInfo(String name, String type) {
-            super();
-            this.name = name;
-            this.type = type;
-            validFlagOn();
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public String getType() {
-            return this.type;
-        }
-
-        public String getVndProviderSpecificString() {
-            return VND + "." + this.name + "." + this.type;
-        }
-
-        @Override
-        protected boolean isValidValue() {
-            return this.name.length() >= 1 && this.type.length() >= 1;
-        }
-
-        @Override
-        public String toString() {
-            return getVndProviderSpecificString();
-        }
-    }
-
-    /**
-     * Manage the SortOrder information.
-     * @author Jaken
-     */
-    public static class SortOrderInfo extends AnnotationInfoBase {
-        private SortOrder order;
-        private int weight;
-
-        public SortOrderInfo(AnnotatedElement element) {
-            super();
-            DefaultSortOrder defaultSortOrder = element.getAnnotation(DefaultSortOrder.class);
-            if (defaultSortOrder != null) {
-                this.order = defaultSortOrder.order();
-                this.weight = defaultSortOrder.weight();
-                validFlagOn();
-            }
-        }
-
-        public SortOrderInfo(SortOrder order, int weight) {
-            super();
-            this.order = order;
-            this.weight = weight;
-            validFlagOn();
-        }
-
-        public SortOrder getOrder() {
-            return this.order;
-        }
-
-        public int getWeight() {
-            return this.weight;
-        }
-
-        public String makeSqlOrderString(String fieldname) {
-            return (fieldname + " " + this.order.toString()).trim();
-        }
-
-        @Override
-        protected boolean isValidValue() {
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return this.order.toString();
-        }
-    }
-
-    /**
-     * Manage the ProjectionMap information.
-     * @author Jaken
-     */
-    public static class ProjectionMapInfo extends AnnotationInfoBase {
-        private String name;
-
-        public ProjectionMapInfo(AnnotatedElement element) {
-            super();
-            ProjectionMap projectionMap = element.getAnnotation(ProjectionMap.class);
-            if (projectionMap != null) {
-                this.name = projectionMap.value();
-                validFlagOn();
-            }
-        }
-
-        public ProjectionMapInfo(String name) {
-            super();
-            this.name = name;
-            validFlagOn();
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
-        protected boolean isValidValue() {
-            return this.name.length() >= 1;
-        }
-
-        @Override
-        public String toString() {
-            return "";
-        }
-    }
-
 }

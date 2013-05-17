@@ -20,8 +20,8 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentUriInfo;
+import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
+import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 
 import android.net.Uri;
@@ -163,7 +163,7 @@ public class MatcherPattern implements Validity
 	 * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation,
 	 * or want to override the setting of the DefaultContentUri annotation.
 	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentUriInfo
+	 * @see com.tojc.ormlite.android.annotation.info.ContentUriInfo
 	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
 	 * @param contentUriInfo
@@ -198,7 +198,7 @@ public class MatcherPattern implements Validity
 	 * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd annotation,
 	 * or want to override the setting of the DefaultContentMimeTypeVnd annotation.
 	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo
+	 * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
 	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
 	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
 	 * @param contentMimeTypeVndInfo

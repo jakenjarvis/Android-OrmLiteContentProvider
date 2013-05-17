@@ -35,8 +35,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentUriInfo;
+import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
+import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters;

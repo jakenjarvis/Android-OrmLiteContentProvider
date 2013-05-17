@@ -20,7 +20,7 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo;
+import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 
 import android.content.ContentResolver;
 
@@ -33,7 +33,7 @@ import android.content.ContentResolver;
  *                         If the URI pattern is for more than one row: android.cursor.dir/
  * Provider-specific part: vnd.name.type (Manage the ContentMimeTypeVndInfo class)
  * @see com.tojc.ormlite.android.framework.MimeTypeVnd.SubType
- * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.ContentMimeTypeVndInfo
+ * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
  * @author Jaken
  */
 public class MimeTypeVnd implements Validity
