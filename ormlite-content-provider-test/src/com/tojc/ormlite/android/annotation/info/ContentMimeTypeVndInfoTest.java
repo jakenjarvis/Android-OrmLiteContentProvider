@@ -122,9 +122,9 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         // when
 
         // then
-        assertNull(contentMimeTypeVndInfo.getName());
-        assertNull(contentMimeTypeVndInfo.getType());
-        assertFalse(contentMimeTypeVndInfo.isValidValue());
+        assertEquals(NonAnnotatedClassUnderTest.class.getPackage().getName() + ContentMimeTypeVndInfo.PROVIDER_SUFFIX, contentMimeTypeVndInfo.getName());
+        assertEquals(NonAnnotatedClassUnderTest.class.getSimpleName().toLowerCase(Locale.ENGLISH), contentMimeTypeVndInfo.getType());
+        assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 
     /**

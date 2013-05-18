@@ -113,9 +113,9 @@ public class ContentUriInfoTest extends AndroidTestCase {
         // when
 
         // then
-        assertNull(ContentUriInfo.getAuthority());
-        assertNull(ContentUriInfo.getPath());
-        assertFalse(ContentUriInfo.isValidValue());
+        assertEquals(NonAnnotatedClassUnderTest.class.getPackage().getName(), ContentUriInfo.getAuthority());
+        assertEquals(NonAnnotatedClassUnderTest.class.getSimpleName().toLowerCase(Locale.ENGLISH), ContentUriInfo.getPath());
+        assertTrue(ContentUriInfo.isValidValue());
     }
 
     /**
