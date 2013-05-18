@@ -76,13 +76,13 @@ public class AdditionalAnnotation {
      * Be used query method, if you do not specify how to sort. DefaultSortOrder annotation can be
      * used in more than one field. In that case, specify the sort in ascending order of weight. If
      * you omit the order, it will be in ascending order by default. If you specify the
-     * SortOrder.Asc, which explicitly grants the ASC.
+     * SortOrder.ASC, which explicitly grants the ASC.
      * @author Jaken
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.FIELD})
     public @interface DefaultSortOrder {
-        SortOrder order() default SortOrder.Default;
+        SortOrder order() default SortOrder.DEFAULT;
 
         int weight() default 0;
     }
@@ -113,27 +113,22 @@ public class AdditionalAnnotation {
         /**
          * Are treated the same as ASC. (dependent SQLite)
          */
-        Default(""),
+        DEFAULT {
+            @Override
+            public String toString() {
+                return "";
+            }
+        },
 
         /**
          * Explicitly specify the ASC.
          */
-        Asc("ASC"),
+        ASC,
 
         /**
          * Explicitly specify the DESC.
          */
-        Desc("DESC");
+        DESC;
 
-        private SortOrder(String name) {
-            this.name = name;
-        }
-
-        private final String name;
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
     }
 }

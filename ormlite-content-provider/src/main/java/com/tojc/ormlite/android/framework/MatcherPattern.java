@@ -87,7 +87,7 @@ public class MatcherPattern implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("subType is null.");
             }
-        } else if (this.pattern == null) {
+        } else if (pattern == null) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("pattern is null.");

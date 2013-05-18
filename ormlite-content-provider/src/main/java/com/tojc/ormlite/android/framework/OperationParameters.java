@@ -66,7 +66,7 @@ public class OperationParameters {
      * @author Jaken
      */
     public static class Parameter implements OperationParametersBaseInterface, QueryParameters, InsertParameters, DeleteParameters, UpdateParameters {
-        // Android Event Item
+        // Android Event ITEM
         private Uri uri;
         private String[] projection;
         private String selection;

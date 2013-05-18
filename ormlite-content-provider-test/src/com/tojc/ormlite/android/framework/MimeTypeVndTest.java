@@ -29,7 +29,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
     public void testIsValid_returns_false_if_mime_type_has_null_or_empty_path() {
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.Item, new ContentMimeTypeVndInfo(null, CONTENT_MIME_TYPE_VND_TYPE));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(null, CONTENT_MIME_TYPE_VND_TYPE));
         // when
 
         // then
@@ -37,7 +37,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
         // --
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.Item, new ContentMimeTypeVndInfo(StringUtils.EMPTY, CONTENT_MIME_TYPE_VND_TYPE));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(StringUtils.EMPTY, CONTENT_MIME_TYPE_VND_TYPE));
         // when
 
         // then
@@ -46,7 +46,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
     public void testIsValid_returns_false_if_mime_type_has_null_or_empty_type() {
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.Item, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, null));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, null));
         // when
 
         // then
@@ -54,7 +54,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
         // --
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.Item, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, StringUtils.EMPTY));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, StringUtils.EMPTY));
         // when
 
         // then
@@ -62,9 +62,9 @@ public class MimeTypeVndTest extends AndroidTestCase {
     }
 
     public void testGetMimeTypeString() {
-        mimeTypeVnd = new MimeTypeVnd(SubType.Item, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, CONTENT_MIME_TYPE_VND_TYPE));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, CONTENT_MIME_TYPE_VND_TYPE));
 
-        final String expectedTypeString = SubType.Item.toString() + File.separator + ContentMimeTypeVndInfo.VND + ContentMimeTypeVndInfo.VND_SEPARATOR + CONTENT_MIME_TYPE_VND_NAME
+        final String expectedTypeString = SubType.ITEM.toString() + File.separator + ContentMimeTypeVndInfo.VND + ContentMimeTypeVndInfo.VND_SEPARATOR + CONTENT_MIME_TYPE_VND_NAME
                 + ContentMimeTypeVndInfo.VND_SEPARATOR + CONTENT_MIME_TYPE_VND_TYPE;
 
         assertEquals(expectedTypeString, mimeTypeVnd.getMimeTypeString());

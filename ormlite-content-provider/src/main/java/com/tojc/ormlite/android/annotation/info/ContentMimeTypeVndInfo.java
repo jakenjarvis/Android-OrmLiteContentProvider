@@ -35,16 +35,16 @@ public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
         if (contentMimeTypeVnd != null) {
             name = contentMimeTypeVnd.name();
             type = contentMimeTypeVnd.type();
+        }
 
-            if (element instanceof Class<?>) {
-                Class<?> clazz = (Class<?>) element;
-                if (StringUtils.isEmpty(name)) {
-                    name = clazz.getPackage().getName() + PROVIDER_SUFFIX;
-                }
+        if (element instanceof Class<?>) {
+            Class<?> clazz = (Class<?>) element;
+            if (StringUtils.isEmpty(name)) {
+                name = clazz.getPackage().getName() + PROVIDER_SUFFIX;
+            }
 
-                if (StringUtils.isEmpty(type)) {
-                    type = clazz.getSimpleName().toLowerCase();
-                }
+            if (StringUtils.isEmpty(type)) {
+                type = clazz.getSimpleName().toLowerCase();
             }
         }
 

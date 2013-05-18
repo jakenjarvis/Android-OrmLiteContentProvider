@@ -39,7 +39,8 @@ import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
  */
 public class MimeTypeVnd implements Validity {
     public enum SubType {
-        Item(ContentResolver.CURSOR_ITEM_BASE_TYPE), Directory(ContentResolver.CURSOR_DIR_BASE_TYPE);
+        ITEM(ContentResolver.CURSOR_ITEM_BASE_TYPE), //
+        DIRECTORY(ContentResolver.CURSOR_DIR_BASE_TYPE);
 
         private SubType(String name) {
             this.name = name;

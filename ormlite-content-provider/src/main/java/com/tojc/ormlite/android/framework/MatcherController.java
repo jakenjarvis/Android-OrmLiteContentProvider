@@ -70,8 +70,8 @@ public class MatcherController {
      *            Register a class for table.
      * @param subType
      *            Contents to be registered in the pattern, specify single or multiple. This is used
-     *            in the MIME types. * Item : If the URI pattern is for a single row :
-     *            vnd.android.cursor.item/ * Directory : If the URI pattern is for more than one row
+     *            in the MIME types. * ITEM : If the URI pattern is for a single row :
+     *            vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
      *            : vnd.android.cursor.dir/
      * @param pattern
      *            registers a pattern for UriMatcher. Note: Must not contain the name of path here.
@@ -93,8 +93,8 @@ public class MatcherController {
      * method.
      * @param subType
      *            Contents to be registered in the pattern, specify single or multiple. This is used
-     *            in the MIME types. * Item : If the URI pattern is for a single row :
-     *            vnd.android.cursor.item/ * Directory : If the URI pattern is for more than one row
+     *            in the MIME types. * ITEM : If the URI pattern is for a single row :
+     *            vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
      *            : vnd.android.cursor.dir/
      * @param pattern
      *            registers a pattern for UriMatcher. Note: Must not contain the name of path here.

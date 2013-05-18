@@ -56,10 +56,10 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
         // where
         switch (target.getMimeTypeVnd().getSubType()) {
-            case Directory:
+            case DIRECTORY:
                 break;
 
-            case Item:
+            case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
                 if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
@@ -110,11 +110,11 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         int result = -1;
 
         switch (target.getMimeTypeVnd().getSubType()) {
-            case Directory:
+            case DIRECTORY:
                 result = db.delete(target.getTableInfo().getName(), parameter.getSelection(), parameter.getSelectionArgs());
                 break;
 
-            case Item:
+            case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
                 if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
@@ -136,11 +136,11 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         int result = -1;
 
         switch (target.getMimeTypeVnd().getSubType()) {
-            case Directory:
+            case DIRECTORY:
                 result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(), parameter.getSelectionArgs());
                 break;
 
-            case Item:
+            case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
                 if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
                     where += " AND ( " + parameter.getSelection() + " ) ";

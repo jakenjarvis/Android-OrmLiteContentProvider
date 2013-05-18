@@ -30,15 +30,16 @@ public class ContentUriInfo extends AnnotationInfoBase {
         if (contentUri != null) {
             authority = contentUri.authority();
             path = contentUri.path();
-            if (element instanceof Class<?>) {
-                Class<?> clazz = (Class<?>) element;
-                if (StringUtils.isEmpty(authority)) {
-                    authority = clazz.getPackage().getName();
-                }
-                if (StringUtils.isEmpty(path)) {
-                    // TODO use DataBase annotation
-                    path = clazz.getSimpleName().toLowerCase();
-                }
+        }
+
+        if (element instanceof Class<?>) {
+            Class<?> clazz = (Class<?>) element;
+            if (StringUtils.isEmpty(authority)) {
+                authority = clazz.getPackage().getName();
+            }
+            if (StringUtils.isEmpty(path)) {
+                // TODO use DataBase annotation
+                path = clazz.getSimpleName().toLowerCase();
             }
         }
 

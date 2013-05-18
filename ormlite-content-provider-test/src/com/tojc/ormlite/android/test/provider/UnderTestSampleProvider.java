@@ -16,10 +16,10 @@ public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<Sample
     public boolean onCreate() {
         int patternCode = 1;
         setMatcherController(new MatcherController()//
-                .add(Account.class, SubType.Directory, "", patternCode++)//
-                .add(Account.class, SubType.Item, "#", patternCode++)//
-                .add(Membership.class, SubType.Directory, "", patternCode++)//
-                .add(Membership.class, SubType.Item, "#", patternCode++));
+                .add(Account.class, SubType.DIRECTORY, "", patternCode++)//
+                .add(Account.class, SubType.ITEM, "#", patternCode++)//
+                .add(Membership.class, SubType.DIRECTORY, "", patternCode++)//
+                .add(Membership.class, SubType.ITEM, "#", patternCode++));
         return true;
     }
 }
