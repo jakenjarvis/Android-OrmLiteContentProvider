@@ -41,6 +41,7 @@ public class ColumnInfo implements Validity {
         if (!columnField.isAnnotationPresent(DatabaseField.class)) {
             throw new IllegalArgumentException("Parameter does not implement the DatabaseField annotation.");
         }
+        // Useless, target is a field.
         if (!(columnField instanceof Field)) {
             throw new IllegalArgumentException("Parameter is not a Field.");
         }
@@ -60,17 +61,19 @@ public class ColumnInfo implements Validity {
     public boolean isValid(boolean throwException) {
         boolean result = true;
 
-        if (this.field == null) {
-            result = false;
-            if (throwException && !result) {
-                throw new IllegalStateException("field is null.");
-            }
-        } else if (this.columnName.length() <= 0) {
-            result = false;
-            if (throwException && !result) {
-                throw new IllegalStateException("columnName is zero string.");
-            }
-        }
+        // none of this can happen, keep for a while : May 18th 2013
+        // TODO remove if useless
+        // if (this.field == null) {
+        // result = false;
+        // if (throwException && !result) {
+        // throw new IllegalStateException("field is null.");
+        // }
+        // } else if (StringUtils.isEmpty(columnName)) {
+        // result = false;
+        // if (throwException && !result) {
+        // throw new IllegalStateException("columnName is zero string.");
+        // }
+        // }
         // Acceptable
         // else if(!this.defaultSortOrderInfo.isValid())
         // {

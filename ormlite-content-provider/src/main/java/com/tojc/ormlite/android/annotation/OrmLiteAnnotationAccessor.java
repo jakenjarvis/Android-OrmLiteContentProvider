@@ -23,6 +23,8 @@ package com.tojc.ormlite.android.annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
@@ -58,7 +60,7 @@ public class OrmLiteAnnotationAccessor {
         DatabaseField databaseField = element.getAnnotation(DatabaseField.class);
         if (databaseField != null) {
             result = databaseField.columnName();
-            if (result.length() <= 0) {
+            if (StringUtils.isEmpty(result)) {
                 result = ((Field) element).getName();
             }
         }
