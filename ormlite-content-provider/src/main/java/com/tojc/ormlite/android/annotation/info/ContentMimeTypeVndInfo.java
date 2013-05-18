@@ -2,6 +2,8 @@ package com.tojc.ormlite.android.annotation.info;
 
 import java.lang.reflect.AnnotatedElement;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 
 /**
@@ -32,19 +34,19 @@ public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
         if (contentMimeTypeVnd != null) {
             name = contentMimeTypeVnd.name();
             type = contentMimeTypeVnd.type();
-            validFlagOn();
+
+            if (element instanceof Class<?>) {
+                Class<?> clazz = (Class<?>) element;
+                if (StringUtils.isEmpty(name)) {
+                    name = clazz.getPackage().getName() + PROVIDER_SUFFIX;
+                }
+
+                if (StringUtils.isEmpty(type)) {
+                    type = clazz.getSimpleName().toLowerCase();
+                }
+            }
         }
 
-        if (element instanceof Class<?>) {
-            Class<?> clazz = (Class<?>) element;
-            if (name == null) {
-                name = clazz.getPackage().getName() + PROVIDER_SUFFIX;
-            }
-
-            if (type == null) {
-                type = clazz.getSimpleName().toLowerCase();
-            }
-        }
         initialize(name, type);
     }
 
@@ -69,7 +71,7 @@ public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
 
     @Override
     protected boolean isValidValue() {
-        return this.name.length() >= 1 && this.type.length() >= 1;
+        return StringUtils.isNotEmpty(this.name) && StringUtils.isNotEmpty(this.type);
     }
 
     // ----------------------------------

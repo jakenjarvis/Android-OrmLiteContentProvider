@@ -1,4 +1,4 @@
-package com.tojc.ormlite.android;
+package com.tojc.ormlite.android.annotation.info;
 
 import android.test.AndroidTestCase;
 
@@ -22,6 +22,26 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
 
         // then
         assertTrue(dummyAnnotationInfoBase.isValid());
+    }
+
+    public void testIsValid_throws_exception_or_not() {
+        // given
+        dummyAnnotationInfoBase = new DummyAnnotationInfoBase(true);
+
+        // when
+
+        // then
+        assertFalse(dummyAnnotationInfoBase.isValid(false));
+
+        // when
+
+        // then
+        try {
+            dummyAnnotationInfoBase.isValid(true);
+            fail();
+        } catch (Exception ex) {
+            // test succeeds
+        }
     }
 
     /**

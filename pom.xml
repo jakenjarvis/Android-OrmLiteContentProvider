@@ -14,6 +14,7 @@
 		<android.version>4.1.1.4</android.version>
 		<android.support.version>r7</android.support.version>
 		<ormlite.version>4.43</ormlite.version>
+		<easymock.version>2.5.2</easymock.version>
 	</properties>
 
 	<modules>
@@ -53,6 +54,11 @@
 				<groupId>com.j256.ormlite</groupId>
 				<artifactId>ormlite-android</artifactId>
 				<version>${ormlite.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
