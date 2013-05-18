@@ -3,8 +3,10 @@ package com.tojc.ormlite.android;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -91,14 +93,14 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
 
         // when
         Cursor cursor = getInstrumentation().getTargetContext().getContentResolver().query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, null);
-
-        // then
         accountList = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account(cursor.getString(1));
             accountList.add(account);
         }
         cursor.close();
+
+        // then
         assertEquals(2, accountList.size());
         assertEquals(TEST_NAME_1, accountList.get(0).getName());
         assertEquals(TEST_NAME_2, accountList.get(1).getName());
@@ -117,6 +119,32 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         // when
         String order = BaseColumns._ID + " DESC";
         Cursor cursor = getInstrumentation().getTargetContext().getContentResolver().query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, order);
+        accountList = new ArrayList<Account>();
+        while (cursor.moveToNext()) {
+            Account account = new Account(cursor.getString(1));
+            accountList.add(account);
+        }
+        cursor.close();
+
+        // then
+        assertEquals(2, accountList.size());
+        assertEquals(TEST_NAME_2, accountList.get(0).getName());
+        assertEquals(TEST_NAME_1, accountList.get(1).getName());
+    }
+
+    public void testContentProviderAcquisition() throws RemoteException {
+        // given
+        Account account1 = new Account(TEST_NAME_1);
+        Account account2 = new Account(TEST_NAME_2);
+        RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
+        simpleDao.create(account1);
+        simpleDao.create(account2);
+        List<Account> accountList = simpleDao.queryForAll();
+        assertEquals(2, accountList.size());
+
+        // when
+        ContentProviderClient contentProviderClient = getInstrumentation().getTargetContext().getContentResolver().acquireContentProviderClient(AccountContract.CONTENT_URI);
+        Cursor cursor = contentProviderClient.query(AccountContract.CONTENT_URI, null, null, null, null);
 
         // then
         accountList = new ArrayList<Account>();
@@ -125,9 +153,34 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
             accountList.add(account);
         }
         cursor.close();
+        contentProviderClient.release();
+
         assertEquals(2, accountList.size());
-        assertEquals(TEST_NAME_2, accountList.get(0).getName());
-        assertEquals(TEST_NAME_1, accountList.get(1).getName());
+        assertEquals(TEST_NAME_1, accountList.get(0).getName());
+        assertEquals(TEST_NAME_2, accountList.get(1).getName());
+    }
+
+    public void testBulkInsert() {
+        // given
+        final int testAccountCount = 10;
+        ContentValues[] contentValues = new ContentValues[testAccountCount];
+        for (int accountIndex = 0; accountIndex < testAccountCount; accountIndex++) {
+            ContentValues values = new ContentValues();
+            values.clear();
+            values.put(AccountContract.NAME, TEST_NAME_1 + accountIndex);
+            contentValues[accountIndex] = values;
+        }
+        // when
+        getInstrumentation().getTargetContext().getContentResolver().bulkInsert(AccountContract.CONTENT_URI, contentValues);
+
+        // then
+        RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
+        List<Account> accountList = simpleDao.queryForAll();
+        assertEquals(testAccountCount, accountList.size());
+        int accountIndex = 0;
+        for (Account account : accountList) {
+            assertEquals(TEST_NAME_1 + accountIndex++, account.getName());
+        }
     }
 
     private SampleHelper getHelper() {
