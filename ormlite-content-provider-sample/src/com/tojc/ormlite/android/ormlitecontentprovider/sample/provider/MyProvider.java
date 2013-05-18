@@ -1,7 +1,8 @@
-package com.tojc.ormlite.android.ormlitecontentprovidersample.provider;
+package com.tojc.ormlite.android.ormlitecontentprovider.sample.provider;
 
 import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+import com.tojc.ormlite.android.ormlitecontentprovider.sample.model.Account;
 
 public class MyProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
     @Override

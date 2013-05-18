@@ -1,4 +1,4 @@
-package com.tojc.ormlite.android.ormlitecontentprovidersample.provider;
+package com.tojc.ormlite.android.ormlitecontentprovider.sample.provider;
 
 import java.sql.SQLException;
 
@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.tojc.ormlite.android.ormlitecontentprovider.sample.model.Account;
 
 public class SampleHelper extends OrmLiteSqliteOpenHelper {
     public SampleHelper(Context context) {

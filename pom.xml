@@ -20,6 +20,7 @@
 		<module>ormlite-content-provider</module>
 		<module>ormlite-content-provider-compiler</module>
 		<module>ormlite-content-provider-sample</module>
+		<module>ormlite-content-provider-compiler-sample</module>
 	</modules>
 
 	<dependencyManagement>

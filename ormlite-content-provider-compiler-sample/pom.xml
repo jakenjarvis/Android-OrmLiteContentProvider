@@ -9,8 +9,8 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ormlite-content-provider-sample</artifactId>
-	<name>Android-OrmLiteContentProvider Sample</name>
+	<artifactId>ormlite-content-provider-compiler-sample</artifactId>
+	<name>Android-OrmLiteContentProvider Sample using the annotation processor</name>
 	<packaging>apk</packaging>
 
 	<properties>
@@ -33,6 +33,12 @@
 			<groupId>com.tojc.ormlite.android</groupId>
 			<artifactId>ormlite-content-provider</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+				<dependency>
+			<groupId>com.tojc.ormlite.android</groupId>
+			<artifactId>ormlite-content-provider-compiler</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

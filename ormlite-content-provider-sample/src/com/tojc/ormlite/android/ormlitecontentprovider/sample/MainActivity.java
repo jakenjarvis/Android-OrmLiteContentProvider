@@ -1,4 +1,4 @@
-package com.tojc.ormlite.android.ormlitecontentprovidersample;
+package com.tojc.ormlite.android.ormlitecontentprovider.sample;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,8 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 
-import com.tojc.ormlite.android.ormlitecontentprovidersample.provider.AccountContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.sample.R;
+import com.tojc.ormlite.android.ormlitecontentprovider.sample.provider.AccountContract;
 
 public class MainActivity extends Activity {
     @Override
