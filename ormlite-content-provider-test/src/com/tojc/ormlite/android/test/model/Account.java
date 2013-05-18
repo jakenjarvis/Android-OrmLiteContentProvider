@@ -1,4 +1,4 @@
-package com.tojc.ormlite.android.ormlitecontentprovider.sample.model;
+package com.tojc.ormlite.android.test.model;
 
 import android.provider.BaseColumns;
 
@@ -8,9 +8,13 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMi
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
 
+/**
+ * Did you know ? All annotations and parameters are optionnal ! You just need the @Contract
+ * @author SNI
+ */
 @DatabaseTable(tableName = "accounts")
-@DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovider.sample", path = "accounts")
-@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.ormlitecontentprovider.sample.provider", type = "accounts")
+@DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "accounts")
+@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "accounts")
 public class Account {
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)

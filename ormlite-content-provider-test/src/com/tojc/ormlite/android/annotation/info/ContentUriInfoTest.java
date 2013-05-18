@@ -1,11 +1,15 @@
 package com.tojc.ormlite.android.annotation.info;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
+@SmallTest
 public class ContentUriInfoTest extends AndroidTestCase {
 
     private static final String TEST_AUTHORITY = "foo";
@@ -88,7 +92,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
 
         // then
         assertEquals(AnnotatedClassUnderTestNoParams.class.getPackage().getName(), ContentUriInfo.getAuthority());
-        assertEquals(AnnotatedClassUnderTestNoParams.class.getSimpleName().toLowerCase(), ContentUriInfo.getPath());
+        assertEquals(AnnotatedClassUnderTestNoParams.class.getSimpleName().toLowerCase(Locale.ENGLISH), ContentUriInfo.getPath());
         assertTrue(ContentUriInfo.isValidValue());
     }
 

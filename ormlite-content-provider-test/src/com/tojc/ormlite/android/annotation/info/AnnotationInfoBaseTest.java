@@ -1,9 +1,9 @@
 package com.tojc.ormlite.android.annotation.info;
 
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
-import com.tojc.ormlite.android.annotation.info.AnnotationInfoBase;
-
+@SmallTest
 public class AnnotationInfoBaseTest extends AndroidTestCase {
 
     private DummyAnnotationInfoBase dummyAnnotationInfoBase;

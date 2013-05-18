@@ -15,12 +15,9 @@
         android:theme="@style/AppTheme" >
         <uses-library android:name="android.test.runner" />
 
-        <!--
-        <provider
-            android:name=".providcom.tojc.ormlite.android.ormlitecontentprovider.provider.MyProvider"
-            android:authorities="com.tojc.ormlite.android.sample"
-            android:exported="false" />
-        -->
+         <provider android:name="com.tojc.ormlite.android.framework.SampleProviderUnderTest"
+	        android:authorities="com.tojc.ormlite.android.test"
+	        android:exported="true"/>
     </application>
 
     <instrumentation

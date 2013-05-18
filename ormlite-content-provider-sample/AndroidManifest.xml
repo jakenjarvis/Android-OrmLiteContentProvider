@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-	    <provider android:name=".provider.MyProvider"
+	    <provider android:name=".provider.SampleProvider"
 	        android:authorities="com.tojc.ormlite.android.ormlitecontentprovider.sample"
 	        android:exported="false"/>
 

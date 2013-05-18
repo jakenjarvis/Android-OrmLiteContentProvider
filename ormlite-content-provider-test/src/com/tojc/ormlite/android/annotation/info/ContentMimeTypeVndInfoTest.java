@@ -1,11 +1,15 @@
 package com.tojc.ormlite.android.annotation.info;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 
+@SmallTest
 public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
     private static final String TEST_NAME = "foo";
@@ -97,7 +101,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
         // then
         assertEquals(AnnotatedClassUnderTestNoParams.class.getPackage().getName() + ContentMimeTypeVndInfo.PROVIDER_SUFFIX, contentMimeTypeVndInfo.getName());
-        assertEquals(AnnotatedClassUnderTestNoParams.class.getSimpleName().toLowerCase(), contentMimeTypeVndInfo.getType());
+        assertEquals(AnnotatedClassUnderTestNoParams.class.getSimpleName().toLowerCase(Locale.ENGLISH), contentMimeTypeVndInfo.getType());
         assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 

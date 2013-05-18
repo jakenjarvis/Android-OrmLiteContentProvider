@@ -1,10 +1,12 @@
-package com.tojc.ormlite.android.ormlitecontentprovider.sample.provider;
+package com.tojc.ormlite.android.framework;
 
 import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
-import com.tojc.ormlite.android.ormlitecontentprovider.sample.model.Account;
+import com.tojc.ormlite.android.test.model.Account;
+import com.tojc.ormlite.android.test.provider.AccountContract;
+import com.tojc.ormlite.android.test.provider.SampleHelper;
 
-public class MyProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
+public class SampleProviderUnderTest extends OrmLiteSimpleContentProvider<SampleHelper> {
     @Override
     protected Class<SampleHelper> getHelperClass() {
         return SampleHelper.class;
