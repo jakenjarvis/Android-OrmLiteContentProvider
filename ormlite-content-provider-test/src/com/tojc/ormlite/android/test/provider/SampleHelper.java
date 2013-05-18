@@ -9,8 +9,11 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.tojc.ormlite.android.test.model.Account;
+import com.tojc.ormlite.android.test.model.Membership;
 
 public class SampleHelper extends OrmLiteSqliteOpenHelper {
+
+    public final static Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class};
 
     public SampleHelper(Context context) {
         super(context, "MyDatabase", null, 1);
@@ -35,7 +38,9 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
     }
 
     public void resetAllTables() throws SQLException {
-        TableUtils.dropTable(connectionSource, Account.class, true);
-        TableUtils.createTable(connectionSource, Account.class);
+        for (Class<?> clazz : CLASS_LIST) {
+            TableUtils.dropTable(connectionSource, clazz, true);
+            TableUtils.createTable(connectionSource, clazz);
+        }
     }
 }

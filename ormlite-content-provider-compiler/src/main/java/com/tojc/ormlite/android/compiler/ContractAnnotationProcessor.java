@@ -52,6 +52,8 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUr
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ContractAnnotationProcessor extends AbstractProcessor {
 
+    private int patternCode = 1;
+
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
 
@@ -136,8 +138,8 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                         .emitField("String", "MIMETYPE_TYPE", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(mimeTypeVndType))//
                         .emitField("String", "MIMETYPE_NAME", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(mimeTypeVndName))//
                         .emitEmptyLine()//
-                        .emitField("int", "CONTENT_URI_PATTERN_MANY", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, "1")//
-                        .emitField("int", "CONTENT_URI_PATTERN_ONE", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, "2")//
+                        .emitField("int", "CONTENT_URI_PATTERN_MANY", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, String.valueOf(patternCode++))//
+                        .emitField("int", "CONTENT_URI_PATTERN_ONE", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, String.valueOf(patternCode++))//
                         .emitEmptyLine()//
                         .emitField("Uri", "CONTENT_URI", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, defaultContentUriStatement)//
                         .emitEmptyLine()//

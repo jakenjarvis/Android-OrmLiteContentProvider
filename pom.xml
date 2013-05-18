@@ -13,7 +13,7 @@
 	<properties>
 		<android.version>4.1.1.4</android.version>
 		<android.support.version>r7</android.support.version>
-		<ormlite.version>4.43</ormlite.version>
+		<ormlite.version>4.45</ormlite.version>
 		<easymock.version>2.5.2</easymock.version>
 	</properties>
 
