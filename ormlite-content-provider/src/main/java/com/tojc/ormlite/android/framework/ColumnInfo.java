@@ -29,113 +29,95 @@ import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
 
 /**
  * Manage the database column information.
- * 
  * @author Jaken
  */
-public class ColumnInfo implements Validity
-{
-	private Field field;
-	private String columnName;
-	private SortOrderInfo defaultSortOrderInfo;
-	private ProjectionMapInfo projectionMapInfo;
-	
-	public ColumnInfo(Field columnField)
-	{
-		if(!columnField.isAnnotationPresent(DatabaseField.class))
-		{
-			throw new IllegalArgumentException("Parameter does not implement the DatabaseField annotation.");
-		}
-		if(!(columnField instanceof Field))
-		{
-			throw new IllegalArgumentException("Parameter is not a Field.");
-		}
-		
-		this.field = columnField;
-		this.columnName = OrmLiteAnnotationAccessor.getAnnotationColumnName(columnField);
-		this.defaultSortOrderInfo = new SortOrderInfo(columnField);
-		this.projectionMapInfo = new ProjectionMapInfo(columnField);
-	}
+public class ColumnInfo implements Validity {
+    private Field field;
+    private String columnName;
+    private SortOrderInfo defaultSortOrderInfo;
+    private ProjectionMapInfo projectionMapInfo;
 
-	@Override
-	public boolean isValid()
-	{
-		return isValid(false);
-	}
+    public ColumnInfo(Field columnField) {
+        if (!columnField.isAnnotationPresent(DatabaseField.class)) {
+            throw new IllegalArgumentException("Parameter does not implement the DatabaseField annotation.");
+        }
+        if (!(columnField instanceof Field)) {
+            throw new IllegalArgumentException("Parameter is not a Field.");
+        }
 
-	@Override
-	public boolean isValid(boolean throwException)
-	{
-		boolean result = true;
-		
-		if(this.field == null)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("field is null.");
-			}
-		}
-		else if(this.columnName.length() <= 0)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("columnName is zero string.");
-			}
-		}
-		// Acceptable
-		//		else if(!this.defaultSortOrderInfo.isValid())
-		//		{
-		//			result = false;
-		//		}
-		// Acceptable
-		//		else if(!this.projectionMapInfo.isValid())
-		//		{
-		//			result = false;
-		//		}
-		return result;
-	}
+        this.field = columnField;
+        this.columnName = OrmLiteAnnotationAccessor.getAnnotationColumnName(columnField);
+        this.defaultSortOrderInfo = new SortOrderInfo(columnField);
+        this.projectionMapInfo = new ProjectionMapInfo(columnField);
+    }
 
-	public Field getField()
-	{
-		return this.field;
-	}
-	
-	public String getColumnName()
-	{
-		return this.columnName;
-	}
+    @Override
+    public boolean isValid() {
+        return isValid(false);
+    }
 
-	public String getProjectionColumnName()
-	{
-		String result = this.columnName;
-		if(this.projectionMapInfo.isValid())
-		{
-			result = this.projectionMapInfo.getName();
-		}
-		return result;
-	}
+    @Override
+    public boolean isValid(boolean throwException) {
+        boolean result = true;
 
-	/**
-	 * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultSortOrderString()
-	 * @return Gets the default value that is specified in the annotation.
-	 *         This represents the state of this column only.
-	 *         If you want to know about the table sort order, you refer to the TableInfo#getDefaultSortOrderString().
-	 */
-	public SortOrderInfo getDefaultSortOrderInfo()
-	{
-		return this.defaultSortOrderInfo;
-	}
+        if (this.field == null) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("field is null.");
+            }
+        } else if (this.columnName.length() <= 0) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("columnName is zero string.");
+            }
+        }
+        // Acceptable
+        // else if(!this.defaultSortOrderInfo.isValid())
+        // {
+        // result = false;
+        // }
+        // Acceptable
+        // else if(!this.projectionMapInfo.isValid())
+        // {
+        // result = false;
+        // }
+        return result;
+    }
 
-	/**
-	 * @see com.tojc.ormlite.android.framework.TableInfo#getProjectionMap()
-	 * @return Gets the default value that is specified in the annotation.
-	 *         This represents the state of this column only.
-	 *         If you want to know about the table ProjectionMap, you refer to the TableInfo#getProjectionMap()
-	 */
-	public ProjectionMapInfo getProjectionMapInfo()
-	{
-		return this.projectionMapInfo;
-	}
+    public Field getField() {
+        return this.field;
+    }
+
+    public String getColumnName() {
+        return this.columnName;
+    }
+
+    public String getProjectionColumnName() {
+        String result = this.columnName;
+        if (this.projectionMapInfo.isValid()) {
+            result = this.projectionMapInfo.getName();
+        }
+        return result;
+    }
+
+    /**
+     * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultSortOrderString()
+     * @return Gets the default value that is specified in the annotation. This represents the state
+     *         of this column only. If you want to know about the table sort order, you refer to the
+     *         TableInfo#getDefaultSortOrderString().
+     */
+    public SortOrderInfo getDefaultSortOrderInfo() {
+        return this.defaultSortOrderInfo;
+    }
+
+    /**
+     * @see com.tojc.ormlite.android.framework.TableInfo#getProjectionMap()
+     * @return Gets the default value that is specified in the annotation. This represents the state
+     *         of this column only. If you want to know about the table ProjectionMap, you refer to
+     *         the TableInfo#getProjectionMap()
+     */
+    public ProjectionMapInfo getProjectionMapInfo() {
+        return this.projectionMapInfo;
+    }
 
 }

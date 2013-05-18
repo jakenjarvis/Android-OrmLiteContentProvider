@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTableConfig;
+
 //import com.j256.ormlite.table.DatabaseTable;
 
 /**

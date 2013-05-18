@@ -20,8 +20,8 @@
  */
 package com.tojc.ormlite.android.framework;
 
-public interface Validity
-{
-	public boolean isValid();
-	public boolean isValid(boolean throwException);
+public interface Validity {
+    public boolean isValid();
+
+    public boolean isValid(boolean throwException);
 }

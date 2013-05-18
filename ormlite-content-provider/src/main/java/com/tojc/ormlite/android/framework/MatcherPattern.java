@@ -28,282 +28,229 @@ import android.net.Uri;
 
 /**
  * Manage the UriMatcher pattern. It holds information related to the pattern code.
- * 
  * @author Jaken
  */
-public class MatcherPattern implements Validity
-{
-	private boolean preinitialized = false;
+public class MatcherPattern implements Validity {
+    private boolean preinitialized = false;
 
-	private TableInfo tableInfo;
-	private SubType subType;
-	private String pattern;
-	private int patternCode;
+    private TableInfo tableInfo;
+    private SubType subType;
+    private String pattern;
+    private int patternCode;
 
-	private ContentUriInfo contentUriInfo;
-	private ContentMimeTypeVndInfo contentMimeTypeVndInfo;
+    private ContentUriInfo contentUriInfo;
+    private ContentMimeTypeVndInfo contentMimeTypeVndInfo;
 
-	private MimeTypeVnd mimeTypeVnd;
+    private MimeTypeVnd mimeTypeVnd;
 
-	public MatcherPattern(TableInfo tableInfo, SubType subType, String pattern, int patternCode)
-	{
-		this.tableInfo = tableInfo;
-		this.subType = subType;
-		this.pattern = pattern;
-		this.patternCode = patternCode;
-		
-		if(this.tableInfo.getDefaultContentUriInfo().isValid())
-		{
-			this.contentUriInfo = this.tableInfo.getDefaultContentUriInfo();
-		}
-		else
-		{
-			this.contentUriInfo = null;
-		}
-		
-		if(this.tableInfo.getDefaultContentMimeTypeVndInfo().isValid())
-		{
-			this.contentMimeTypeVndInfo = this.tableInfo.getDefaultContentMimeTypeVndInfo();
-		}
-		else
-		{
-			this.contentMimeTypeVndInfo = null;
-		}
-		
-		if(this.contentMimeTypeVndInfo != null)
-		{
-			this.mimeTypeVnd = new MimeTypeVnd(this.subType, this.contentMimeTypeVndInfo);
-		}
-		else
-		{
-			this.mimeTypeVnd = null;
-		}
-	}
+    public MatcherPattern(TableInfo tableInfo, SubType subType, String pattern, int patternCode) {
+        this.tableInfo = tableInfo;
+        this.subType = subType;
+        this.pattern = pattern;
+        this.patternCode = patternCode;
 
-	@Override
-	public boolean isValid()
-	{
-		return isValid(false);
-	}
+        if (this.tableInfo.getDefaultContentUriInfo().isValid()) {
+            this.contentUriInfo = this.tableInfo.getDefaultContentUriInfo();
+        } else {
+            this.contentUriInfo = null;
+        }
 
-	@Override
-	public boolean isValid(boolean throwException)
-	{
-		boolean result = true;
-		
-		if(this.tableInfo == null)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("tableInfo is null.");
-			}
-		}
-		else if(this.subType == null)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("subType is null.");
-			}
-		}
-		else if(this.pattern == null)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("pattern is null.");
-			}
-		}
-		else if(this.patternCode <= 0)
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("patternCode is zero.");
-			}
-		}
-		else if((this.contentUriInfo == null) || (!this.contentUriInfo.isValid()))
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("contentUriInfo is invalid.");
-			}
-		}
-		else if((this.contentMimeTypeVndInfo == null) || (!this.contentMimeTypeVndInfo.isValid()))
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("contentMimeTypeVndInfo is invalid.");
-			}
-		}
-		else if((this.mimeTypeVnd == null) || (!this.mimeTypeVnd.isValid()))
-		{
-			result = false;
-			if(throwException && !result)
-			{
-				throw new IllegalStateException("mimeTypeVnd is invalid.");
-			}
-		}
-		return result;
-	}
+        if (this.tableInfo.getDefaultContentMimeTypeVndInfo().isValid()) {
+            this.contentMimeTypeVndInfo = this.tableInfo.getDefaultContentMimeTypeVndInfo();
+        } else {
+            this.contentMimeTypeVndInfo = null;
+        }
 
-	/**
-	 * Do not call this method. This is only used MatcherController.
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
-	 */
-	public void setPreinitialized()
-	{
-		this.preinitialized = true;
-	}
-	
-	/**
-	 * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation,
-	 * or want to override the setting of the DefaultContentUri annotation.
-	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.info.ContentUriInfo
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
-	 * @param contentUriInfo
-	 * @return Instance of the MatcherPattern class.
-	 */
-	public MatcherPattern setContentUri(ContentUriInfo contentUriInfo)
-	{
-		if(this.preinitialized)
-		{
-			throw new IllegalStateException("Can't change the settings after initialization.");
-		}
-		this.contentUriInfo = contentUriInfo;
-		return this;
-	}
+        if (this.contentMimeTypeVndInfo != null) {
+            this.mimeTypeVnd = new MimeTypeVnd(this.subType, this.contentMimeTypeVndInfo);
+        } else {
+            this.mimeTypeVnd = null;
+        }
+    }
 
-	/**
-	 * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation,
-	 * or want to override the setting of the DefaultContentUri annotation.
-	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
-	 * @param authority
-	 * @param path
-	 * @return Instance of the MatcherPattern class.
-	 */
-	public MatcherPattern setContentUri(String authority, String path)
-	{
-		return this.setContentUri(new ContentUriInfo(authority, path));
-	}
-	
-	/**
-	 * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd annotation,
-	 * or want to override the setting of the DefaultContentMimeTypeVnd annotation.
-	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
-	 * @param contentMimeTypeVndInfo
-	 * @return Instance of the MatcherPattern class.
-	 */
-	public MatcherPattern setContentMimeTypeVnd(ContentMimeTypeVndInfo contentMimeTypeVndInfo)
-	{
-		if(this.preinitialized)
-		{
-			throw new IllegalStateException("Can't change the settings after initialization.");
-		}
-		this.contentMimeTypeVndInfo = contentMimeTypeVndInfo;
-		this.mimeTypeVnd = new MimeTypeVnd(this.subType, this.contentMimeTypeVndInfo);
-		return this;
-	}
-	
-	/**
-	 * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd annotation,
-	 * or want to override the setting of the DefaultContentMimeTypeVnd annotation.
-	 * This method can not be called after MatcherController#hasPreinitialized().
-	 * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
-	 * @param name
-	 * @param type
-	 * @return Instance of the MatcherPattern class.
-	 */
-	public MatcherPattern setContentMimeTypeVnd(String name, String type)
-	{
-		return this.setContentMimeTypeVnd(new ContentMimeTypeVndInfo(name, type));
-	}
+    @Override
+    public boolean isValid() {
+        return isValid(false);
+    }
 
+    @Override
+    public boolean isValid(boolean throwException) {
+        boolean result = true;
 
-	public TableInfo getTableInfo()
-	{
-		return this.tableInfo;
-	}
+        if (this.tableInfo == null) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("tableInfo is null.");
+            }
+        } else if (this.subType == null) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("subType is null.");
+            }
+        } else if (this.pattern == null) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("pattern is null.");
+            }
+        } else if (this.patternCode <= 0) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("patternCode is zero.");
+            }
+        } else if ((this.contentUriInfo == null) || (!this.contentUriInfo.isValid())) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("contentUriInfo is invalid.");
+            }
+        } else if ((this.contentMimeTypeVndInfo == null) || (!this.contentMimeTypeVndInfo.isValid())) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("contentMimeTypeVndInfo is invalid.");
+            }
+        } else if ((this.mimeTypeVnd == null) || (!this.mimeTypeVnd.isValid())) {
+            result = false;
+            if (throwException && !result) {
+                throw new IllegalStateException("mimeTypeVnd is invalid.");
+            }
+        }
+        return result;
+    }
 
-	public SubType getSubType()
-	{
-		return this.subType;
-	}
+    /**
+     * Do not call this method. This is only used MatcherController.
+     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     */
+    public void setPreinitialized() {
+        this.preinitialized = true;
+    }
 
-	public String getPattern()
-	{
-		return this.pattern;
-	}
+    /**
+     * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation, or
+     * want to override the setting of the DefaultContentUri annotation. This method can not be
+     * called after MatcherController#hasPreinitialized().
+     * @see com.tojc.ormlite.android.annotation.info.ContentUriInfo
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
+     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @param contentUriInfo
+     * @return Instance of the MatcherPattern class.
+     */
+    public MatcherPattern setContentUri(ContentUriInfo contentUriInfo) {
+        if (this.preinitialized) {
+            throw new IllegalStateException("Can't change the settings after initialization.");
+        }
+        this.contentUriInfo = contentUriInfo;
+        return this;
+    }
 
-	public int getPatternCode()
-	{
-		return this.patternCode;
-	}
+    /**
+     * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation, or
+     * want to override the setting of the DefaultContentUri annotation. This method can not be
+     * called after MatcherController#hasPreinitialized().
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
+     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @param authority
+     * @param path
+     * @return Instance of the MatcherPattern class.
+     */
+    public MatcherPattern setContentUri(String authority, String path) {
+        return this.setContentUri(new ContentUriInfo(authority, path));
+    }
 
+    /**
+     * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd
+     * annotation, or want to override the setting of the DefaultContentMimeTypeVnd annotation. This
+     * method can not be called after MatcherController#hasPreinitialized().
+     * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
+     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @param contentMimeTypeVndInfo
+     * @return Instance of the MatcherPattern class.
+     */
+    public MatcherPattern setContentMimeTypeVnd(ContentMimeTypeVndInfo contentMimeTypeVndInfo) {
+        if (this.preinitialized) {
+            throw new IllegalStateException("Can't change the settings after initialization.");
+        }
+        this.contentMimeTypeVndInfo = contentMimeTypeVndInfo;
+        this.mimeTypeVnd = new MimeTypeVnd(this.subType, this.contentMimeTypeVndInfo);
+        return this;
+    }
 
-	public ContentUriInfo getContentUriInfo()
-	{
-		return this.contentUriInfo;
-	}
+    /**
+     * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd
+     * annotation, or want to override the setting of the DefaultContentMimeTypeVnd annotation. This
+     * method can not be called after MatcherController#hasPreinitialized().
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
+     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @param name
+     * @param type
+     * @return Instance of the MatcherPattern class.
+     */
+    public MatcherPattern setContentMimeTypeVnd(String name, String type) {
+        return this.setContentMimeTypeVnd(new ContentMimeTypeVndInfo(name, type));
+    }
 
-//	public ContentMimeTypeVndInfo getContentMimeTypeVndInfo()
-//	{
-//		return this.contentMimeTypeVndInfo;
-//	}
+    public TableInfo getTableInfo() {
+        return this.tableInfo;
+    }
 
-	public MimeTypeVnd getMimeTypeVnd()
-	{
-		return this.mimeTypeVnd;
-	}
+    public SubType getSubType() {
+        return this.subType;
+    }
 
-	/**
-	 * @return Return the concatenation string of Path and Pattern from ContentUri.
-	 *     <br>ex)<br>
-	 *     <code>
-	 *         ContentUri = "content://com.example.app.provider/table2/dataset1"<br>
-	 *         Return = "table2/dataset1"<br>
-	 *     </code>
-	 */
-	public String getPathAndPatternString()
-	{
-		return this.contentUriInfo.getPath() + "/" + this.pattern;
-	}
+    public String getPattern() {
+        return this.pattern;
+    }
 
-	/**
-	 * @return Returns the full ContentUri.(Uri object)
-	 */
-	public Uri getContentUriPattern()
-	{
-		return Uri.parse(this.contentUriInfo.getContentUri() + "/" + this.pattern);
-	}
-	
-	/**
-	 * @return Returns the full MIME types string.
-	 *     <br>ex)<br>
-	 *     <code>
-	 *         Return = "vnd.android.cursor.item/vnd.com.example.provider.table1"<br>
-	 *     </code>
-	 */
-	public String getMimeTypeVndString()
-	{
-		return this.mimeTypeVnd.getMimeTypeString();
-	}
+    public int getPatternCode() {
+        return this.patternCode;
+    }
 
-	@Override
-	public String toString()
-	{
-		return getContentUriPattern().toString();
-	}
+    public ContentUriInfo getContentUriInfo() {
+        return this.contentUriInfo;
+    }
+
+    // public ContentMimeTypeVndInfo getContentMimeTypeVndInfo()
+    // {
+    // return this.contentMimeTypeVndInfo;
+    // }
+
+    public MimeTypeVnd getMimeTypeVnd() {
+        return this.mimeTypeVnd;
+    }
+
+    /**
+     * @return Return the concatenation string of Path and Pattern from ContentUri. <br>
+     *         ex)<br>
+     *         <code>
+     *         ContentUri = "content://com.example.app.provider/table2/dataset1"<br>
+     *         Return = "table2/dataset1"<br>
+     *     </code>
+     */
+    public String getPathAndPatternString() {
+        return this.contentUriInfo.getPath() + "/" + this.pattern;
+    }
+
+    /**
+     * @return Returns the full ContentUri.(Uri object)
+     */
+    public Uri getContentUriPattern() {
+        return Uri.parse(this.contentUriInfo.getContentUri() + "/" + this.pattern);
+    }
+
+    /**
+     * @return Returns the full MIME types string. <br>
+     *         ex)<br>
+     *         <code>
+     *         Return = "vnd.android.cursor.item/vnd.com.example.provider.table1"<br>
+     *     </code>
+     */
+    public String getMimeTypeVndString() {
+        return this.mimeTypeVnd.getMimeTypeString();
+    }
+
+    @Override
+    public String toString() {
+        return getContentUriPattern().toString();
+    }
 
 }

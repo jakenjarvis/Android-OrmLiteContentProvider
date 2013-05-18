@@ -35,132 +35,120 @@ import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
 
 /**
- * This is a simple class that utilizes the framework. You can make ContentProvider minimal implementation.
- * This is an example of how to implement OrmLiteDefaultContentProvider.
- * 
+ * This is a simple class that utilizes the framework. You can make ContentProvider minimal
+ * implementation. This is an example of how to implement OrmLiteDefaultContentProvider.
  * @author Jaken
  */
-public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T>
-{
-	/*
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
-	 */
-	@Override
-	public Cursor onQuery(T helper, SQLiteDatabase db, MatcherPattern target, QueryParameters parameter)
-	{
-		Cursor result = null;
+public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T> {
+    /*
+     * @see
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256.ormlite.android.apptools
+     * .OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
+     */
+    @Override
+    public Cursor onQuery(T helper, SQLiteDatabase db, MatcherPattern target, QueryParameters parameter) {
+        Cursor result = null;
 
-		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables(target.getTableInfo().getName());
-		builder.setProjectionMap(target.getTableInfo().getProjectionMap());
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(target.getTableInfo().getName());
+        builder.setProjectionMap(target.getTableInfo().getProjectionMap());
 
-		// where
-		switch(target.getMimeTypeVnd().getSubType())
-		{
-			case Directory:
-				break;
+        // where
+        switch (target.getMimeTypeVnd().getSubType()) {
+            case Directory:
+                break;
 
-			case Item:
-				String where = target.getTableInfo().getIdColumnInfo().getColumnName()
-						+ "="
-						+ parameter.getUri().getPathSegments().get(1);
-				if((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1))
-				{
-					where += " AND ( " + parameter.getSelection() + " ) ";
-				}
-				builder.appendWhere(where);
-				break;
-		}
+            case Item:
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
+                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                    where += " AND ( " + parameter.getSelection() + " ) ";
+                }
+                builder.appendWhere(where);
+                break;
+        }
 
-		// orderBy
-		String orderBy = "";
-		if((parameter.getSortOrder() != null) && (parameter.getSortOrder().length() >= 1))
-		{
-			orderBy = parameter.getSortOrder();
-		}
-		else
-		{
-			orderBy = target.getTableInfo().getDefaultSortOrderString();
-		}
+        // orderBy
+        String orderBy = "";
+        if ((parameter.getSortOrder() != null) && (parameter.getSortOrder().length() >= 1)) {
+            orderBy = parameter.getSortOrder();
+        } else {
+            orderBy = target.getTableInfo().getDefaultSortOrderString();
+        }
 
-		result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(), null, null, orderBy);
-		return result;
-	}
+        result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(), null, null, orderBy);
+        return result;
+    }
 
-	/*
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
-	 */
-	@Override
-	public Uri onInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter)
-	{
-		Uri result = null;
-		
-		long id = db.insert(target.getTableInfo().getName(), null, parameter.getValues());
-		if(id >= 0)
-		{
-			result = ContentUris.withAppendedId(target.getContentUriPattern(), id);
-		}
-		else
-		{
-			throw new SQLException("Failed to insert row into : " + parameter.getUri().toString());
-		}
-		return result;
-	}
+    /*
+     * @see
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256.ormlite.android.
+     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
+     */
+    @Override
+    public Uri onInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
+        Uri result = null;
 
-	/*
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
-	 */
-	@Override
-	public int onDelete(T helper, SQLiteDatabase db, MatcherPattern target, DeleteParameters parameter)
-	{
-		int result = -1;
+        long id = db.insert(target.getTableInfo().getName(), null, parameter.getValues());
+        if (id >= 0) {
+            result = ContentUris.withAppendedId(target.getContentUriPattern(), id);
+        } else {
+            throw new SQLException("Failed to insert row into : " + parameter.getUri().toString());
+        }
+        return result;
+    }
 
-		switch(target.getMimeTypeVnd().getSubType())
-		{
-			case Directory:
-				result = db.delete(target.getTableInfo().getName(), parameter.getSelection(), parameter.getSelectionArgs());
-				break;
+    /*
+     * @see
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256.ormlite.android.
+     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
+     */
+    @Override
+    public int onDelete(T helper, SQLiteDatabase db, MatcherPattern target, DeleteParameters parameter) {
+        int result = -1;
 
-			case Item:
-				String where = target.getTableInfo().getIdColumnInfo().getColumnName()
-						+ "="
-						+ parameter.getUri().getPathSegments().get(1);
-				if((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1))
-				{
-					where += " AND ( " + parameter.getSelection() + " ) ";
-				}
-				result = db.delete(target.getTableInfo().getName(), where, parameter.getSelectionArgs());
-				break;
-		}
-		return result;
-	}
+        switch (target.getMimeTypeVnd().getSubType()) {
+            case Directory:
+                result = db.delete(target.getTableInfo().getName(), parameter.getSelection(), parameter.getSelectionArgs());
+                break;
 
-	/*
-	 * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern, com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
-	 */
-	@Override
-	public int onUpdate(T helper, SQLiteDatabase db, MatcherPattern target, UpdateParameters parameter)
-	{
-		int result = -1;
+            case Item:
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
+                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                    where += " AND ( " + parameter.getSelection() + " ) ";
+                }
+                result = db.delete(target.getTableInfo().getName(), where, parameter.getSelectionArgs());
+                break;
+        }
+        return result;
+    }
 
-		switch(target.getMimeTypeVnd().getSubType())
-		{
-			case Directory:
-				result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(), parameter.getSelectionArgs());
-				break;
+    /*
+     * @see
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256.ormlite.android.
+     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
+     */
+    @Override
+    public int onUpdate(T helper, SQLiteDatabase db, MatcherPattern target, UpdateParameters parameter) {
+        int result = -1;
 
-			case Item:
-				String where = target.getTableInfo().getIdColumnInfo().getColumnName()
-						+ "="
-						+ parameter.getUri().getPathSegments().get(1);
-				if((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1))
-				{
-					where += " AND ( " + parameter.getSelection() + " ) ";
-				}
-				result = db.update(target.getTableInfo().getName(), parameter.getValues(), where, parameter.getSelectionArgs());
-				break;
-		}
-		return result;
-	}
+        switch (target.getMimeTypeVnd().getSubType()) {
+            case Directory:
+                result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(), parameter.getSelectionArgs());
+                break;
+
+            case Item:
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
+                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                    where += " AND ( " + parameter.getSelection() + " ) ";
+                }
+                result = db.update(target.getTableInfo().getName(), parameter.getValues(), where, parameter.getSelectionArgs());
+                break;
+        }
+        return result;
+    }
 
 }
