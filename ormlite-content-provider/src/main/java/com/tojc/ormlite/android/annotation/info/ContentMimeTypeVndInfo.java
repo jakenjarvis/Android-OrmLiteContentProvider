@@ -16,6 +16,7 @@ public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
     // ----------------------------------
     public static final String VND = "vnd";
     public static final String PROVIDER_SUFFIX = ".provider";
+    public static final String VND_SEPARATOR = ".";
 
     // ----------------------------------
     // ATRRIBUTES
@@ -66,7 +67,7 @@ public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
     }
 
     public String getVndProviderSpecificString() {
-        return VND + "." + this.name + "." + this.type;
+        return VND + VND_SEPARATOR + this.name + VND_SEPARATOR + this.type;
     }
 
     @Override

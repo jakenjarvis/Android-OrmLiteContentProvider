@@ -1,6 +1,7 @@
 package com.tojc.ormlite.android.ormlitecontentprovider.sample.provider;
 
 import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
+import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.ormlitecontentprovider.sample.model.Account;
 

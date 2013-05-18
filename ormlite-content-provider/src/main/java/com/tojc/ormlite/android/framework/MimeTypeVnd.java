@@ -20,9 +20,11 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
+import java.io.File;
 
 import android.content.ContentResolver;
+
+import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 
 /**
  * Manage the MIME types information. It provides full support for ContentProvider MIME Types.
@@ -99,7 +101,7 @@ public class MimeTypeVnd implements Validity {
     }
 
     public String getMimeTypeString() {
-        return this.subType.toString() + "/" + this.providerSpecific.getVndProviderSpecificString();
+        return this.subType.toString() + File.separator + this.providerSpecific.getVndProviderSpecificString();
     }
 
     @Override

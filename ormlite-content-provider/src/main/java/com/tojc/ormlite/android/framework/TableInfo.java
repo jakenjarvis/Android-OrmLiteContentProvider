@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import android.provider.BaseColumns;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -53,9 +55,12 @@ public class TableInfo implements Validity {
     private String defaultSortOrder = "";
 
     public TableInfo(Class<?> tableClassType) {
-        if (!(tableClassType instanceof Class<?>)) {
-            throw new IllegalArgumentException("Parameter is not a Class<?>.");
-        }
+        // can't happen
+        // keep a while, May 18th 2013
+        // TODO remove after a while
+        // if (!(tableClassType instanceof Class<?>)) {
+        // throw new IllegalArgumentException("Parameter is not a Class<?>.");
+        // }
 
         this.classType = tableClassType;
         this.name = OrmLiteAnnotationAccessor.getAnnotationTableName(tableClassType);
@@ -132,7 +137,7 @@ public class TableInfo implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("classType is null.");
             }
-        } else if (this.name.length() <= 0) {
+        } else if (StringUtils.isEmpty(name)) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("name is zero string.");
@@ -148,7 +153,7 @@ public class TableInfo implements Validity {
         // {
         // result = false;
         // }
-        else if (this.columns.size() <= 0) {
+        else if (this.columns.isEmpty()) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("columns is zero size.");
@@ -165,9 +170,15 @@ public class TableInfo implements Validity {
         // result = false;
         // }
 
-        for (Map.Entry<String, ColumnInfo> entry : this.columns.entrySet()) {
-            result = result && entry.getValue().isValid(throwException);
-        }
+        // can't happen as columnInfo is always valid
+        // keep a while, May 18th 2013
+        // TODO remove after a while
+        // for (ColumnInfo columnInfo : this.columns.values()) {
+        // result = result && columnInfo.isValid(throwException);
+        // if (throwException && !result) {
+        // throw new IllegalStateException("ColumnInfo " + columnInfo + " is not valid");
+        // }
+        // }
 
         return result;
     }
@@ -190,7 +201,7 @@ public class TableInfo implements Validity {
     }
 
     /**
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#setDefaultContentUri(String,
+     * @see com.tojc.ormlite.android.framework.MatcherController#setDefaultContentUri(String,
      *      String)
      * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultContentUriInfo()
      * @see com.tojc.ormlite.android.framework.MatcherPattern#getContentUriInfo()
@@ -210,7 +221,7 @@ public class TableInfo implements Validity {
     }
 
     /**
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#setDefaultContentMimeTypeVnd(String,
+     * @see com.tojc.ormlite.android.framework.MatcherController#setDefaultContentMimeTypeVnd(String,
      *      String)
      * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultContentMimeTypeVndInfo()
      * @see com.tojc.ormlite.android.framework.MatcherPattern#getMimeTypeVnd()

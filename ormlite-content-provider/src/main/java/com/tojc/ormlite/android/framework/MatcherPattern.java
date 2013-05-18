@@ -20,18 +20,18 @@
  */
 package com.tojc.ormlite.android.framework;
 
+import android.net.Uri;
+
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
-
-import android.net.Uri;
 
 /**
  * Manage the UriMatcher pattern. It holds information related to the pattern code.
  * @author Jaken
  */
 public class MatcherPattern implements Validity {
-    private boolean preinitialized = false;
+    private boolean initialized = false;
 
     private TableInfo tableInfo;
     private SubType subType;
@@ -97,17 +97,17 @@ public class MatcherPattern implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("patternCode is zero.");
             }
-        } else if ((this.contentUriInfo == null) || (!this.contentUriInfo.isValid())) {
+        } else if (this.contentUriInfo == null || !this.contentUriInfo.isValid()) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("contentUriInfo is invalid.");
             }
-        } else if ((this.contentMimeTypeVndInfo == null) || (!this.contentMimeTypeVndInfo.isValid())) {
+        } else if (this.contentMimeTypeVndInfo == null || !this.contentMimeTypeVndInfo.isValid()) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("contentMimeTypeVndInfo is invalid.");
             }
-        } else if ((this.mimeTypeVnd == null) || (!this.mimeTypeVnd.isValid())) {
+        } else if (this.mimeTypeVnd == null || !this.mimeTypeVnd.isValid()) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("mimeTypeVnd is invalid.");
@@ -117,11 +117,11 @@ public class MatcherPattern implements Validity {
     }
 
     /**
-     * Do not call this method. This is only used MatcherController.
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * Do not call this method. This is only used MatcherController and tests.
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      */
-    public void setPreinitialized() {
-        this.preinitialized = true;
+    protected void initialize() {
+        this.initialized = true;
     }
 
     /**
@@ -130,12 +130,12 @@ public class MatcherPattern implements Validity {
      * called after MatcherController#hasPreinitialized().
      * @see com.tojc.ormlite.android.annotation.info.ContentUriInfo
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      * @param contentUriInfo
      * @return Instance of the MatcherPattern class.
      */
     public MatcherPattern setContentUri(ContentUriInfo contentUriInfo) {
-        if (this.preinitialized) {
+        if (this.initialized) {
             throw new IllegalStateException("Can't change the settings after initialization.");
         }
         this.contentUriInfo = contentUriInfo;
@@ -147,7 +147,7 @@ public class MatcherPattern implements Validity {
      * want to override the setting of the DefaultContentUri annotation. This method can not be
      * called after MatcherController#hasPreinitialized().
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      * @param authority
      * @param path
      * @return Instance of the MatcherPattern class.
@@ -162,12 +162,12 @@ public class MatcherPattern implements Validity {
      * method can not be called after MatcherController#hasPreinitialized().
      * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      * @param contentMimeTypeVndInfo
      * @return Instance of the MatcherPattern class.
      */
     public MatcherPattern setContentMimeTypeVnd(ContentMimeTypeVndInfo contentMimeTypeVndInfo) {
-        if (this.preinitialized) {
+        if (this.initialized) {
             throw new IllegalStateException("Can't change the settings after initialization.");
         }
         this.contentMimeTypeVndInfo = contentMimeTypeVndInfo;
@@ -180,7 +180,7 @@ public class MatcherPattern implements Validity {
      * annotation, or want to override the setting of the DefaultContentMimeTypeVnd annotation. This
      * method can not be called after MatcherController#hasPreinitialized().
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
-     * @see com.tojc.ormlite.android.OrmLiteDefaultContentProvider.MatcherController#hasPreinitialized()
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      * @param name
      * @param type
      * @return Instance of the MatcherPattern class.
