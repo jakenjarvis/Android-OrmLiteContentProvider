@@ -2,6 +2,8 @@ package com.tojc.ormlite.android.annotation.info;
 
 import java.lang.reflect.AnnotatedElement;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ProjectionMap;
 
 /**
@@ -30,6 +32,6 @@ public class ProjectionMapInfo extends AnnotationInfoBase {
 
     @Override
     protected boolean isValidValue() {
-        return this.name.length() >= 1;
+        return StringUtils.isNotEmpty(name);
     }
 }

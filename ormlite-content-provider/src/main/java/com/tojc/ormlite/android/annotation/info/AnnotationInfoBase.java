@@ -33,14 +33,19 @@ public abstract class AnnotationInfoBase implements Validity {
     @Override
     public boolean isValid(boolean throwException) {
         boolean result = this.isValid();
-        if (throwException && !result) {
-            throw new IllegalStateException(this.getClass().getSimpleName() + " class status is abnormal.");
-        }
+        String message = this.getClass().getSimpleName() + " class status is abnormal.";
+        thowIllegalStateExceptionUnderCondition(throwException && !result, message);
         return result;
     }
 
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
+    }
+
+    protected final void thowIllegalStateExceptionUnderCondition(boolean condition, String message) {
+        if (condition) {
+            throw new IllegalStateException(message);
+        }
     }
 }

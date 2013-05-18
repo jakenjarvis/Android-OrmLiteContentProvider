@@ -10,6 +10,8 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SortOrder;
  * @author Jaken
  */
 public class SortOrderInfo extends AnnotationInfoBase {
+    private static final String SQL_ORDER_SEPARATOR = " ";
+
     private SortOrder order;
     private int weight;
 
@@ -37,7 +39,7 @@ public class SortOrderInfo extends AnnotationInfoBase {
     }
 
     public String makeSqlOrderString(String fieldname) {
-        return (fieldname + " " + this.order.toString()).trim();
+        return (fieldname + SQL_ORDER_SEPARATOR + this.order.toString()).trim();
     }
 
     @Override

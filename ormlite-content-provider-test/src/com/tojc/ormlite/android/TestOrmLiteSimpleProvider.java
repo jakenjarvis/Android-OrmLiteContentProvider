@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentProviderClient;
+import android.content.ContentProviderOperation;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
@@ -181,6 +183,24 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         for (Account account : accountList) {
             assertEquals(TEST_NAME_1 + accountIndex++, account.getName());
         }
+    }
+
+    public void testApplyBatch() throws RemoteException, OperationApplicationException {
+        // given
+        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+        operations.add(ContentProviderOperation.newInsert(AccountContract.CONTENT_URI).withValue(AccountContract.NAME, TEST_NAME_1).build());
+        operations.add(ContentProviderOperation.newInsert(AccountContract.CONTENT_URI).withValue(AccountContract.NAME, TEST_NAME_2).build());
+
+        // when
+        getInstrumentation().getTargetContext().getContentResolver().applyBatch(AccountContract.AUTHORITY, operations);
+
+        // then
+        RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
+        List<Account> accountList = simpleDao.queryForAll();
+        accountList = simpleDao.queryForAll();
+        assertEquals(2, accountList.size());
+        assertEquals(TEST_NAME_1, accountList.get(0).getName());
+        assertEquals(TEST_NAME_2, accountList.get(1).getName());
     }
 
     private SampleHelper getHelper() {

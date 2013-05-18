@@ -48,7 +48,7 @@ import com.tojc.ormlite.android.framework.TableInfo;
 
 /**
  * To take advantage of the framework, it provides a standard class. If you use this library, you
- * should inherit from this class.
+ * should inherit from this class (or a provided subclass).
  * @author Jaken
  */
 public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteBaseContentProvider<T> {
