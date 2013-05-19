@@ -19,6 +19,9 @@ public final class PojoWithFields1Contract
 
   public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
+  private PojoWithFields1Contract() {
+  }
+
 
   public static final String CONTRACTUALFIELD = "contractualField";
 }

@@ -170,7 +170,7 @@ final class CodeGen {
                 Object value = e.getValue().accept(VALUE_EXTRACTOR, null);
                 Object defaultValue = result.get(name);
                 if (!lenientIsInstance(defaultValue.getClass(), value)) {
-                    throw new IllegalStateException(String.format("Value of %s.%s is a %s but expected a %s\n    value: %s", annotationType, name, value.getClass().getName(), defaultValue.getClass()
+                    throw new IllegalStateException(String.format("Value of %s.%s is a %s but expected a %s%n    value: %s", annotationType, name, value.getClass().getName(), defaultValue.getClass()
                             .getName(), value instanceof Object[] ? Arrays.toString((Object[]) value) : value));
                 }
                 result.put(name, value);

@@ -35,9 +35,9 @@ import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.InsertParameters;
-import com.tojc.ormlite.android.framework.OperationParameters.Parameter;
 import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
+import com.tojc.ormlite.android.framework.Parameter;
 
 /**
  * To take advantage of the framework, it provides a standard class. If you use this library, you

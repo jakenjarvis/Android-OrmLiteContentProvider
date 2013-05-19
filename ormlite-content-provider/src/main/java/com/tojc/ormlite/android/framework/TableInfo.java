@@ -92,7 +92,8 @@ public class TableInfo implements Validity {
                 // DefaultSortOrder
                 SortOrderInfo defaultSortOrderInfo = columnInfo.getDefaultSortOrderInfo();
                 if (defaultSortOrderInfo.isValid()) {
-                    defaultSortOrderMap.put(defaultSortOrderInfo.getWeight(), defaultSortOrderInfo.makeSqlOrderString(columnInfo.getColumnName()));
+                    defaultSortOrderMap.put(defaultSortOrderInfo.getWeight(),
+                        defaultSortOrderInfo.makeSqlOrderString(columnInfo.getColumnName()));
                 }
 
                 // ProjectionMap
@@ -142,18 +143,7 @@ public class TableInfo implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("name is zero string.");
             }
-        }
-        // Acceptable
-        // else if(!this.defaultContentUriInfo.isValid())
-        // {
-        // result = false;
-        // }
-        // Acceptable
-        // else if(!this.defaultContentMimeTypeVndInfo.isValid())
-        // {
-        // result = false;
-        // }
-        else if (this.columns.isEmpty()) {
+        } else if (this.columns.isEmpty()) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("columns is zero size.");
@@ -176,7 +166,8 @@ public class TableInfo implements Validity {
         // for (ColumnInfo columnInfo : this.columns.values()) {
         // result = result && columnInfo.isValid(throwException);
         // if (throwException && !result) {
-        // throw new IllegalStateException("ColumnInfo " + columnInfo + " is not valid");
+        // throw new IllegalStateException("ColumnInfo " + columnInfo +
+        // " is not valid");
         // }
         // }
 
@@ -193,8 +184,9 @@ public class TableInfo implements Validity {
 
     /**
      * @see com.tojc.ormlite.android.framework.MatcherPattern#getContentUriInfo()
-     * @return Gets the default value that is specified in the annotation. If you want to know the
-     *         state to match the pattern, see MatcherPattern#getContentUriInfo.
+     * @return Gets the default value that is specified in the annotation. If
+     *         you want to know the state to match the pattern, see
+     *         MatcherPattern#getContentUriInfo.
      */
     public ContentUriInfo getDefaultContentUriInfo() {
         return this.defaultContentUriInfo;
@@ -213,8 +205,9 @@ public class TableInfo implements Validity {
 
     /**
      * @see com.tojc.ormlite.android.framework.MatcherPattern#getMimeTypeVnd()
-     * @return Gets the default value that is specified in the annotation. If you want to know the
-     *         state to match the pattern, see MatcherPattern#getMimeTypeVnd.
+     * @return Gets the default value that is specified in the annotation. If
+     *         you want to know the state to match the pattern, see
+     *         MatcherPattern#getMimeTypeVnd.
      */
     public ContentMimeTypeVndInfo getDefaultContentMimeTypeVndInfo() {
         return this.defaultContentMimeTypeVndInfo;
@@ -232,8 +225,9 @@ public class TableInfo implements Validity {
     }
 
     /**
-     * @return Gets the default value that is specified in the annotation. If you are specifying
-     *         multiple fields, return the concatenated string. ex) "timestamp DESC, _id ASC"
+     * @return Gets the default value that is specified in the annotation. If
+     *         you are specifying multiple fields, return the concatenated
+     *         string. ex) "timestamp DESC, _id ASC"
      */
     public String getDefaultSortOrderString() {
         return this.defaultSortOrder;
@@ -248,8 +242,9 @@ public class TableInfo implements Validity {
 
     /**
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.ProjectionMap
-     * @return Return to generate the ProjectionMap. If you are not using the ProjectionMap
-     *         annotations need not be used. The Map is includes all columns.
+     * @return Return to generate the ProjectionMap. If you are not using the
+     *         ProjectionMap annotations need not be used. The Map is includes
+     *         all columns.
      */
     public Map<String, String> getProjectionMap() {
         return this.projectionMap;

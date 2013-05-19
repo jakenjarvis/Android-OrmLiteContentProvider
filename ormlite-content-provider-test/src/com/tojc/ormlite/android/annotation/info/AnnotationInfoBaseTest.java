@@ -40,7 +40,7 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
             dummyAnnotationInfoBase.isValid(true);
             fail();
         } catch (Exception ex) {
-            // test succeeds
+            assertTrue(true);
         }
     }
 
@@ -48,7 +48,7 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
      * Class under test.
      * @author SNI
      */
-    private class DummyAnnotationInfoBase extends AnnotationInfoBase {
+    private static class DummyAnnotationInfoBase extends AnnotationInfoBase {
 
         private boolean isValidValue;
 

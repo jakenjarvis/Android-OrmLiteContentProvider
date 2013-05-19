@@ -41,10 +41,6 @@ public class ColumnInfo implements Validity {
         if (!columnField.isAnnotationPresent(DatabaseField.class)) {
             throw new IllegalArgumentException("Parameter does not implement the DatabaseField annotation.");
         }
-        // Useless, target is a field.
-        if (!(columnField instanceof Field)) {
-            throw new IllegalArgumentException("Parameter is not a Field.");
-        }
 
         this.field = columnField;
         this.columnName = OrmLiteAnnotationAccessor.getAnnotationColumnName(columnField);
@@ -105,8 +101,9 @@ public class ColumnInfo implements Validity {
 
     /**
      * @see com.tojc.ormlite.android.framework.TableInfo#getDefaultSortOrderString()
-     * @return Gets the default value that is specified in the annotation. This represents the state
-     *         of this column only. If you want to know about the table sort order, you refer to the
+     * @return Gets the default value that is specified in the annotation. This
+     *         represents the state of this column only. If you want to know
+     *         about the table sort order, you refer to the
      *         TableInfo#getDefaultSortOrderString().
      */
     public SortOrderInfo getDefaultSortOrderInfo() {
@@ -115,9 +112,10 @@ public class ColumnInfo implements Validity {
 
     /**
      * @see com.tojc.ormlite.android.framework.TableInfo#getProjectionMap()
-     * @return Gets the default value that is specified in the annotation. This represents the state
-     *         of this column only. If you want to know about the table ProjectionMap, you refer to
-     *         the TableInfo#getProjectionMap()
+     * @return Gets the default value that is specified in the annotation. This
+     *         represents the state of this column only. If you want to know
+     *         about the table ProjectionMap, you refer to the
+     *         TableInfo#getProjectionMap()
      */
     public ProjectionMapInfo getProjectionMapInfo() {
         return this.projectionMapInfo;

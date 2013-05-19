@@ -1,23 +1,3 @@
-/*
- * This file is part of the Android-OrmLiteContentProvider package.
- * 
- * Copyright (c) 2012, Jaken Jarvis (jaken.jarvis@gmail.com)
- * 
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- * 
- * The author may be contacted via 
- * https://github.com/jakenjarvis/Android-OrmLiteContentProvider
- */
 package com.tojc.ormlite.android.annotation;
 
 import java.lang.reflect.AnnotatedElement;
@@ -28,13 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
-//import com.j256.ormlite.table.DatabaseTable;
-
 /**
  * Class to access the standard OrmLite annotation.
  * @author Jaken
  */
-public class OrmLiteAnnotationAccessor {
+public final class OrmLiteAnnotationAccessor {
+
+    private OrmLiteAnnotationAccessor() {
+        // utility constructor
+    }
+
     /**
      * Gets the table name from DatabaseTable annotation. If the DatabaseTable#tableName is not
      * specified, returns the class name.

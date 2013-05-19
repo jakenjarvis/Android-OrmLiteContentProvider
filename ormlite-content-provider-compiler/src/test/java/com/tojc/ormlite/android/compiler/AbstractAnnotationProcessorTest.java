@@ -49,7 +49,7 @@ abstract class AbstractAnnotationProcessorTest {
 
     protected enum CompilerOptions {
         GENERATED_SOURCES_DIRECTORY("-s <directory>", "<directory>", "Specify where to place generated source files"), GENERATED_CLASSES_DIRECTORY("-d <directory>", "<directory>",
-                "Specify where to place generated class files"), ;
+                "Specify where to place generated class files");
 
         private String option;
         private String description;
@@ -157,6 +157,7 @@ abstract class AbstractAnnotationProcessorTest {
         try {
             fileManager.close();
         } catch (IOException exception) {
+            exception.printStackTrace();
         }
 
         return diagnosticCollector.getDiagnostics();

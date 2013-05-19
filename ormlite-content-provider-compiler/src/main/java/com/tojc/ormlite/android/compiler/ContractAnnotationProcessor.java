@@ -57,9 +57,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
 
-        // Create a string builder for out debug messages
-        StringBuilder debug = new StringBuilder();
-
         // Get all classes that has the annotation
         Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
 
@@ -81,7 +78,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 targetPackageName = contractClassName.substring(0, contractClassName.lastIndexOf('.'));
                 targetClassName = contractClassName;
             }
-            System.out.println("filename " + targetClassName);
 
             DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
             String contentUriAuthority = "";
@@ -115,7 +111,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             Writer out = null;
             try {
                 JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(targetClassName, (Element[]) null);
-                System.out.println("sourceFile " + sourceFile.toUri().toString());
 
                 out = sourceFile.openWriter();
                 JavaWriter writer = new JavaWriter(out);
@@ -124,7 +119,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                         .emitImports("android.net.Uri")//
                         .emitImports("android.content.ContentResolver")//
                         .emitImports("android.provider.BaseColumns")//
-                        .emitEmptyLine();//
+                        .emitEmptyLine();
 
                 // public static final String TABLENAME = "curren_weather";
 
@@ -143,9 +138,12 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                         .emitEmptyLine()//
                         .emitField("Uri", "CONTENT_URI", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, defaultContentUriStatement)//
                         .emitEmptyLine()//
+                        .beginMethod(null, targetClassName, Modifier.PRIVATE)//
+                        .endMethod()//
+                        .emitEmptyLine()//
                         .emitEmptyLine();
 
-                List<Element> fields = getAllElementsAnnotatedWith(debug, DatabaseField.class, classElement);
+                List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
                 for (Element field : fields) {
                     String fieldName = field.getSimpleName().toString();
                     if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
@@ -156,62 +154,46 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                error(classElement, debug, "can't open java file " + targetClassName);
+                error(classElement, "can't open java file " + targetClassName);
             } finally {
                 if (out != null) {
                     try {
                         out.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } finally {
-
                     }
                 }
             }
         }
 
-        System.out.println(debug.toString());
         return true;
-
     }
 
-    private List<Element> getAllElementsAnnotatedWith(final StringBuilder debug, Class<? extends Annotation> class1, Element classElement) {
-        debug.append("annotorm" + "\n");
-        List<Element> allFields = getEnclosedElements(debug, classElement, ElementKind.FIELD);
+    private List<Element> getAllElementsAnnotatedWith(Class<? extends Annotation> class1, Element classElement) {
+        List<Element> allFields = getEnclosedElements(classElement, ElementKind.FIELD);
         List<Element> result = new ArrayList<Element>();
         for (final Element fieldElement : allFields) {
             if (fieldElement.getAnnotation(class1) != null) {
-                debug.append("annotorm good" + fieldElement + " " + fieldElement.toString() + "\n");
                 result.add(fieldElement);
             }
         }
         return result;
     }
 
-    private void error(final Element element, final StringBuilder debug, final String message) {
-
-        // Debug output (uncomment this to show debug message)
-        // processingEnv.getMessager().printMessage(Kind.ERROR, debug.toString() + "\n\n" + message,
-        // element);
-
-        // Production output (uncomment this for production message)
+    private void error(final Element element, final String message) {
         processingEnv.getMessager().printMessage(Kind.ERROR, message, element);
-
     }
 
-    private List<Element> getEnclosedElements(final StringBuilder debug, final Element element, final ElementKind elementKind) {
+    private List<Element> getEnclosedElements(final Element element, final ElementKind elementKind) {
 
         List<Element> list = new ArrayList<Element>();
 
         for (Element enclosedElement : element.getEnclosedElements()) {
-            debug.append("enclosed:" + enclosedElement.getSimpleName() + ":" + enclosedElement.getKind() + "\n");
             if (enclosedElement.getKind() == elementKind) {
                 list.add(enclosedElement);
             }
         }
 
         return list;
-
     }
-
 }

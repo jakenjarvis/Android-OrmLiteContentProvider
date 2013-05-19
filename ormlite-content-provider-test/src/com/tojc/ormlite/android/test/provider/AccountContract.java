@@ -5,6 +5,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class AccountContract implements BaseColumns {
+
+    private AccountContract() {
+        // utility constructor
+    }
+
     public static final String AUTHORITY = "com.tojc.ormlite.android.test";
 
     public static final String CONTENT_URI_PATH = "accounts";

@@ -12,10 +12,11 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 
-import com.tojc.ormlite.android.ormlitecontentprovider.sample.R;
 import com.tojc.ormlite.android.ormlitecontentprovider.sample.provider.AccountContract;
 
 public class MainActivity extends Activity {
+    private static final int TEST_ENTRY_COUNT = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +29,8 @@ public class MainActivity extends Activity {
         getContentResolver().insert(AccountContract.CONTENT_URI, values);
 
         // bulkInsert test
-        int length = 10;
-        ContentValues[] contentValues = new ContentValues[length];
-        for (int i = 0; i < length; i++) {
+        ContentValues[] contentValues = new ContentValues[TEST_ENTRY_COUNT];
+        for (int i = 0; i < TEST_ENTRY_COUNT; i++) {
             values = new ContentValues();
             values.clear();
             values.put(AccountContract.NAME, "Yamada Tarou: " + i);
@@ -62,15 +62,18 @@ public class MainActivity extends Activity {
         Cursor c2 = null;
         try {
             c2 = client.query(AccountContract.CONTENT_URI, null, null, null, null);
+            while (c2.moveToNext()) {
+                for (int i = 0; i < c2.getColumnCount(); i++) {
+                    Log.d(getClass().getSimpleName(), c2.getColumnName(i) + " : " + c2.getString(i));
+                }
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
-        }
-        while (c2.moveToNext()) {
-            for (int i = 0; i < c2.getColumnCount(); i++) {
-                Log.d(getClass().getSimpleName(), c2.getColumnName(i) + " : " + c2.getString(i));
+        } finally {
+            if (c2 != null) {
+                c2.close();
             }
         }
-        c2.close();
         client.release();
     }
 

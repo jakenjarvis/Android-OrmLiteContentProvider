@@ -35,15 +35,18 @@ import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
 
 /**
- * This is a simple class that utilizes the framework. You can make ContentProvider minimal
- * implementation. This is an example of how to implement OrmLiteDefaultContentProvider.
+ * This is a simple class that utilizes the framework. You can make
+ * ContentProvider minimal implementation. This is an example of how to
+ * implement OrmLiteDefaultContentProvider.
  * @author Jaken
  */
-public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T> {
+public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends
+    OrmLiteDefaultContentProvider<T> {
     /*
      * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256.ormlite.android.apptools
-     * .OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256
+     * .ormlite.android.apptools .OrmLiteSqliteOpenHelper,
+     * com.tojc.ormlite.android.framework.MatcherPattern,
      * com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
      */
     @Override
@@ -56,34 +59,39 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
         // where
         switch (target.getMimeTypeVnd().getSubType()) {
-            case DIRECTORY:
-                break;
 
             case ITEM:
-                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
-                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
+                    + parameter.getUri().getPathSegments().get(1);
+                if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
                 builder.appendWhere(where);
+                break;
+
+            case DIRECTORY:
+            default:
                 break;
         }
 
         // orderBy
         String orderBy = "";
-        if ((parameter.getSortOrder() != null) && (parameter.getSortOrder().length() >= 1)) {
+        if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
             orderBy = parameter.getSortOrder();
         } else {
             orderBy = target.getTableInfo().getDefaultSortOrderString();
         }
 
-        result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(), null, null, orderBy);
+        result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(),
+            null, null, orderBy);
         return result;
     }
 
     /*
      * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256.ormlite.android.
-     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256
+     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
+     * com.tojc.ormlite.android.framework.MatcherPattern,
      * com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
      */
     @Override
@@ -101,8 +109,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
     /*
      * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256.ormlite.android.
-     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256
+     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
+     * com.tojc.ormlite.android.framework.MatcherPattern,
      * com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
      */
     @Override
@@ -111,15 +120,20 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
-                result = db.delete(target.getTableInfo().getName(), parameter.getSelection(), parameter.getSelectionArgs());
+                result = db.delete(target.getTableInfo().getName(), parameter.getSelection(),
+                    parameter.getSelectionArgs());
                 break;
 
             case ITEM:
-                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
-                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
+                    + parameter.getUri().getPathSegments().get(1);
+                if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
                 result = db.delete(target.getTableInfo().getName(), where, parameter.getSelectionArgs());
+                break;
+
+            default:
                 break;
         }
         return result;
@@ -127,8 +141,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
     /*
      * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256.ormlite.android.
-     * apptools.OrmLiteSqliteOpenHelper, com.tojc.ormlite.android.framework.MatcherPattern,
+     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256
+     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
+     * com.tojc.ormlite.android.framework.MatcherPattern,
      * com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
      */
     @Override
@@ -137,18 +152,23 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
 
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
-                result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(), parameter.getSelectionArgs());
+                result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(),
+                    parameter.getSelectionArgs());
                 break;
 
             case ITEM:
-                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "=" + parameter.getUri().getPathSegments().get(1);
-                if ((parameter.getSelection() != null) && (parameter.getSelection().length() >= 1)) {
+                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
+                    + parameter.getUri().getPathSegments().get(1);
+                if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
-                result = db.update(target.getTableInfo().getName(), parameter.getValues(), where, parameter.getSelectionArgs());
+                result = db.update(target.getTableInfo().getName(), parameter.getValues(), where,
+                    parameter.getSelectionArgs());
+                break;
+
+            default:
                 break;
         }
         return result;
     }
-
 }

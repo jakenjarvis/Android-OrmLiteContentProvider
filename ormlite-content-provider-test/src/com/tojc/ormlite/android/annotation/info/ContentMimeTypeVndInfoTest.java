@@ -127,6 +127,10 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 
+    // ----------------------------------
+    //  CLASSES UNDER TESTS
+    // ----------------------------------
+    
     /**
      * Annotated class under test.
      */

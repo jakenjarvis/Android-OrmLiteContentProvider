@@ -49,100 +49,29 @@
 		<sourceDirectory>src/</sourceDirectory>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<extensions>true</extensions>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
-				<version>${android-maven-plugin.version}</version>
-				<configuration>
-					<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-					<assetsDirectory>${project.basedir}/assets</assetsDirectory>
-					<resourceDirectory>${project.basedir}/res</resourceDirectory>
-					<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
-					<sdk>
-						<platform>17</platform>
-					</sdk>
-					<undeployBeforeDeploy>true</undeployBeforeDeploy>
-				</configuration>
 			</plugin>
-
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>lint</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.lewisd</groupId>
-						<artifactId>lint-maven-plugin</artifactId>
-						<version>0.0.6</version>
-						<executions>
-							<execution>
-								<phase>validate</phase>
-								<goals>
-									<goal>check</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>ant</id>
-			<build>
-				<plugins>
-					<!-- This configuration is only meant to provide compatibility for ant 
-						users -->
-					<plugin>
-						<artifactId>maven-clean-plugin</artifactId>
-						<version>${maven-clean-plugin.version}</version>
-						<configuration>
-							<filesets>
-								<fileset>
-									<directory>${project.basedir}/libs-for-ant</directory>
-									<includes>
-										<include>*.jar</include>
-									</includes>
-									<followSymlinks>false</followSymlinks>
-								</fileset>
-							</filesets>
-						</configuration>
-					</plugin>
-					<!-- This configuration is only meant to provide compatibility for ant 
-						users -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>${maven-dependency-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>copy-dependencies</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy-dependencies</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.basedir}/libs-for-ant</outputDirectory>
-									<overWriteReleases>true</overWriteReleases>
-									<overWriteSnapshots>true</overWriteSnapshots>
-									<overWriteIfNewer>true</overWriteIfNewer>
-									<excludeArtifactIds>xpp3,httpclient,httpcore,android,xmlParserAPIs,opengl-api</excludeArtifactIds>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

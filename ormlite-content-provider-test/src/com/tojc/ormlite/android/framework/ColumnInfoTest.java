@@ -62,7 +62,7 @@ public class ColumnInfoTest extends AndroidTestCase {
             columnInfo = new ColumnInfo(field);
             fail();
         } catch (Exception e) {
-            // test succeeds
+            assertTrue(true);
         }
     }
 

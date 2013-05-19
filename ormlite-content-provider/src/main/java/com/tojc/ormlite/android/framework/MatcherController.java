@@ -37,7 +37,7 @@ import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
  * @author Jaken
  */
 public class MatcherController {
-    private boolean preinitialized = false;
+    private boolean initialized = false;
 
     private UriMatcher matcher = null;
     private Map<Class<?>, TableInfo> tables = null;
@@ -182,7 +182,7 @@ public class MatcherController {
             entry.initialize();
         }
 
-        this.preinitialized = true;
+        this.initialized = true;
         return this;
     }
 
@@ -234,14 +234,14 @@ public class MatcherController {
     }
 
     public boolean hasPreinitialized() {
-        return this.preinitialized;
+        return this.initialized;
     }
 
     /**
      * @return Return an instance of the UriMatcher.
      */
     public UriMatcher getUriMatcher() {
-        if (!this.preinitialized) {
+        if (!this.initialized) {
             throw new IllegalStateException("Controller has not been initialized.");
         }
         return this.matcher;
@@ -251,7 +251,7 @@ public class MatcherController {
      * @return Return a map of tables that have been registered class.
      */
     public Map<Class<?>, TableInfo> getTables() {
-        if (!this.preinitialized) {
+        if (!this.initialized) {
             throw new IllegalStateException("Controller has not been initialized.");
         }
         return this.tables;
@@ -261,7 +261,7 @@ public class MatcherController {
      * @return Return an instance of the UriMatcher.
      */
     public List<MatcherPattern> getMatcherPatterns() {
-        if (!this.preinitialized) {
+        if (!this.initialized) {
             throw new IllegalStateException("Controller has not been initialized.");
         }
         return this.matcherPatterns;

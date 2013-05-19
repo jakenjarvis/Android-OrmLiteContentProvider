@@ -13,7 +13,7 @@ import com.tojc.ormlite.android.test.model.Membership;
 
 public class SampleHelper extends OrmLiteSqliteOpenHelper {
 
-    public final static Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class};
+    /* package-private */static final Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class};
 
     public SampleHelper(Context context) {
         super(context, "MyDatabase", null, 1);

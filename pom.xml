@@ -11,10 +11,23 @@
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
+		<!-- dependencies -->
 		<android.version>4.1.1.4</android.version>
+		<android-platform.version>17</android-platform.version>
 		<android.support.version>r7</android.support.version>
+
 		<ormlite.version>4.45</ormlite.version>
+
+		<!-- testing -->
 		<easymock.version>2.5.2</easymock.version>
+
+		<!-- plugins -->
+		<maven-checkstyle-plugin.version>2.9.1</maven-checkstyle-plugin.version>
+		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
+		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>
+		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
+		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
+		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
 	</properties>
 
 	<modules>
@@ -62,5 +75,137 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Eclipse config -->
+				<!-- http://stackoverflow.com/questions/13040788/how-to-elimate-the-maven-enforcer-plugin-goal-enforce-is-ignored-by-m2e-wa -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${eclipse-lifecycle-plugin.version}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<!-- Android config -->
+				<plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>${android-maven-plugin.version}</version>
+					<configuration>
+						<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+						<assetsDirectory>${project.basedir}/assets</assetsDirectory>
+						<resourceDirectory>${project.basedir}/res</resourceDirectory>
+						<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+						<sdk>
+							<platform>${android-platform.version}</platform>
+						</sdk>
+						<undeployBeforeDeploy>true</undeployBeforeDeploy>
+					</configuration>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven-deploy-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>${maven-checkstyle-plugin.version}</version>
+					<configuration>
+						<configLocation>style_checks.xml</configLocation>
+						<enableRulesSummary>false</enableRulesSummary>
+					</configuration>
+					<executions>
+						<execution>
+							<id>checkstyle-check</id>
+							<phase>process-sources</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>${findbugs-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>findbugs-check</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>${maven-pmd-plugin.version}</version>
+					<configuration>
+						<targetJdk>1.5</targetJdk>
+					</configuration>
+					<executions>
+						<execution>
+							<id>pmd-check</id>
+							<goals>
+								<goal>check</goal>
+								<goal>cpd-check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
 
 </project>

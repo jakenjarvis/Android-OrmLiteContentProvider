@@ -19,5 +19,8 @@ public final class LessSimplePojoContract2
 
   public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
+  private LessSimplePojoContract2() {
+  }
+
 
 }
