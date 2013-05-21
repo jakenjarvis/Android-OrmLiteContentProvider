@@ -22,7 +22,7 @@
 		<easymock.version>2.5.2</easymock.version>
 
 		<!-- plugins -->
-		<maven-checkstyle-plugin.version>2.9.1</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
 		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
@@ -158,7 +158,7 @@
 					<executions>
 						<execution>
 							<id>checkstyle-check</id>
-							<phase>process-sources</phase>
+							<phase>verify</phase>
 							<goals>
 								<goal>check</goal>
 							</goals>

@@ -15,7 +15,7 @@
 	<description>Processes annotations to create a ContentProvider with OrmLite.</description>
 
 	<properties>
-		<android-maven-plugin.version>3.5.0</android-maven-plugin.version>
+		<android-maven-plugin.version>3.5.3</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 	</properties>
 
