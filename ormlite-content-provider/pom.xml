@@ -18,6 +18,7 @@
 		<android-maven-plugin.version>3.5.3</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -42,9 +43,29 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
+		    <!-- create res folder for IDE -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+					    <id>create-res-directory</id>
+						<phase>initialize</phase>
+						<configuration>
+							<target>
+								<mkdir dir="${basedir}/res"/>
+								<mkdir dir="${basedir}/res/drawable"/>
+								<mkdir dir="${basedir}/res/layout"/>
+								<mkdir dir="${basedir}/res/values"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
