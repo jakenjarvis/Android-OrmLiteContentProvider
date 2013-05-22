@@ -2,8 +2,11 @@ language: java
 jdk: oraclejdk6
 env:
     matrix:
+    - ANDROID_SDKS=android-8            ANDROID_TARGET=android-8   ANDROID_ABI=armeabi
+    - ANDROID_SDKS=android-10           ANDROID_TARGET=android-10  ANDROID_ABI=armeabi
     - ANDROID_SDKS=sysimg-16            ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
     - ANDROID_SDKS=android-17,sysimg-17 ANDROID_TARGET=android-17  ANDROID_ABI=armeabi-v7a
+
 before_install:
     # Install base Android SDK
     #- sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
@@ -16,7 +19,7 @@ before_install:
 
     # Install required Android components.
     - android list sdk
-    - android update sdk --filter platform-tools,android-16,extra-android-support,$ANDROID_SDKS --no-ui --force
+    - android update sdk --filter platform-tools,android-16,extra-android-support,$ANDROID_SDKS --no-ui --force > /dev/null
 
     # Create and start emulator
     - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
@@ -24,6 +27,7 @@ before_install:
 
 before_script:
     # Make sure the emulator has started before running tests
+    - chmod +x ./wait_for_emulator
     - ./wait_for_emulator
 
 script: mvn install -Pintegration-tests -Dandroid.device=test
