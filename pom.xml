@@ -11,6 +11,9 @@
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<!-- dependencies -->
 		<android.version>4.1.1.4</android.version>
 		<android-platform.version>17</android-platform.version>
@@ -207,5 +210,46 @@
 		</plugins>
 	</build>
 
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Android-OrmLiteContentProvider Team</name>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>jakenjarvis</id>
+			<name>Jaken Jarvis</name>
+			<email>jaken.jarvis@gmail.com</email>
+			<url>https://github.com/jakenjarvis</url>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+9</timezone>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Stéphane NICOLAS</name>
+			<email>snicolas@octo.com</email>
+			<url>https://github.com/stephanenicolas</url>
+			<organization>octo-online</organization>
+			<organizationUrl>http://www.octo.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
+	</contributors>
 
 </project>

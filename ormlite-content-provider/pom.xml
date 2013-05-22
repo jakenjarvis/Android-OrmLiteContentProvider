@@ -11,7 +11,7 @@
 
 	<artifactId>ormlite-content-provider</artifactId>
 	<name>Android-OrmLiteContentProvider Library</name>
-	<packaging>jar</packaging>
+	<packaging>apklib</packaging>
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
@@ -42,6 +42,8 @@
 	</dependencies>
 
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -54,6 +56,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<extensions>true</extensions>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

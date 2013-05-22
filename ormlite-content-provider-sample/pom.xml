@@ -16,6 +16,7 @@
 	<properties>
 		<android-maven-plugin.version>3.5.3</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -39,6 +40,27 @@
 	<build>
 		<sourceDirectory>src/</sourceDirectory>
 		<plugins>
+		    <!-- for IDE generate sources folder -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${build-helper-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${basedir}/target/generated-sources/r</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
