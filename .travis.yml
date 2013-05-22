@@ -6,7 +6,7 @@ env:
     - ANDROID_SDKS=android-17,sysimg-17 ANDROID_TARGET=android-17  ANDROID_ABI=armeabi-v7a
 before_install:
     # Install base Android SDK
-    - sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
+    #- sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
     - sudo apt-get update -qq
     - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
     - wget http://dl.google.com/android/android-sdk_r22-linux.tgz
