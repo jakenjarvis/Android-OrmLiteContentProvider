@@ -30,12 +30,12 @@ before_install:
     - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
     - emulator -avd test -no-skin -no-audio -no-window &
 
-    # PROVISIONAL: android-maven-plugin 3.6.0
-    - git clone git://github.com/jayway/maven-android-plugin.git android-maven-plugin
-    - cd android-maven-plugin
-    - git checkout -b refs/tags/3.6.0
-    - mvn clean install
-    - cd ..
+    ## PROVISIONAL: android-maven-plugin 3.6.0
+    #- git clone git://github.com/jayway/maven-android-plugin.git android-maven-plugin
+    #- cd android-maven-plugin
+    #- git checkout -b refs/tags/3.6.0
+    #- mvn clean install
+    #- cd ..
 
 before_script:
     # Make sure the emulator has started before running tests

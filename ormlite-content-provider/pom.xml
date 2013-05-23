@@ -11,7 +11,7 @@
 
 	<artifactId>ormlite-content-provider</artifactId>
 	<name>Android-OrmLiteContentProvider Library</name>
-	<packaging>apklib</packaging>
+	<packaging>jar</packaging>
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
