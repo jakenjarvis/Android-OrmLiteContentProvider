@@ -3,8 +3,8 @@ jdk: oraclejdk6
 env:
     matrix:
     - ANDROID_TARGET=android-8   ANDROID_SDKS=android-8,build-tools-17.0.0            ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
-    - ANDROID_TARGET=android-10  ANDROID_SDKS=android-10,build-tools-17.0.0           ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
-    - ANDROID_TARGET=android-15  ANDROID_SDKS=android-15,build-tools-17.0.0           ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-10  ANDROID_SDKS=android-10,build-tools-17.0.0,sysimg-10 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
+    - ANDROID_TARGET=android-15  ANDROID_SDKS=android-15,build-tools-17.0.0,sysimg-15 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-17  ANDROID_SDKS=android-17,build-tools-17.0.0,sysimg-17 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
 
 before_install:
@@ -20,7 +20,7 @@ before_install:
     - android list sdk --extended
     # Do you accept the license 'android-sdk-license-bcbbd656' [y/n]:
     - echo -e "y\n" > accept.txt
-    - android update sdk --filter $ANDROID_SDKS --no-ui --force < accept.txt
+    - android update sdk --filter platform-tools,extra-android-support,$ANDROID_SDKS --no-ui --force < accept.txt
 
     # PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
     - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
