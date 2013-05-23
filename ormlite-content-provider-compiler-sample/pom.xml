@@ -60,7 +60,9 @@
 						<configuration>
 							<sources>
 								<source>${basedir}/target/generated-sources/annotations</source>
+								<!--
 								<source>${basedir}/target/generated-sources/r</source>
+								-->
 							</sources>
 						</configuration>
 					</execution>
