@@ -9,9 +9,10 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ormlite-content-provider-compiler-sample</artifactId>
-	<name>Android-OrmLiteContentProvider Sample using the annotation processor</name>
-	<packaging>apk</packaging>
+	<artifactId>ormlite-content-provider-jar</artifactId>
+	<name>Android-OrmLiteContentProvider JavaArchive</name>
+	<packaging>jar</packaging>
+	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
 	    <!-- infomation -->
@@ -19,6 +20,9 @@
 
 		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 	</properties>
 
@@ -29,44 +33,41 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<scope>provided</scope>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.tojc.ormlite.android</groupId>
-			<artifactId>ormlite-content-provider-library</artifactId>
-			<version>${project.version}</version>
-			<type>apklib</type>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-android</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.tojc.ormlite.android</groupId>
-			<artifactId>ormlite-content-provider-compiler</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/</sourceDirectory>
+	    <!--
+		<sourceDirectory>${root.basedir}/ormlite-content-provider-library/src/main/java</sourceDirectory>
+		<testSourceDirectory>${root.basedir}/ormlite-content-provider-library/src/test/java</testSourceDirectory>
+	    -->
 		<plugins>
-		    <!-- for IDE generate sources folder -->
+			<!-- Source code to reference the library. -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>add-source</id>
-						<phase>generate-sources</phase>
+						<phase>initialize</phase>
 						<goals>
 							<goal>add-source</goal>
 						</goals>
 						<configuration>
 							<sources>
-								<source>${basedir}/target/generated-sources/annotations</source>
-								<!--
-								<source>${basedir}/target/generated-sources/r</source>
-								-->
+								<source>${root.basedir}/ormlite-content-provider-library/src/main/java</source>
+								<source>${root.basedir}/ormlite-content-provider-library/src/test/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -100,4 +101,27 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>lint</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.lewisd</groupId>
+						<artifactId>lint-maven-plugin</artifactId>
+						<version>0.0.6</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

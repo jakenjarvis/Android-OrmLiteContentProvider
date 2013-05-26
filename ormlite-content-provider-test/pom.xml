@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tojc.ormlite.android</groupId>
 		<artifactId>ormlite-content-provider-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>ormlite-content-provider-test</artifactId>
@@ -14,6 +14,9 @@
 	<packaging>apk</packaging>
 
 	<properties>
+	    <!-- infomation -->
+	    <root.basedir>${project.parent.basedir}</root.basedir>
+
 		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 	</properties>
@@ -36,8 +39,9 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tojc.ormlite.android</groupId>
-			<artifactId>ormlite-content-provider</artifactId>
+			<artifactId>ormlite-content-provider-library</artifactId>
 			<version>${project.version}</version>
+			<type>apklib</type>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -52,6 +56,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
+			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
@@ -59,6 +64,7 @@
 					<excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
 				</configuration>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
