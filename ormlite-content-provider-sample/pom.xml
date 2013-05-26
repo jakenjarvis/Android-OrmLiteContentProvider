@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tojc.ormlite.android</groupId>
 		<artifactId>ormlite-content-provider-parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>ormlite-content-provider-sample</artifactId>
@@ -36,48 +36,16 @@
 			<groupId>com.tojc.ormlite.android</groupId>
 			<artifactId>ormlite-content-provider-library</artifactId>
 			<version>${project.version}</version>
-			<type>apklib</type>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<sourceDirectory>src/</sourceDirectory>
 		<plugins>
-			<!-- for IDE generate sources folder -->
-			<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${basedir}/target/generated-sources/r</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			-->
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
-				</configuration>
-			</plugin>
-			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
