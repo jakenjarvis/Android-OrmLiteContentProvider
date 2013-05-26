@@ -52,14 +52,34 @@
 		<sourceDirectory>${root.basedir}/ormlite-content-provider-library/src/main/java</sourceDirectory>
 		<testSourceDirectory>${root.basedir}/ormlite-content-provider-library/src/test/java</testSourceDirectory>
 	    -->
+
 		<plugins>
 			<!-- Source code to reference the library. -->
+			<!--
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+					    <id>create-src-directory</id>
+						<phase>initialize</phase>
+						<configuration>
+							<target>
+								<mkdir dir="${basedir}/src/main/java"/>
+								<mkdir dir="${basedir}/src/test/java"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>add-source</id>
+						<id>add-main-source</id>
 						<phase>initialize</phase>
 						<goals>
 							<goal>add-source</goal>
@@ -67,8 +87,43 @@
 						<configuration>
 							<sources>
 								<source>${root.basedir}/ormlite-content-provider-library/src/main/java</source>
+							</sources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add-test-source</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
 								<source>${root.basedir}/ormlite-content-provider-library/src/test/java</source>
 							</sources>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-main-source</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>eclipse:eclipse</goal>
+						</goals>
+						<configuration>
+							<linkedResources>
+								<linkedResource>
+									<name>src/main/java</name>
+									<type>2</type>
+									<location>${root.basedir}/ormlite-content-provider-library/src/main/java</location>
+								</linkedResource>
+							</linkedResources>
 						</configuration>
 					</execution>
 				</executions>
