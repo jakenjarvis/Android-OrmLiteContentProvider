@@ -14,9 +14,12 @@
 	<packaging>apk</packaging>
 
 	<properties>
+<<<<<<< HEAD
 	    <!-- infomation -->
 	    <root.basedir>${project.parent.basedir}</root.basedir>
 
+=======
+>>>>>>> Upgrade to maven android plugin 3.6
 		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
