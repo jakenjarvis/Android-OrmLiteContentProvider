@@ -19,6 +19,7 @@
 		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -48,6 +49,42 @@
 	<build>
 		<sourceDirectory>src/</sourceDirectory>
 		<plugins>
+		    <!-- generate .factorypath file for IDE -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+					    <id>create-factorypath-file</id>
+						<phase>initialize</phase>
+						<configuration>
+							<exportAntProperties>true</exportAntProperties>
+							<target>
+								<property environment="env" />
+								<!-- <echoproperties /> -->
+
+								<property name="ormlite_content_provider_compiler_jar" value="${maven.dependency.com.tojc.ormlite.android.ormlite-content-provider-compiler.jar.path}" />
+								<property name="ormlite_android_jar" value="${maven.dependency.com.j256.ormlite.ormlite-android.jar.path}" />
+								<property name="ormlite_core_jar" value="${maven.dependency.com.j256.ormlite.ormlite-core.jar.path}" />
+								<property name="javawriter_jar" value="${maven.dependency.com.squareup.javawriter.jar.path}" />
+								<property name="ormlite_content_provider_library_jar" value="${maven.dependency.com.tojc.ormlite.android.ormlite-content-provider-library.jar.path}" />
+
+								<echo file="${basedir}/.factorypath" append="false"></echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypath&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypathentry kind=&quot;EXTJAR&quot; id=&quot;${ormlite_content_provider_compiler_jar}&quot; enabled=&quot;true&quot; runInBatchMode=&quot;false&quot;/&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypathentry kind=&quot;EXTJAR&quot; id=&quot;${ormlite_android_jar}&quot; enabled=&quot;true&quot; runInBatchMode=&quot;false&quot;/&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypathentry kind=&quot;EXTJAR&quot; id=&quot;${ormlite_core_jar}&quot; enabled=&quot;true&quot; runInBatchMode=&quot;false&quot;/&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypathentry kind=&quot;EXTJAR&quot; id=&quot;${javawriter_jar}&quot; enabled=&quot;true&quot; runInBatchMode=&quot;false&quot;/&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;factorypathentry kind=&quot;EXTJAR&quot; id=&quot;${ormlite_content_provider_library_jar}&quot; enabled=&quot;true&quot; runInBatchMode=&quot;false&quot;/&gt;</echo>
+								<echo file="${basedir}/.factorypath" append="true">&lt;/factorypath&gt;</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- for IDE generate sources folder -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
