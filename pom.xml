@@ -96,8 +96,14 @@
 		<android-support.version>r7</android-support.version>
 
 		<ormlite.version>4.45</ormlite.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
 
-		<!-- testing -->
+		<!-- compiler dependencies -->
+		<javawriter.version>1.0.5</javawriter.version>
+		<spring-core.version>2.5.6</spring-core.version>
+
+		<!-- test dependencies -->
+		<junit.version>4.11</junit.version>
 		<easymock.version>2.5.2</easymock.version>
 
 		<!-- plugins -->
@@ -106,7 +112,14 @@
 		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
-		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
+		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
+
+		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -140,9 +153,31 @@
 				<version>${ormlite.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
 				<version>${easymock.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.squareup</groupId>
+				<artifactId>javawriter</artifactId>
+				<version>${javawriter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -224,6 +259,19 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.google.code.maven-replacer-plugin</groupId>
+										<artifactId>maven-replacer-plugin</artifactId>
+										<versionRange>[1.4.0,)</versionRange>
+										<goals>
+											<goal>replace</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -234,14 +282,11 @@
 					<artifactId>android-maven-plugin</artifactId>
 					<version>${android-maven-plugin.version}</version>
 					<configuration>
-						<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-						<assetsDirectory>${project.basedir}/assets</assetsDirectory>
-						<resourceDirectory>${project.basedir}/res</resourceDirectory>
-						<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+						<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
 						<sdk>
 							<platform>${android-platform.version}</platform>
 						</sdk>
-						<undeployBeforeDeploy>true</undeployBeforeDeploy>
+						<undeployBeforeDeploy>false</undeployBeforeDeploy>
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
@@ -274,10 +319,18 @@
 				</plugin>
 
 				<plugin>
+					<groupId>com.google.code.maven-replacer-plugin</groupId>
+					<artifactId>maven-replacer-plugin</artifactId>
+					<version>${maven-replacer-plugin.version}</version>
+				</plugin>
+
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
 					<version>${maven-checkstyle-plugin.version}</version>
 					<configuration>
+						<failsOnError>true</failsOnError>
+						<consoleOutput>true</consoleOutput>
 						<configLocation>style_checks.xml</configLocation>
 						<enableRulesSummary>false</enableRulesSummary>
 					</configuration>
@@ -314,7 +367,7 @@
 					<artifactId>maven-pmd-plugin</artifactId>
 					<version>${maven-pmd-plugin.version}</version>
 					<configuration>
-						<targetJdk>1.5</targetJdk>
+						<targetJdk>${java.version}</targetJdk>
 					</configuration>
 					<executions>
 						<execution>
@@ -326,17 +379,30 @@
 						</execution>
 					</executions>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-
-
 
 </project>
