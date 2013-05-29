@@ -3,12 +3,82 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
 	<name>Android-OrmLiteContentProvider Parent</name>
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
+	<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
+	<inceptionYear>2012</inceptionYear>
+
+	<modules>
+		<module>ormlite-content-provider-library</module>
+		<module>ormlite-content-provider-library-test</module>
+		<module>ormlite-content-provider-compiler</module>
+		<module>ormlite-content-provider-sample</module>
+		<module>ormlite-content-provider-compiler-sample</module>
+	</modules>
+
+	<scm>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
+		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
+		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
+		<tag>1.0.2</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>jakenjarvis</id>
+			<name>Jaken Jarvis</name>
+			<email>jaken.jarvis@gmail.com</email>
+			<url>https://github.com/jakenjarvis</url>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+9</timezone>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Stéphane NICOLAS</name>
+			<email>snicolas@octo.com</email>
+			<url>https://github.com/stephanenicolas</url>
+			<organization>octo-online</organization>
+			<organizationUrl>http://www.octo.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
+	</contributors>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Android-OrmLiteContentProvider Team</name>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider</url>
+	</organization>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues</url>
+	</issueManagement>
 
 	<properties>
 	    <!-- infomation -->
@@ -18,10 +88,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- dependencies -->
-		<android.version>4.1.1.4</android.version>
+		<java.version>1.6</java.version>
 		<android-platform.version>17</android-platform.version>
-		<android.support.version>r7</android.support.version>
+
+		<!-- Compilation dependencies -->
+		<android.version>4.1.1.4</android.version>
+		<android-support.version>r7</android-support.version>
 
 		<ormlite.version>4.45</ormlite.version>
 
@@ -36,14 +108,6 @@
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
 	</properties>
-
-	<modules>
-		<module>ormlite-content-provider-library</module>
-		<module>ormlite-content-provider-library-test</module>
-		<module>ormlite-content-provider-compiler</module>
-		<module>ormlite-content-provider-sample</module>
-		<module>ormlite-content-provider-compiler-sample</module>
-	</modules>
 
 	<dependencyManagement>
 		<dependencies>
@@ -62,7 +126,7 @@
 			<dependency>
 				<groupId>com.google.android</groupId>
 				<artifactId>support-v4</artifactId>
-				<version>${android.support.version}</version>
+				<version>${android-support.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -182,11 +246,16 @@
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<showWarnings>true</showWarnings>
+						<compilerArguments>
+							<Xlint />
+						</compilerArguments>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -268,46 +337,6 @@
 		</plugins>
 	</build>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-			<comments>A business-friendly OSS license</comments>
-		</license>
-	</licenses>
 
-	<organization>
-		<name>Android-OrmLiteContentProvider Team</name>
-		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider</url>
-	</organization>
-
-	<developers>
-		<developer>
-			<id>jakenjarvis</id>
-			<name>Jaken Jarvis</name>
-			<email>jaken.jarvis@gmail.com</email>
-			<url>https://github.com/jakenjarvis</url>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-			<timezone>+9</timezone>
-		</developer>
-	</developers>
-
-	<contributors>
-		<contributor>
-			<name>Stéphane NICOLAS</name>
-			<email>snicolas@octo.com</email>
-			<url>https://github.com/stephanenicolas</url>
-			<organization>octo-online</organization>
-			<organizationUrl>http://www.octo.com</organizationUrl>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</contributor>
-	</contributors>
 
 </project>
