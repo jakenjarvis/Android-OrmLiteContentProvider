@@ -34,6 +34,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ormlite-content-provider-library</artifactId>
 			<version>${project.version}</version>
+			<type>apklib</type>
 		</dependency>
 		<dependency>
 			<groupId>com.tojc.ormlite.android</groupId>
@@ -83,6 +84,7 @@
 			</plugin>
 
 			<!-- for IDE generate sources folder -->
+			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -96,12 +98,12 @@
 						<configuration>
 							<sources>
 								<source>${basedir}/target/generated-sources/annotations</source>
-								<!-- <source>${basedir}/target/generated-sources/r</source> -->
 							</sources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			-->
 
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -128,9 +130,17 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> 
-				<configuration> <excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile> 
-				</configuration> </plugin> -->
+
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
+			-->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>

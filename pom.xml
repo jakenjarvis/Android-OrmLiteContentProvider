@@ -119,6 +119,7 @@
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
 	</properties>
 
@@ -345,7 +346,6 @@
 					</executions>
 				</plugin>
 				<!-- issue: If apklib, sub-module is not excluded excludeFilterFile. R.java is always an error. -->
-				<!--
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
@@ -360,7 +360,6 @@
 						</execution>
 					</executions>
 				</plugin>
-				-->
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -403,6 +402,18 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
 		</plugins>
+
 	</build>
+
+	<reporting>
+		<plugins>
+			<!-- [WARNING] Unable to locate Source XRef to link to - DISABLED -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven-jxr-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
