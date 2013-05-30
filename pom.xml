@@ -80,6 +80,19 @@
 		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues</url>
 	</issueManagement>
 
+	<distributionManagement>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Sonatype Nexus Staging(Release Repository)</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<properties>
 	    <!-- infomation -->
 	    <root.basedir>${project.basedir}</root.basedir>
@@ -121,6 +134,15 @@
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
 		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
+
+		<!-- release-sign-artifacts -->
+		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+
+		<!--
+			$ mvn versions:display-dependency-updates
+			$ mvn versions:use-latest-versions
+		-->
+		<versions-maven-plugin.version>2.0</versions-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -385,6 +407,12 @@
 					<version>${maven-javadoc-plugin.version}</version>
 				</plugin>
 
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>${versions-maven-plugin.version}</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
@@ -415,5 +443,35 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>${maven-gpg-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
