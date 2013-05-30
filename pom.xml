@@ -3,12 +3,95 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
 	<name>Android-OrmLiteContentProvider Parent</name>
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
+	<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
+	<inceptionYear>2012</inceptionYear>
+
+	<modules>
+		<module>ormlite-content-provider-library</module>
+		<module>ormlite-content-provider-library-test</module>
+		<module>ormlite-content-provider-compiler</module>
+		<module>ormlite-content-provider-sample</module>
+		<module>ormlite-content-provider-compiler-sample</module>
+	</modules>
+
+	<scm>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
+		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
+		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
+		<tag>1.0.2</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>jakenjarvis</id>
+			<name>Jaken Jarvis</name>
+			<email>jaken.jarvis@gmail.com</email>
+			<url>https://github.com/jakenjarvis</url>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+9</timezone>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Stéphane NICOLAS</name>
+			<email>snicolas@octo.com</email>
+			<url>https://github.com/stephanenicolas</url>
+			<organization>octo-online</organization>
+			<organizationUrl>http://www.octo.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
+	</contributors>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Android-OrmLiteContentProvider Team</name>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider</url>
+	</organization>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Sonatype Nexus Staging(Release Repository)</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<properties>
 	    <!-- infomation -->
@@ -18,14 +101,22 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- dependencies -->
-		<android.version>4.1.1.4</android.version>
+		<java.version>1.6</java.version>
 		<android-platform.version>17</android-platform.version>
-		<android.support.version>r7</android.support.version>
+
+		<!-- Compilation dependencies -->
+		<android.version>4.1.1.4</android.version>
+		<android-support.version>r7</android-support.version>
 
 		<ormlite.version>4.45</ormlite.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
 
-		<!-- testing -->
+		<!-- compiler dependencies -->
+		<javawriter.version>1.0.5</javawriter.version>
+		<spring-core.version>2.5.6</spring-core.version>
+
+		<!-- test dependencies -->
+		<junit.version>4.11</junit.version>
 		<easymock.version>2.5.2</easymock.version>
 
 		<!-- plugins -->
@@ -34,16 +125,25 @@
 		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
-		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
-	</properties>
+		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
 
-	<modules>
-		<module>ormlite-content-provider-library</module>
-		<module>ormlite-content-provider-library-test</module>
-		<module>ormlite-content-provider-compiler</module>
-		<module>ormlite-content-provider-sample</module>
-		<module>ormlite-content-provider-compiler-sample</module>
-	</modules>
+		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
+		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
+
+		<!-- release-sign-artifacts -->
+		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+
+		<!--
+			$ mvn versions:display-dependency-updates
+			$ mvn versions:use-latest-versions
+		-->
+		<versions-maven-plugin.version>2.0</versions-maven-plugin.version>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -62,7 +162,7 @@
 			<dependency>
 				<groupId>com.google.android</groupId>
 				<artifactId>support-v4</artifactId>
-				<version>${android.support.version}</version>
+				<version>${android-support.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -76,9 +176,31 @@
 				<version>${ormlite.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
 				<version>${easymock.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.squareup</groupId>
+				<artifactId>javawriter</artifactId>
+				<version>${javawriter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -160,6 +282,19 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.google.code.maven-replacer-plugin</groupId>
+										<artifactId>maven-replacer-plugin</artifactId>
+										<versionRange>[1.4.0,)</versionRange>
+										<goals>
+											<goal>replace</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -170,23 +305,25 @@
 					<artifactId>android-maven-plugin</artifactId>
 					<version>${android-maven-plugin.version}</version>
 					<configuration>
-						<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-						<assetsDirectory>${project.basedir}/assets</assetsDirectory>
-						<resourceDirectory>${project.basedir}/res</resourceDirectory>
-						<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+						<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
 						<sdk>
 							<platform>${android-platform.version}</platform>
 						</sdk>
-						<undeployBeforeDeploy>true</undeployBeforeDeploy>
+						<undeployBeforeDeploy>false</undeployBeforeDeploy>
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<showWarnings>true</showWarnings>
+						<compilerArguments>
+							<Xlint />
+						</compilerArguments>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -205,10 +342,18 @@
 				</plugin>
 
 				<plugin>
+					<groupId>com.google.code.maven-replacer-plugin</groupId>
+					<artifactId>maven-replacer-plugin</artifactId>
+					<version>${maven-replacer-plugin.version}</version>
+				</plugin>
+
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
 					<version>${maven-checkstyle-plugin.version}</version>
 					<configuration>
+						<failsOnError>true</failsOnError>
+						<consoleOutput>true</consoleOutput>
 						<configLocation>style_checks.xml</configLocation>
 						<enableRulesSummary>false</enableRulesSummary>
 					</configuration>
@@ -223,7 +368,6 @@
 					</executions>
 				</plugin>
 				<!-- issue: If apklib, sub-module is not excluded excludeFilterFile. R.java is always an error. -->
-				<!--
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
@@ -238,14 +382,13 @@
 						</execution>
 					</executions>
 				</plugin>
-				-->
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-pmd-plugin</artifactId>
 					<version>${maven-pmd-plugin.version}</version>
 					<configuration>
-						<targetJdk>1.5</targetJdk>
+						<targetJdk>${java.version}</targetJdk>
 					</configuration>
 					<executions>
 						<execution>
@@ -257,57 +400,78 @@
 						</execution>
 					</executions>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>${versions-maven-plugin.version}</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
 		</plugins>
+
 	</build>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-			<comments>A business-friendly OSS license</comments>
-		</license>
-	</licenses>
+	<reporting>
+		<plugins>
+			<!-- [WARNING] Unable to locate Source XRef to link to - DISABLED -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven-jxr-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
-	<organization>
-		<name>Android-OrmLiteContentProvider Team</name>
-		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider</url>
-	</organization>
-
-	<developers>
-		<developer>
-			<id>jakenjarvis</id>
-			<name>Jaken Jarvis</name>
-			<email>jaken.jarvis@gmail.com</email>
-			<url>https://github.com/jakenjarvis</url>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-			<timezone>+9</timezone>
-		</developer>
-	</developers>
-
-	<contributors>
-		<contributor>
-			<name>Stéphane NICOLAS</name>
-			<email>snicolas@octo.com</email>
-			<url>https://github.com/stephanenicolas</url>
-			<organization>octo-online</organization>
-			<organizationUrl>http://www.octo.com</organizationUrl>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</contributor>
-	</contributors>
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>${maven-gpg-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
