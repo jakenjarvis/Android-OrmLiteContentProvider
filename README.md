@@ -1,12 +1,18 @@
-Android-OrmLiteContentProvider
+Android-OrmLiteContentProvider [![Build Status](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider.png?branch=master)](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider)
 ==============================
+
+# What's new
+* This project has changed the license at the same time as published in Maven Central Repository.
+Changed the license to 'Apache License, Version 2.0' from 'ISC License'. By this, everyone will be easy to use!  
+* Automatic generation of Contract Class.
+By Java annotation processing, to automatically generate it based on the table definition class.  
 
 # What ORMLite?
 See [ORMLite](http://ormlite.com/) and [ORMLite : Android Supports](http://ormlite.com/sqlite_java_android_orm.shtml)
 , [ORMLite : Using With Android](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_4.html#SEC40).
 
 # What ContentProvider?
-See [Android Developers : Content Provider](http://developer.android.com/intl/ja/guide/topics/providers/content-providers.html)
+See [Android Developers : Content Provider](http://developer.android.com/intl/ja/guide/topics/providers/content-providers.html)  
 
 # This is what can be done?
 This is a library that easy to make using ContentProvider with OrmLite.  
@@ -20,27 +26,83 @@ You can from among the following three of the abstract class, select the inherit
 
 Can be used to match the level of your implementation.  
 
-# How to use.
+# How to use
 About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
 
-## Downloading ORMLite Jar
+## Apache Maven
+If you use maven to build your Android project you can simply add a dependency for this library.
+
+    <dependency>
+        <groupId>com.tojc.ormlite.android</groupId>
+        <artifactId>ormlite-content-provider-library</artifactId>
+        <version>${version}</version>
+        <type>apklib</type>
+    </dependency>
+
+If you perform the automatic generation of Contract Class, Additional compiler is required.
+
+    <dependency>
+        <groupId>com.tojc.ormlite.android</groupId>
+        <artifactId>ormlite-content-provider-compiler</artifactId>
+        <version>${version}</version>
+        <scope>provided</scope>
+    </dependency>
+
+## Manual setup
+If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
+
+### Downloading Android-OrmLiteContentProvider
+
+    git clone git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git <Anywhere>
+
+### Import Project's
+Add these to your project.  
+
+#### ormlite-content-provider-library
+Add the Android Library Project to your project.  
+See [Android Developers : Referencing a library project](http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject)  
+
+##### Downloading and add dependency
+See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)  
+
 Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
+Download from [Apache Commons : Commons Lang](http://commons.apache.org/proper/commons-lang/)  
+
+Copy the following files to libs folder.  
 
 * ormlite-core-4.45.jar
 * ormlite-android-4.45.jar
 * ormlite-jdbc-4.45.jar(If you need)
+* commons-lang3-3.1.jar
 
-Add these to your project.  
-See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)
+#### ormlite-content-provider-compiler(Optional)
+Add the Java Project(Not Android Project) to your project.  
+Compiler will work when build your project. You do not need to include the compiler on your package.  
+NOTE: Manual setting be a very tedious task. You must solve all the dependencies. The following shows only important point.  
 
-## Downloading Android-OrmLiteContentProvider
+##### Downloading and add dependency
+Download from [github : javawriter](https://github.com/square/javawriter)  
 
-    git clone git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git <Anywhere>
+* javawriter-1.0.5.jar
 
-Add the LibraryProject to your project.  
-See [Android Developers : Referencing a library project](http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject)
+##### Settings .factorypath to your project
+ormlite-content-provider-compiler-sample is going to be your reference.  
 
-## Implementing a Contract Class
+See [Eclipse help JDT Annotation Processing : Getting Started](http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Fguide%2Fjdt_apt_getting_started.htm)  
+
+    <factorypath>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-compiler-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-core-X.XX.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-android-X.XX.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/javawriter-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-library-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+    </factorypath>
+
+## Let's coding!
+
+### Implementing a Contract Class
+If you want to automatically generate, skip this step. When implemented compiler, this similar class is created.  
+
 See [Android Developers : Implementing a Contract Class](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ContractClass)  
 You define the column name as a string. You are free to define it.
 
@@ -77,10 +139,11 @@ You define the column name as a string. You are free to define it.
         }
     }
 
-## Configuring a Class
+### Configuring a Class
 See [ORMLite documents : Configuring a Class](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_1.html#SEC3)  
 You can use the annotations added by OrmLiteContentProvider library.
 
+* @Contract
 * @DefaultContentUri
 * @DefaultContentMimeTypeVnd
 * @DefaultSortOrder
@@ -122,7 +185,58 @@ For added annotations, see the javadoc.
         }
     }
 
-## Implementing the OrmLiteSqliteOpenHelper Class
+### Configuring a Class with Automatic generation of Contract Class.
+There is no need for special difficult. You add the @Contract annotation.  
+
+    @Contract()
+    @DatabaseTable(tableName = "accounts")
+    @DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample", path = "accounts")
+    @DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.provider", type = "accounts")
+    public class Account
+    {
+        @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
+        @DefaultSortOrder
+        private int id;
+
+        @DatabaseField
+        private String name;
+
+        public Account()
+        {
+            // ORMLite needs a no-arg constructor
+        }
+
+        (Omission)
+    }
+
+compiler generates the following from this definition.
+
+    public final class AccountContract implements BaseColumns
+    {
+        public static final String AUTHORITY = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample";
+
+        public static final String CONTENT_URI_PATH = "accounts";
+
+        public static final String MIMETYPE_TYPE = "accounts";
+        public static final String MIMETYPE_NAME = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.provider";
+
+        public static final int CONTENT_URI_PATTERN_MANY = 1;
+        public static final int CONTENT_URI_PATTERN_ONE = 2;
+
+        public static final Uri CONTENT_URI = new Uri.Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(AUTHORITY)
+            .appendPath(CONTENT_URI_PATH)
+            .build();
+
+        private AccountContract()
+        {
+        }
+
+        public static final String NAME = "name";
+    }
+
+### Implementing the OrmLiteSqliteOpenHelper Class
 See [ORMLite : OrmLiteSqliteOpenHelper](http://ormlite.com/javadoc/ormlite-android/com/j256/ormlite/android/apptools/OrmLiteSqliteOpenHelper.html)
 and [Android Developers : SQLiteOpenHelper](http://developer.android.com/intl/ja/reference/android/database/sqlite/SQLiteOpenHelper.html).  
 Implementing the OrmLiteSqliteOpenHelper class is required. How to implement OrmLiteSqliteOpenHelper, please refer to manual of ORMLite.
@@ -166,7 +280,7 @@ Implementing the OrmLiteSqliteOpenHelper class is required. How to implement Orm
         }
     }
 
-## Implementing the ContentProvider Class
+### Implementing the ContentProvider Class
 See [Android Developers : Implementing the ContentProvider Class](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ContentProvider)  
 Implement an abstract class OrmLiteSimpleContentProvider.  
 
@@ -181,19 +295,18 @@ Implement an abstract class OrmLiteSimpleContentProvider.
         @Override
         public boolean onCreate()
         {
-            Controller = new MatcherController()
-                .add(Account.class, SubType.Directory, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
-                .add(Account.class, SubType.Item, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
-                .initialize();
+	        setMatcherController(new MatcherController()
+                .add(Account.class, SubType.DIRECTORY, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
+                .add(Account.class, SubType.ITEM, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
+                );
             return true;
         }
     }
 
 By getHelperClass() method to register the Helper class.
 To register for a pattern in onCreate(). Creates an instance of MatcherController To do so, call add() method.
-After registering all patterns, please call the initialize() method.
 
-### Flexibility
+#### Flexibility
 This is more flexible precisely because the user can set MatcherController arbitrarily.
 This is the most important key points of the Android-OrmLiteContentProvider library.
 
@@ -227,10 +340,13 @@ This is the most important key points of the Android-OrmLiteContentProvider libr
         @Override
         public boolean onCreate()
         {
-            Controller = new MatcherController()
+	        setMatcherController(new MatcherController()
+                .add(Account.class, SubType.DIRECTORY, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
+                .add(Account.class, SubType.ITEM, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
+                
                 .add(Account.class)
-                    .add(SubType.Directory, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
-                    .add(SubType.Item, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
+                    .add(SubType.DIRECTORY, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
+                    .add(SubType.ITEM, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
                 // Add new table. You can add more than one table.
                 // Is considered to be set to the table(class) that you have added to end.
                 .add(NewTable.class)
@@ -242,16 +358,16 @@ This is the most important key points of the Android-OrmLiteContentProvider libr
                             Contract.NewTable.MIMETYPE_NAME,
                             Contract.NewTable.MIMETYPE_TYPE)
                     // (NewTable.class)
-                    .add(SubType.Directory, "", Contract.NewTable.CONTENT_URI_PATTERN_MANY)
-                    .add(SubType.Item, "#", Contract.NewTable.CONTENT_URI_PATTERN_ONE)
+                    .add(SubType.DIRECTORY, "", Contract.NewTable.CONTENT_URI_PATTERN_MANY)
+                    .add(SubType.ITEM, "#", Contract.NewTable.CONTENT_URI_PATTERN_ONE)
                     // add other pattern. 'content://com.example.app.provider/newtable/dataset'
-                    .add(SubType.Directory, "dataset", Contract.NewTable.CONTENT_URI_PATTERN_DATASET)
-                .initialize();
+                    .add(SubType.DIRECTORY, "dataset", Contract.NewTable.CONTENT_URI_PATTERN_DATASET)
+                );
             return true;
         }
     }
 
-## The &lt;provider&gt; Element
+### The &lt;provider&gt; Element
 See [Android Developers : The &lt;provider&gt; Element](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ProviderElement).
 
 Add AndroidManifest.xml
@@ -260,7 +376,7 @@ Add AndroidManifest.xml
         android:authorities="com.tojc.ormlite.android.ormlitecontentprovidersample"
         android:exported="false"/>
 
-## Accessing a provider
+### Accessing a provider
 See [Android Developers : Content Provider Basics](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-basics.html).  
 Run the test program.
 
@@ -290,22 +406,23 @@ Run the test program.
     }
 
 
-# Open Source License (ISC License)
+# Apache License, Version 2.0
 This document is part of the Android-OrmLiteContentProvider project.
 
-Copyright (c) 2012, Jaken Jarvis (jaken.jarvis@gmail.com)
+Copyright (c) 2012, Android-OrmLiteContentProvider Team.
+                    Jaken Jarvis (jaken.jarvis@gmail.com)
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 The author may be contacted via 
 https://github.com/jakenjarvis/Android-OrmLiteContentProvider
