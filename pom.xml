@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><!-- Do not delete! UTF-8 for incorrect detection avoidance. "日本語表示" -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -31,7 +30,7 @@
 		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
 		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
 		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
-		<tag>1.0.2</tag>
+		<tag>Ver1.0.0-SNAPSHOT</tag>
 	</scm>
 
 	<developers>
@@ -131,9 +130,12 @@
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
-		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
-		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
+
+		<maven-site-plugin.version>3.3</maven-site-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
 
 		<!-- release-sign-artifacts -->
 		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
@@ -403,8 +405,20 @@
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven-site-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${maven-javadoc-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
 				</plugin>
 
 				<plugin>
@@ -417,12 +431,18 @@
 		</pluginManagement>
 
 		<plugins>
+			<!-- Release Process
+				$ mvn clean release:clean release:prepare -DdryRun=true
+				$ mvn clean release:clean release:prepare
+				$ mvn release:perform
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>${maven-release-plugin.version}</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<tagNameFormat>Ver@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -435,6 +455,44 @@
 
 	<reporting>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+				<configuration>
+					<locales>en</locales>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<configuration>
+					<aggregate>true</aggregate>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>non-aggregate</id>
+						<configuration>
+							<!-- Specific configuration for the non aggregate report -->
+						</configuration>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>aggregate</id>
+						<configuration>
+							<!-- Specific configuration for the aggregate report -->
+						</configuration>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
 			<!-- [WARNING] Unable to locate Source XRef to link to - DISABLED -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -449,6 +507,7 @@
 			<id>release-sign-artifacts</id>
 			<activation>
 				<property>
+					<!-- activation:$ mvn release:perform -->
 					<name>performRelease</name>
 					<value>true</value>
 				</property>
