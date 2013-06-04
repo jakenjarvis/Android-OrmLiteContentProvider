@@ -10,7 +10,7 @@
 
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Android-OrmLiteContentProvider Parent</name>
@@ -30,7 +30,7 @@
 		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
 		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
 		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
-		<tag>Ver1.0.2</tag>
+		<tag>Ver1.0.0-SNAPSHOT</tag>
 	</scm>
 
 	<developers>
