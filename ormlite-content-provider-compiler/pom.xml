@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Do not delete! UTF-8 for incorrect detection avoidance. "��{��\��" -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.tojc.ormlite.android</groupId>
+		<artifactId>ormlite-content-provider-parent</artifactId>
+		<version>1.0.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>ormlite-content-provider-compiler</artifactId>
+	<name>Android-OrmLiteContentProvider Annotation processor</name>
+	<packaging>jar</packaging>
+	<description>Processes annotations to create a ContentProvider with OrmLite.</description>
+
+	<properties>
+		<!-- infomation -->
+		<root.basedir>${project.parent.basedir}</root.basedir>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-android</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javawriter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ormlite-content-provider-library</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/src/test/resources</directory>
+			</testResource>
+
+			<!-- add a directory of source files which need to be compiled during 
+				a test -->
+			<testResource>
+				<directory>${project.build.testSourceDirectory}/com/tojc/ormlite/android/compiler/sample</directory>
+				<targetPath>com/tojc/ormlite/android/compiler/sample</targetPath>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<excludeRoots>
+						<excludeRoot>${basedir}/target/generated-sources/r/</excludeRoot>
+					</excludeRoots>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

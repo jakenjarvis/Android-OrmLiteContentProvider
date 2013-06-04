@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Do not delete! UTF-8 for incorrect detection avoidance. "��{��\��" -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.tojc.ormlite.android</groupId>
+		<artifactId>ormlite-content-provider-parent</artifactId>
+		<version>1.0.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>ormlite-content-provider-library-test</artifactId>
+	<name>Android-OrmLiteContentProvider Tests</name>
+	<packaging>apk</packaging>
+
+	<properties>
+	    <!-- infomation -->
+	    <root.basedir>${project.parent.basedir}</root.basedir>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android-test</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>support-v4</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ormlite-content-provider-library</artifactId>
+			<version>${project.version}</version>
+			<type>apklib</type>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<file>target/generated-sources/r/com/tojc/ormlite/android/test/R.java</file>
+					<outputFile>target/generated-sources/r/com/tojc/ormlite/android/test/R.java</outputFile>
+					<regex>false</regex>
+					<token>static final int</token>
+					<value>static int</value>
+				</configuration>
+			</plugin>
+
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
+			-->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<excludeRoots>
+						<excludeRoot>${basedir}/target/generated-sources/r/</excludeRoot>
+					</excludeRoots>
+				</configuration>
+			</plugin>
+			<plugin>
+				<extensions>true</extensions>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
