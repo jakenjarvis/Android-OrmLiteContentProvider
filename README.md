@@ -1,20 +1,15 @@
 Android-OrmLiteContentProvider [![Build Status](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider.png?branch=master)](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider)
 ==============================
 
-# What's new
+# Overview
+## What's new
 * This project has changed the license at the same time as published in Maven Central Repository.
 Changed the license to 'Apache License, Version 2.0' from 'ISC License'. By this, everyone will be easy to use!  
 * Automatic generation of Contract Class.
 By Java annotation processing, to automatically generate it based on the table definition class.  
 
-# What ORMLite?
-See [ORMLite](http://ormlite.com/) and [ORMLite : Android Supports](http://ormlite.com/sqlite_java_android_orm.shtml)
-, [ORMLite : Using With Android](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_4.html#SEC40).
-
-# What ContentProvider?
-See [Android Developers : Content Provider](http://developer.android.com/intl/ja/guide/topics/providers/content-providers.html)  
-
-# This is what can be done?
+## Features
+### This is what can be done?
 This is a library that easy to make using ContentProvider with OrmLite.  
 With this library, you can focus on the operation of the table.  
 You can from among the following three of the abstract class, select the inheritance class.  
@@ -26,81 +21,21 @@ You can from among the following three of the abstract class, select the inherit
 
 Can be used to match the level of your implementation.  
 
-# How to use
-About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
+You can focus on implementing the original function.  
 
-## Apache Maven
-If you use maven to build your Android project you can simply add a dependency for this library.
+## Quick question
 
-    <dependency>
-        <groupId>com.tojc.ormlite.android</groupId>
-        <artifactId>ormlite-content-provider-library</artifactId>
-        <version>${version}</version>
-        <type>apklib</type>
-    </dependency>
+### What ORMLite?
+See [ORMLite](http://ormlite.com/) and [ORMLite : Android Supports](http://ormlite.com/sqlite_java_android_orm.shtml)
+, [ORMLite : Using With Android](http://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_4.html#SEC40).
 
-If you perform the automatic generation of Contract Class, Additional compiler is required.
+### What ContentProvider?
+See [Android Developers : Content Provider](http://developer.android.com/intl/ja/guide/topics/providers/content-providers.html)  
 
-    <dependency>
-        <groupId>com.tojc.ormlite.android</groupId>
-        <artifactId>ormlite-content-provider-compiler</artifactId>
-        <version>${version}</version>
-        <scope>provided</scope>
-    </dependency>
+# Tutorials
+## Getting Started
 
-## Manual setup
-If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
-
-### Downloading Android-OrmLiteContentProvider
-
-    git clone git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git <Anywhere>
-
-### Import Project's
-Add these to your project.  
-
-#### ormlite-content-provider-library
-Add the Android Library Project to your project.  
-See [Android Developers : Referencing a library project](http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject)  
-
-##### Downloading and add dependency
-See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)  
-
-Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
-Download from [Apache Commons : Commons Lang](http://commons.apache.org/proper/commons-lang/)  
-
-Copy the following files to libs folder.  
-
-* ormlite-core-4.45.jar
-* ormlite-android-4.45.jar
-* ormlite-jdbc-4.45.jar(If you need)
-* commons-lang3-3.1.jar
-
-#### ormlite-content-provider-compiler(Optional)
-Add the Java Project(Not Android Project) to your project.  
-Compiler will work when build your project. You do not need to include the compiler on your package.  
-NOTE: Manual setting be a very tedious task. You must solve all the dependencies. The following shows only important point.  
-
-##### Downloading and add dependency
-Download from [github : javawriter](https://github.com/square/javawriter)  
-
-* javawriter-1.0.5.jar
-
-##### Settings .factorypath to your project
-ormlite-content-provider-compiler-sample is going to be your reference.  
-
-See [Eclipse help JDT Annotation Processing : Getting Started](http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Fguide%2Fjdt_apt_getting_started.htm)  
-
-    <factorypath>
-        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-compiler-X.X.X.jar" enabled="true" runInBatchMode="false"/>
-        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-core-X.XX.jar" enabled="true" runInBatchMode="false"/>
-        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-android-X.XX.jar" enabled="true" runInBatchMode="false"/>
-        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/javawriter-X.X.X.jar" enabled="true" runInBatchMode="false"/>
-        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-library-X.X.X.jar" enabled="true" runInBatchMode="false"/>
-    </factorypath>
-
-## Let's coding!
-
-### Implementing a Contract Class
+### Implementing a Contract Class (Optional)
 If you want to automatically generate, skip this step. When implemented compiler, this similar class is created.  
 
 See [Android Developers : Implementing a Contract Class](http://developer.android.com/intl/ja/guide/topics/providers/content-provider-creating.html#ContractClass)  
@@ -186,7 +121,7 @@ For added annotations, see the javadoc.
     }
 
 ### Configuring a Class with Automatic generation of Contract Class.
-There is no need for special difficult. You add the @Contract annotation.  
+There is no need for special difficult. You add the @Contract annotation. And Shall be given here information underlying to produce.  
 
     @Contract()
     @DatabaseTable(tableName = "accounts")
@@ -209,7 +144,7 @@ There is no need for special difficult. You add the @Contract annotation.
         (Omission)
     }
 
-compiler generates the following from this definition.
+Compiler generates the following from this definition. You do not have to write this.
 
     public final class AccountContract implements BaseColumns
     {
@@ -404,6 +339,85 @@ Run the test program.
             c.close();
         }
     }
+
+# Install
+About the OrmLiteSimpleContentProvider easiest, I will introduce the procedure.
+
+## Apache Maven setup
+If you use maven to build your Android project you can simply add a dependency for this library.
+
+    <dependency>
+        <groupId>com.tojc.ormlite.android</groupId>
+        <artifactId>ormlite-content-provider-library</artifactId>
+        <version>${version}</version>
+        <type>jar</type> <!-- or apklib -->
+    </dependency>
+
+* If you specify the 'apklib', you will need to imported the ormlite-content-provider-library to local workspace.
+
+If you perform the automatic generation of Contract Class, Additional compiler is required.
+
+    <dependency>
+        <groupId>com.tojc.ormlite.android</groupId>
+        <artifactId>ormlite-content-provider-compiler</artifactId>
+        <version>${version}</version>
+        <scope>provided</scope>
+    </dependency>
+
+## Manual setup
+If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
+
+### Downloading Android-OrmLiteContentProvider
+
+    git clone git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git <Anywhere>
+
+### Import Project's
+Add these to your project.  
+
+#### ormlite-content-provider-library
+Add the Android Library Project to your project.  
+See [Android Developers : Referencing a library project](http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject)  
+
+##### Downloading and add dependency
+See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)  
+
+Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
+Download from [Apache Commons : Commons Lang](http://commons.apache.org/proper/commons-lang/)  
+
+Copy the following files to libs folder.  
+
+* ormlite-core-4.45.jar
+* ormlite-android-4.45.jar
+* ormlite-jdbc-4.45.jar(If you need)
+* commons-lang3-3.1.jar
+
+#### ormlite-content-provider-compiler(Optional)
+Add the Java Project(Not Android Project) to your project.  
+Compiler will work when build your project. You do not need to include the compiler on your package.  
+NOTE: Manual setting be a very tedious task. You must solve all the dependencies. The following shows only important point.  
+
+##### Downloading and add dependency
+Download from [github : javawriter](https://github.com/square/javawriter)  
+
+* javawriter-1.0.5.jar
+
+##### Settings .factorypath to your project
+ormlite-content-provider-compiler-sample is going to be your reference.  
+
+See [Eclipse help JDT Annotation Processing : Getting Started](http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Fguide%2Fjdt_apt_getting_started.htm)  
+
+    <factorypath>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-compiler-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-core-X.XX.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-android-X.XX.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/javawriter-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+        <factorypathentry kind="VARJAR" id="YOUR_LOCATION/ormlite-content-provider-library-X.X.X.jar" enabled="true" runInBatchMode="false"/>
+    </factorypath>
+
+* Another solution : m2e-apt  
+This is a better solution to get annotation processing within eclipse using maven settings.
+
+See [m2e-apt](https://github.com/jbosstools/m2e-apt/)  
 
 
 # Apache License, Version 2.0
