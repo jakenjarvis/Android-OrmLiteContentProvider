@@ -64,9 +64,6 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
             case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
                     + parameter.getUri().getPathSegments().get(1);
-                if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
-                    where += " AND ( " + parameter.getSelection() + " ) ";
-                }
                 builder.appendWhere(where);
                 break;
 
