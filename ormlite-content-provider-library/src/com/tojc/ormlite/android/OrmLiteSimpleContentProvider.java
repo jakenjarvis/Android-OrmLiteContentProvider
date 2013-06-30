@@ -62,12 +62,12 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         switch (target.getMimeTypeVnd().getSubType()) {
 
             case ITEM:
-                String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
-                    + parameter.getUri().getPathSegments().get(1);
-                if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
-                    where += " AND ( " + parameter.getSelection() + " ) ";
-                }
-                builder.appendWhere(where);
+                // Add item selection criteria (using StringBuilder via appendWhere)
+                // URI parameter type not set at this level of the class hierarchy, but it is
+                // assumed to be numeric so value not escaped.
+                builder.appendWhere(target.getTableInfo().getIdColumnInfo().getColumnName());
+                builder.appendWhere("=");
+                builder.appendWhere(parameter.getUri().getPathSegments().get(1));
                 break;
 
             case DIRECTORY:
