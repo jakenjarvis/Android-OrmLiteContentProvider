@@ -101,17 +101,17 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>1.6</java.version>
-		<android-platform.version>17</android-platform.version>
+		<android-platform.version>18</android-platform.version>
 
 		<!-- Compilation dependencies -->
 		<android.version>4.1.1.4</android.version>
 		<android-support.version>r7</android-support.version>
 
-		<ormlite.version>4.45</ormlite.version>
+		<ormlite.version>4.46</ormlite.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>1.0.5</javawriter.version>
+		<javawriter.version>2.1.1</javawriter.version>
 		<spring-core.version>2.5.6</spring-core.version>
 
 		<!-- test dependencies -->
@@ -126,7 +126,7 @@
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
+		<android-maven-plugin.version>3.6.1</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
