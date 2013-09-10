@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- Do not delete! UTF-8 for incorrect detection avoidance. "日本語表示" -->
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -10,7 +10,7 @@
 
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>pom</packaging>
 
 	<name>Android-OrmLiteContentProvider Parent</name>
@@ -30,7 +30,7 @@
 		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
 		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
 		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
-		<tag>Ver1.0.2</tag>
+		<tag>Ver1.0.3</tag>
 	</scm>
 
 	<developers>
@@ -101,39 +101,39 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>1.6</java.version>
-		<android-platform.version>17</android-platform.version>
+		<android-platform.version>18</android-platform.version>
 
 		<!-- Compilation dependencies -->
 		<android.version>4.1.1.4</android.version>
 		<android-support.version>r7</android-support.version>
 
-		<ormlite.version>4.45</ormlite.version>
+		<ormlite.version>4.47</ormlite.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>1.0.5</javawriter.version>
-		<spring-core.version>2.5.6</spring-core.version>
+		<javawriter.version>2.1.2</javawriter.version>
+		<spring-core.version>3.2.4.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
 		<junit.version>4.11</junit.version>
-		<easymock.version>2.5.2</easymock.version>
+		<easymock.version>3.2</easymock.version>
 
 		<!-- plugins -->
 		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
-		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>
+		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>	<!-- not update -->
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>3.6.0</android-maven-plugin.version>
+		<android-maven-plugin.version>3.6.1</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
 
 		<maven-site-plugin.version>3.3</maven-site-plugin.version>
-		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
 
@@ -142,9 +142,10 @@
 
 		<!--
 			$ mvn versions:display-dependency-updates
-			$ mvn versions:use-latest-versions
+			$ mvn versions:update-properties
+			# maven-pmd-plugin.version -> 2.7.1
 		-->
-		<versions-maven-plugin.version>2.0</versions-maven-plugin.version>
+		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>

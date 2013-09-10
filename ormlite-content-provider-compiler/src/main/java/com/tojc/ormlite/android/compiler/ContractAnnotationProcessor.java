@@ -20,11 +20,15 @@ package com.tojc.ormlite.android.compiler;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import static javax.lang.model.element.Modifier.FINAL;
+import static javax.lang.model.element.Modifier.PRIVATE;
+import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.lang.model.element.Modifier.STATIC;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -38,7 +42,7 @@ import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.squareup.java.JavaWriter;
+import com.squareup.javawriter.JavaWriter;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
@@ -125,20 +129,20 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
 
                 String defaultContentUriStatement = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
 
-                writer.beginType(targetClassName, "class", Modifier.PUBLIC | Modifier.FINAL, null, "BaseColumns") //
-                        .emitField("String", "AUTHORITY", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(contentUriAuthority))//
+                writer.beginType(targetClassName, "class", EnumSet.of(PUBLIC, FINAL), null, "BaseColumns") //
+                        .emitField("String", "AUTHORITY", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriAuthority))//
                         .emitEmptyLine()//
-                        .emitField("String", "CONTENT_URI_PATH", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(contentUriPath))//
+                        .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriPath))//
                         .emitEmptyLine()//
-                        .emitField("String", "MIMETYPE_TYPE", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(mimeTypeVndType))//
-                        .emitField("String", "MIMETYPE_NAME", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(mimeTypeVndName))//
+                        .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndType))//
+                        .emitField("String", "MIMETYPE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndName))//
                         .emitEmptyLine()//
-                        .emitField("int", "CONTENT_URI_PATTERN_MANY", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, String.valueOf(patternCode++))//
-                        .emitField("int", "CONTENT_URI_PATTERN_ONE", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, String.valueOf(patternCode++))//
+                        .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))//
+                        .emitField("int", "CONTENT_URI_PATTERN_ONE", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))//
                         .emitEmptyLine()//
-                        .emitField("Uri", "CONTENT_URI", Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, defaultContentUriStatement)//
+                        .emitField("Uri", "CONTENT_URI", EnumSet.of(STATIC, PUBLIC, FINAL), defaultContentUriStatement)//
                         .emitEmptyLine()//
-                        .beginMethod(null, targetClassName, Modifier.PRIVATE)//
+                        .beginMethod(null, targetClassName, EnumSet.of(PRIVATE))//
                         .endMethod()//
                         .emitEmptyLine()//
                         .emitEmptyLine();
@@ -147,7 +151,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 for (Element field : fields) {
                     String fieldName = field.getSimpleName().toString();
                     if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
-                        writer.emitField("String", fieldName.toUpperCase(), Modifier.STATIC | Modifier.PUBLIC | Modifier.FINAL, JavaWriter.stringLiteral(fieldName));
+                        writer.emitField("String", fieldName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(fieldName));
                     }
                 }
                 writer.endType();

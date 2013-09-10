@@ -5,14 +5,15 @@ env:
     #- ANDROID_TARGET=android-8   ANDROID_SDKS=android-8,build-tools-17.0.0            ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
     #- ANDROID_TARGET=android-10  ANDROID_SDKS=android-10,build-tools-17.0.0,sysimg-10 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
     #- ANDROID_TARGET=android-15  ANDROID_SDKS=android-15,build-tools-17.0.0,sysimg-15 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-17  ANDROID_SDKS=android-17,build-tools-17.0.0,sysimg-17 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_TARGET=android-17  ANDROID_SDKS=android-17,build-tools-17.0.0,sysimg-17 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-18  ANDROID_SDKS=android-18,build-tools-18.0.1,sysimg-18 ANDROID_BUILD_TOOLS_VERSION=18.0.1 ANDROID_ABI=armeabi-v7a
 
 before_install:
     # Install base Android SDK
     - sudo apt-get update -qq
     - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
-    - wget http://dl.google.com/android/android-sdk_r22-linux.tgz
-    - tar xzf android-sdk_r22-linux.tgz
+    - wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz
+    - tar xzf android-sdk_r22.0.5-linux.tgz
     - export ANDROID_HOME=`pwd`/android-sdk-linux
     - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
 
