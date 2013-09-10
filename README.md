@@ -386,10 +386,10 @@ Download from [Apache Commons : Commons Lang](http://commons.apache.org/proper/c
 
 Copy the following files to libs folder.  
 
-* ormlite-core-4.45.jar
-* ormlite-android-4.45.jar
-* ormlite-jdbc-4.45.jar(If you need)
-* commons-lang3-3.1.jar
+* ormlite-core-X.XX.jar
+* ormlite-android-X.XX.jar
+* ormlite-jdbc-X.XX.jar(If you need)
+* commons-langX-X.X.jar
 
 #### ormlite-content-provider-compiler(Optional)
 Add the Java Project(Not Android Project) to your project.  
@@ -399,7 +399,7 @@ NOTE: Manual setting be a very tedious task. You must solve all the dependencies
 ##### Downloading and add dependency
 Download from [github : javawriter](https://github.com/square/javawriter)  
 
-* javawriter-1.0.5.jar
+* javawriter-X.X.X.jar
 
 ##### Settings .factorypath to your project
 ormlite-content-provider-compiler-sample is going to be your reference.  
