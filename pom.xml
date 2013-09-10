@@ -10,7 +10,7 @@
 
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Android-OrmLiteContentProvider Parent</name>
