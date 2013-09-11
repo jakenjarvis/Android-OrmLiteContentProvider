@@ -1,7 +1,7 @@
 <factorypath>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/tojc/ormlite/android/ormlite-content-provider-compiler/1.0.3-SNAPSHOT/ormlite-content-provider-compiler-1.0.3-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/j256/ormlite/ormlite-core/4.46/ormlite-core-4.46.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/j256/ormlite/ormlite-android/4.46/ormlite-android-4.46.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/squareup/javawriter/2.1.1/javawriter-2.1.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/tojc/ormlite/android/ormlite-content-provider-library/1.0.3-SNAPSHOT/ormlite-content-provider-library-1.0.3-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/tojc/ormlite/android/ormlite-content-provider-compiler/1.0.3/ormlite-content-provider-compiler-1.0.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/j256/ormlite/ormlite-core/4.47/ormlite-core-4.47.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/j256/ormlite/ormlite-android/4.47/ormlite-android-4.47.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/squareup/javawriter/2.1.2/javawriter-2.1.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/tojc/ormlite/android/ormlite-content-provider-library/1.0.3/ormlite-content-provider-library-1.0.3.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

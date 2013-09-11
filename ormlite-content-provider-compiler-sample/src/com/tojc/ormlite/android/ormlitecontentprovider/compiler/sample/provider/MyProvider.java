@@ -26,6 +26,10 @@ import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.Account;
 import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.AccountContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.Car;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.CarContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.Fuel;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.FuelContract;
 
 public class MyProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
     @Override
@@ -37,7 +41,11 @@ public class MyProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
     public boolean onCreate() {
         setMatcherController(new MatcherController()//
                 .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
-                .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE));
+                .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)
+                .add(Car.class, SubType.DIRECTORY, "", CarContract.CONTENT_URI_PATTERN_MANY)//
+                .add(Car.class, SubType.ITEM, "#", CarContract.CONTENT_URI_PATTERN_ONE)
+                .add(Fuel.class, SubType.DIRECTORY, "", FuelContract.CONTENT_URI_PATTERN_MANY)//
+                .add(Fuel.class, SubType.ITEM, "#", FuelContract.CONTENT_URI_PATTERN_ONE));
         return true;
     }
 }

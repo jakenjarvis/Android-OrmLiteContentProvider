@@ -34,6 +34,9 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.AccountContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.CarContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.Fuel;
+import com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.FuelContract;
 
 public class MainActivity extends Activity {
     private static final int TEST_ENTRY_COUNT = 10;
@@ -67,6 +70,15 @@ public class MainActivity extends Activity {
             }
         }
         c.close();
+
+        //
+        Cursor cz1 = getContentResolver().query(CarContract.CONTENT_URI, null, null, null, null);
+        while (cz1.moveToNext()) {
+            for (int i = 0; i < cz1.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), cz1.getColumnName(i) + " : " + cz1.getString(i));
+            }
+        }
+        cz1.close();
 
         // applyBatch test
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
