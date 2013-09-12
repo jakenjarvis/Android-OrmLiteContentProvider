@@ -76,12 +76,7 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         }
 
         // orderBy
-        String orderBy = "";
-        if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
-            orderBy = parameter.getSortOrder();
-        } else {
-            orderBy = target.getTableInfo().getDefaultSortOrderString();
-        }
+        String orderBy = getSortOrderStringForQuery(target, parameter);
 
         result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(),
             null, null, orderBy);
@@ -172,4 +167,15 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         }
         return result;
     }
+
+    protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
+        String result = "";
+        if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
+            result = parameter.getSortOrder();
+        } else {
+            result = target.getTableInfo().getDefaultSortOrderString();
+        }
+        return result;
+    }
+
 }
