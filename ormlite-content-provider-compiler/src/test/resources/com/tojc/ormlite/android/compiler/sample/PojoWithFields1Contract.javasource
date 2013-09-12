@@ -7,6 +7,8 @@ import android.provider.BaseColumns;
 
 public final class PojoWithFields1Contract
     implements BaseColumns {
+  public static final String TABLE_NAME = "PojoWithFields1";
+
   public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
 
   public static final String CONTENT_URI_PATH = "pojowithfields1";

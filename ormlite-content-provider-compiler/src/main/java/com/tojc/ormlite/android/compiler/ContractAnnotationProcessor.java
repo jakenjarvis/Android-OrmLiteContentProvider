@@ -42,6 +42,7 @@ import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.squareup.javawriter.JavaWriter;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
@@ -81,6 +82,15 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             } else {
                 targetPackageName = contractClassName.substring(0, contractClassName.lastIndexOf('.'));
                 targetClassName = contractClassName;
+            }
+
+            DatabaseTable databaseTable = classElement.getAnnotation(DatabaseTable.class);
+            String databaseTableName = "";
+            if (databaseTable != null) {
+                databaseTableName = databaseTable.tableName();
+            }
+            if (databaseTableName == null || databaseTableName.length() == 0) {
+                databaseTableName = classElement.getSimpleName().toString();
             }
 
             DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
@@ -130,6 +140,8 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 String defaultContentUriStatement = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
 
                 writer.beginType(targetClassName, "class", EnumSet.of(PUBLIC, FINAL), null, "BaseColumns") //
+                        .emitField("String", "TABLE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(databaseTableName))//
+                        .emitEmptyLine()//
                         .emitField("String", "AUTHORITY", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriAuthority))//
                         .emitEmptyLine()//
                         .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriPath))//
