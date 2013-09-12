@@ -73,11 +73,12 @@ public class MainActivity extends Activity {
 
         //
         Cursor cz1 = getContentResolver().query(CarContract.CONTENT_URI, null, null, null, null);
-        while (cz1.moveToNext()) {
+        cz1.moveToFirst();
+        do {
             for (int i = 0; i < cz1.getColumnCount(); i++) {
                 Log.d(getClass().getSimpleName(), cz1.getColumnName(i) + " : " + cz1.getString(i));
             }
-        }
+        } while (cz1.moveToNext());
         cz1.close();
 
         // applyBatch test
