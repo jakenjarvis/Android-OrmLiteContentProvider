@@ -28,10 +28,11 @@ import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
+import com.tojc.ormlite.android.ormlitecontentprovider.sample.provider.AccountContract;
 
-@DatabaseTable(tableName = "accounts")
-@DefaultContentUri(authority = "com.tojc.ormlite.android.ormlitecontentprovider.sample", path = "accounts")
-@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.ormlitecontentprovider.sample.provider", type = "accounts")
+@DatabaseTable(tableName = AccountContract.TABLE_NAME)
+@DefaultContentUri(authority = AccountContract.AUTHORITY, path = AccountContract.CONTENT_URI_PATH)
+@DefaultContentMimeTypeVnd(name = AccountContract.MIMETYPE_NAME, type = AccountContract.MIMETYPE_TYPE)
 public class Account {
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
