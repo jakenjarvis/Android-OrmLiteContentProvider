@@ -1,1 +1,2 @@
 com.tojc.ormlite.android.compiler.ContractAnnotationProcessor
+com.tojc.ormlite.android.compiler.SuperContractAnnotationProcessor

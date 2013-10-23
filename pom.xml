@@ -111,7 +111,7 @@
 		<commons-lang3.version>3.1</commons-lang3.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>2.1.2</javawriter.version>
+		<javawriter.version>2.2.0</javawriter.version>
 		<spring-core.version>3.2.4.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->

@@ -47,6 +47,19 @@ public class AdditionalAnnotation {
     }
 
     /**
+     * This specifies the classes that should be generated into one Contract file, instead of generating one Contract
+     * file for each table like the {@link Contract} annotation.
+     *
+     * @author Michael Cramer
+     * @see android.provider.ContactsContract
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @Target(ElementType.TYPE)
+    public @interface SuperContract {
+        String contractClassName();
+    }
+
+    /**
      * This specifies the default ContentUri. If you do not want to use the
      * DefaultContentUri annotation, you must call the
      * MatcherPattern#setContentUri(). "content://authority/path"

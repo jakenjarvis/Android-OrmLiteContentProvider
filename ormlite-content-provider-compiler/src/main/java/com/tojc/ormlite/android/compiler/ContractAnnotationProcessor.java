@@ -46,6 +46,7 @@ import com.squareup.javawriter.JavaWriter;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SuperContract;
 
 /**
  * Annotation processor
@@ -62,7 +63,9 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
 
         // Get all classes that has the annotation
-        Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
+        final Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
+        final Set<? extends Element> superClassElements = roundEnvironment.getElementsAnnotatedWith(SuperContract.class);
+        classElements.removeAll(superClassElements);
 
         // For each class that has the annotation
         for (final Element classElement : classElements) {
