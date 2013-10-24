@@ -23,8 +23,6 @@ package com.tojc.ormlite.android.annotation.info;
 
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -35,6 +33,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
     private static final String TEST_NAME = "foo";
     private static final String TEST_TYPE = "bar";
+    private static final String EMPTY = "";
 
     private ContentMimeTypeVndInfo contentMimeTypeVndInfo;
 
@@ -64,7 +63,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
         // --
         // given
-        contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, StringUtils.EMPTY);
+        contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, EMPTY);
         // when
 
         // then
@@ -72,7 +71,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
         // --
         // given
-        contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(StringUtils.EMPTY, TEST_TYPE);
+        contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(EMPTY, TEST_TYPE);
         // when
 
         // then

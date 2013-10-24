@@ -21,8 +21,6 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
 import com.tojc.ormlite.android.framework.Validity;
 
 /**
@@ -61,7 +59,9 @@ public abstract class AnnotationInfoBase implements Validity {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this);
+        return "AnnotationInfoBase{"
+                + "validFlag=" + validFlag
+                + "} " + super.toString();
     }
 
     protected final void thowIllegalStateExceptionUnderCondition(boolean condition, String message) {
