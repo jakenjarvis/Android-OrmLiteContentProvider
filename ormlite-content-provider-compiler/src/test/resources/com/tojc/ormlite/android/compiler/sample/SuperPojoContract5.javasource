@@ -35,7 +35,7 @@ public final class SuperPojoContract5 {
     public static final String CONTENT_URI_PATH = "my_pojo_3";
     public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.samplepojo";
 
-    public static final String MIMETYPE_TYPE = "my_pojo_3";
+    public static final String MIMETYPE_TYPE = "pojo3";
     public static final String MIMETYPE_NAME = "pojo3";
 
     public static final int CONTENT_URI_PATTERN_MANY = 11;

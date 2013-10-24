@@ -14,154 +14,194 @@
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  */
-
 package com.tojc.ormlite.android.compiler;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.squareup.javawriter.JavaWriter;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
-import static javax.lang.model.element.Modifier.FINAL;
-import static javax.lang.model.element.Modifier.PRIVATE;
-import static javax.lang.model.element.Modifier.PUBLIC;
-import static javax.lang.model.element.Modifier.STATIC;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.squareup.javawriter.JavaWriter;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SuperContract;
+import static javax.lang.model.element.Modifier.FINAL;
+import static javax.lang.model.element.Modifier.PRIVATE;
+import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.lang.model.element.Modifier.STATIC;
 
 /**
- * Annotation processor
+ * Contract annotation processor
+ *
  * @author <a href=\"mailto:christoffer@christoffer.me\">Christoffer Pettersson</a>
+ * @author Michael Cramer
+ * @see Contract
+ * @since 1.0.4
  */
-
 @SupportedAnnotationTypes("com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ContractAnnotationProcessor extends AbstractProcessor {
-
-    private int patternCode = 1;
+    private static final String DEFAULT_CONTENT_URI_STATEMENT = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
+    private static final String SUPER_MIME_TYPE_NAME = "SUPER_MIME_TYPE_NAME";
+    private static final String SUPER_AUTHORITY = "SUPER_AUTHORITY";
+    private static final String EMPTY_LITERAL = JavaWriter.stringLiteral("");
+    private static final int COUNT_FACTOR = 10;
+    private int contractCount = 0;
 
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
-
         // Get all classes that has the annotation
-        final Set<? extends Element> classElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
-        final Set<? extends Element> superClassElements = roundEnvironment.getElementsAnnotatedWith(SuperContract.class);
-        classElements.removeAll(superClassElements);
+        final Set<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
 
-        // For each class that has the annotation
-        for (final Element classElement : classElements) {
+        // Get the annotation information grouped by SuperContractClassName
+        final Map<String, Set<Element>> grouped = CodeGen.groupElementsByContractClassName(annotatedElements);
 
-            // Get the annotation information
-            Contract contractAnnotation = classElement.getAnnotation(Contract.class);
-            String contractClassName = contractAnnotation.contractClassName();
+        // process every SuperContractClassName
+        for (final Map.Entry<String, Set<Element>> groupedElements : grouped.entrySet()) {
+            final String targetClassName = groupedElements.getKey();
+            final Set<Element> classElements = groupedElements.getValue();
 
-            String targetPackageName;
-            String targetClassName;
-            if (contractClassName == null || contractClassName.length() == 0) {
-                PackageElement targetPackage;
-                targetPackage = CodeGen.getPackage(classElement);
-                targetPackageName = targetPackage.getQualifiedName().toString();
-                targetClassName = targetPackage.getQualifiedName().toString() + "." + classElement.getSimpleName() + "Contract";
-            } else {
-                targetPackageName = contractClassName.substring(0, contractClassName.lastIndexOf('.'));
-                targetClassName = contractClassName;
-            }
+            final String targetPackageName = targetClassName.substring(0, targetClassName.lastIndexOf('.'));
 
-            DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
-            String contentUriAuthority = "";
-            String contentUriPath = "";
-            if (defaultContentUriAnnotation != null) {
-                contentUriAuthority = defaultContentUriAnnotation.authority();
-                contentUriPath = defaultContentUriAnnotation.path();
-            }
-            if (contentUriAuthority == null || contentUriAuthority.length() == 0) {
-                contentUriAuthority = targetPackageName;
-            }
-            if (contentUriPath == null || contentUriPath.length() == 0) {
-                // TODO use DataBase annotation
-                contentUriPath = classElement.getSimpleName().toString().toLowerCase();
-            }
-
-            DefaultContentMimeTypeVnd defaultContentMimeTypeVndAnnotation = classElement.getAnnotation(DefaultContentMimeTypeVnd.class);
-            String mimeTypeVndName = "";
-            String mimeTypeVndType = "";
-            if (defaultContentMimeTypeVndAnnotation != null) {
-                mimeTypeVndName = defaultContentMimeTypeVndAnnotation.name();
-                mimeTypeVndType = defaultContentMimeTypeVndAnnotation.type();
-            }
-            if (mimeTypeVndName == null || mimeTypeVndName.length() == 0) {
-                mimeTypeVndName = targetPackageName + ".provider";
-            }
-            if (mimeTypeVndType == null || mimeTypeVndType.length() == 0) {
-                mimeTypeVndType = classElement.getSimpleName().toString().toLowerCase();
-            }
+            final boolean multipleClassesForContract = classElements.size() > 1;
 
             Writer out = null;
             try {
-                JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(targetClassName, (Element[]) null);
+                final JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(targetClassName, (Element[]) null);
 
                 out = sourceFile.openWriter();
-                JavaWriter writer = new JavaWriter(out);
-                writer.emitPackage(targetPackageName)//
-                        .emitEmptyLine()//
-                        .emitImports("android.net.Uri")//
-                        .emitImports("android.content.ContentResolver")//
-                        .emitImports("android.provider.BaseColumns")//
+                final JavaWriter writer = new JavaWriter(out);
+
+                // package and import statements
+                writer.emitPackage(targetPackageName)
+                        .emitImports("android.net.Uri")
+                        .emitImports("android.content.ContentResolver")
+                        .emitImports("android.provider.BaseColumns")
                         .emitEmptyLine();
 
-                // public static final String TABLENAME = "curren_weather";
-
-                String defaultContentUriStatement = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
-
-                writer.beginType(targetClassName, "class", EnumSet.of(PUBLIC, FINAL), null, "BaseColumns") //
-                        .emitField("String", "AUTHORITY", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriAuthority))//
-                        .emitEmptyLine()//
-                        .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriPath))//
-                        .emitEmptyLine()//
-                        .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndType))//
-                        .emitField("String", "MIMETYPE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndName))//
-                        .emitEmptyLine()//
-                        .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))//
-                        .emitField("int", "CONTENT_URI_PATTERN_ONE", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))//
-                        .emitEmptyLine()//
-                        .emitField("Uri", "CONTENT_URI", EnumSet.of(STATIC, PUBLIC, FINAL), defaultContentUriStatement)//
-                        .emitEmptyLine()//
-                        .beginMethod(null, targetClassName, EnumSet.of(PRIVATE))//
-                        .endMethod()//
-                        .emitEmptyLine()//
-                        .emitEmptyLine();
-
-                List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
-                for (Element field : fields) {
-                    String fieldName = field.getSimpleName().toString();
-                    if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
-                        writer.emitField("String", fieldName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(fieldName));
-                    }
+                if (multipleClassesForContract) {
+                    // super contract class with private constructor
+                    writer.beginType(targetClassName, "class", EnumSet.of(PUBLIC, FINAL))
+                            .emitField("String", SUPER_AUTHORITY, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(targetPackageName))
+                            .emitField("String", SUPER_MIME_TYPE_NAME, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(targetPackageName + ".provider"))
+                            .emitEmptyLine()
+                            .beginMethod(null, targetClassName, EnumSet.of(PRIVATE))
+                            .endMethod()
+                            .emitEmptyLine();
                 }
-                writer.endType();
+
+                // For each class that has the annotation
+                final Iterator<Element> iterator = classElements.iterator();
+                while (iterator.hasNext()) {
+                    final Element classElement = iterator.next();
+                    int patternCode = 1;
+                    final DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
+                    final String contentUriPathFromAnnotation;
+                    final String contentUriAuthorityFromAnnotation;
+                    if (defaultContentUriAnnotation != null) {
+                        contentUriPathFromAnnotation = defaultContentUriAnnotation.path();
+                        contentUriAuthorityFromAnnotation = defaultContentUriAnnotation.authority();
+                    } else {
+                        contentUriPathFromAnnotation = "";
+                        contentUriAuthorityFromAnnotation = "";
+                    }
+
+                    final String contentUriPath;
+                    if (contentUriPathFromAnnotation.isEmpty()) {
+                        final DatabaseTable databaseTable = classElement.getAnnotation(DatabaseTable.class);
+                        if (databaseTable == null || databaseTable.tableName().isEmpty()) {
+                            contentUriPath = classElement.getSimpleName().toString().toLowerCase();
+                        } else {
+                            contentUriPath = databaseTable.tableName().toLowerCase();
+                        }
+                    } else {
+                        contentUriPath = contentUriPathFromAnnotation;
+                    }
+
+                    final DefaultContentMimeTypeVnd defaultContentMimeTypeVndAnnotation = classElement.getAnnotation(DefaultContentMimeTypeVnd.class);
+                    final String mimeTypeVndNameFromAnnotation;
+                    final String mimeTypeVndTypeFromAnnotation;
+                    if (defaultContentMimeTypeVndAnnotation != null) {
+                        mimeTypeVndNameFromAnnotation = defaultContentMimeTypeVndAnnotation.name();
+                        mimeTypeVndTypeFromAnnotation = defaultContentMimeTypeVndAnnotation.type();
+                    } else {
+                        mimeTypeVndNameFromAnnotation = "";
+                        mimeTypeVndTypeFromAnnotation = "";
+                    }
+
+                    final String mimeTypeVndType;
+                    if (mimeTypeVndTypeFromAnnotation.isEmpty()) {
+                        final DatabaseTable databaseTable = classElement.getAnnotation(DatabaseTable.class);
+                        if (databaseTable == null || databaseTable.tableName().isEmpty()) {
+                            mimeTypeVndType = classElement.getSimpleName().toString().toLowerCase();
+                        } else {
+                            mimeTypeVndType = databaseTable.tableName().toLowerCase();
+                        }
+                    } else {
+                        mimeTypeVndType = mimeTypeVndTypeFromAnnotation;
+                    }
+
+                    final String contractClassName = multipleClassesForContract ? String.format("%sContract", classElement.getSimpleName().toString()) : targetClassName.substring(targetClassName.lastIndexOf('.') + 1, targetClassName.length());
+                    final EnumSet<Modifier> classModifiers = multipleClassesForContract ? EnumSet.of(STATIC, PUBLIC, FINAL) : EnumSet.of(PUBLIC, FINAL);
+
+                    final String authority = multipleClassesForContract && (contentUriAuthorityFromAnnotation == null || contentUriAuthorityFromAnnotation.isEmpty()) ? SUPER_AUTHORITY : JavaWriter.stringLiteral(contentUriAuthorityFromAnnotation);
+                    final String vndName = multipleClassesForContract && (mimeTypeVndNameFromAnnotation == null || mimeTypeVndNameFromAnnotation.isEmpty()) ? SUPER_MIME_TYPE_NAME : JavaWriter.stringLiteral(mimeTypeVndNameFromAnnotation);
+
+                    writer.beginType(contractClassName, "class", classModifiers, null, "BaseColumns")
+                            .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriPath))
+                            .emitField("String", "AUTHORITY", EnumSet.of(STATIC, PUBLIC, FINAL), authority.isEmpty() || EMPTY_LITERAL.equals(authority) ? JavaWriter.stringLiteral(targetPackageName) : authority)
+                            .emitEmptyLine()
+                            .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndType))
+                            .emitField("String", "MIMETYPE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), vndName.isEmpty() || EMPTY_LITERAL.equals(vndName) ? JavaWriter.stringLiteral(String.format("%s.provider", targetPackageName)) : vndName)
+                            .emitEmptyLine()
+                            .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(contractCount * COUNT_FACTOR + patternCode++))
+                            .emitField("int", "CONTENT_URI_PATTERN_ONE", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(contractCount * COUNT_FACTOR + patternCode++))
+                            .emitEmptyLine()
+                            .emitField("Uri", "CONTENT_URI", EnumSet.of(STATIC, PUBLIC, FINAL), DEFAULT_CONTENT_URI_STATEMENT)
+                            .emitEmptyLine()
+                            .beginMethod(null, contractClassName, EnumSet.of(PRIVATE))
+                            .endMethod()
+                            .emitEmptyLine();
+
+                    final List<Element> fields = CodeGen.getAllElementsAnnotatedWith(DatabaseField.class, classElement);
+                    for (final Element field : fields) {
+                        final String fieldName = field.getSimpleName().toString();
+                        if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
+                            writer.emitField("String", fieldName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(fieldName));
+                        }
+                    }
+                    writer.endType();
+                    if (iterator.hasNext()) {
+                        writer.emitEmptyLine();
+                    }
+                    contractCount++;
+                }
+                if (multipleClassesForContract) {
+                    writer.endType();
+                }
+                writer.emitEmptyLine();
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                error(classElement, "can't open java file " + targetClassName);
+                for (final Element element : classElements) {
+                    processingEnv.getMessager().printMessage(Kind.ERROR, "can't open java file " + targetClassName, element);
+                }
             } finally {
                 if (out != null) {
                     try {
@@ -172,35 +212,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 }
             }
         }
-
         return true;
-    }
-
-    private List<Element> getAllElementsAnnotatedWith(Class<? extends Annotation> class1, Element classElement) {
-        List<Element> allFields = getEnclosedElements(classElement, ElementKind.FIELD);
-        List<Element> result = new ArrayList<Element>();
-        for (final Element fieldElement : allFields) {
-            if (fieldElement.getAnnotation(class1) != null) {
-                result.add(fieldElement);
-            }
-        }
-        return result;
-    }
-
-    private void error(final Element element, final String message) {
-        processingEnv.getMessager().printMessage(Kind.ERROR, message, element);
-    }
-
-    private List<Element> getEnclosedElements(final Element element, final ElementKind elementKind) {
-
-        List<Element> list = new ArrayList<Element>();
-
-        for (Element enclosedElement : element.getEnclosedElements()) {
-            if (enclosedElement.getKind() == elementKind) {
-                list.add(enclosedElement);
-            }
-        }
-
-        return list;
     }
 }

@@ -44,7 +44,7 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
 
     @Override
     protected Collection<Processor> getProcessors() {
-        return Arrays.<Processor>asList(new ContractAnnotationProcessor(), new SuperContractAnnotationProcessor());
+        return Arrays.<Processor>asList(new ContractAnnotationProcessor());
     }
 
     // @Test
@@ -55,40 +55,40 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
     @Test
     public void validVerySimpleContractAnnotation() throws IOException {
         assertCompilationSuccessful(compileTestCase(Pojo.class));
-        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/PojoContract.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoContract.javasource";
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/PojoContract.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoContract.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validLessSimpleContractAnnotation() throws IOException {
         assertCompilationSuccessful(compileTestCase(Pojo2.class));
-        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.javasource";
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/LessSimplePojoContract2.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validDefaultContentUriAndContractAnnotation() throws IOException {
         assertCompilationSuccessful(compileTestCase(Pojo3.class));
-        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/Pojo3Contract.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/Pojo3Contract.javasource";
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/Pojo3Contract.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/Pojo3Contract.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validDefaultContentUriAndDefaultContentMimeTypeVndContractAnnotation() throws IOException {
         assertCompilationSuccessful(compileTestCase(Pojo4.class));
-        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.javasource";
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/Pojo4Contract.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validFieldsContractAnnotation() throws IOException {
         assertCompilationSuccessful(compileTestCase(PojoWithFields1.class));
-        String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.java";
-        String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.javasource";
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
