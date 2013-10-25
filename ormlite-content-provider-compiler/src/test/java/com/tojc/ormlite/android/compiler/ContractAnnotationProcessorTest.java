@@ -21,17 +21,17 @@
  */
 package com.tojc.ormlite.android.compiler;
 
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo1;
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo2;
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo3;
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo4;
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo5;
+import com.tojc.ormlite.android.compiler.sample.CombinedPojo6;
 import com.tojc.ormlite.android.compiler.sample.Pojo;
 import com.tojc.ormlite.android.compiler.sample.Pojo2;
 import com.tojc.ormlite.android.compiler.sample.Pojo3;
 import com.tojc.ormlite.android.compiler.sample.Pojo4;
 import com.tojc.ormlite.android.compiler.sample.PojoWithFields1;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo1;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo2;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo3;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo4;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo5;
-import com.tojc.ormlite.android.compiler.sample.SuperPojo6;
 import org.junit.Test;
 
 import javax.annotation.processing.Processor;
@@ -94,25 +94,25 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
 
     @Test
     public void validSuperPojo() throws IOException {
-        assertCompilationSuccessful(compileTestCase(SuperPojo1.class, SuperPojo2.class));
-        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/SuperPojoContract.java";
-        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/SuperPojoContract.javasource";
+        assertCompilationSuccessful(compileTestCase(CombinedPojo1.class, CombinedPojo2.class));
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract1.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract1.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validSuperPojoWithDefaultContentUriAndDefaultContentMimeTypeVndContractAnnotation() throws IOException {
-        assertCompilationSuccessful(compileTestCase(SuperPojo3.class, SuperPojo4.class));
-        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/SuperPojoContract3.java";
-        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/SuperPojoContract3.javasource";
+        assertCompilationSuccessful(compileTestCase(CombinedPojo3.class, CombinedPojo4.class));
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract2.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract2.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
     @Test
     public void validSuperPojoMixedWithDefaultContentUriAndDefaultContentMimeTypeVndContractAnnotation() throws IOException {
-        assertCompilationSuccessful(compileTestCase(SuperPojo5.class, SuperPojo6.class));
-        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/SuperPojoContract5.java";
-        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/SuperPojoContract5.javasource";
+        assertCompilationSuccessful(compileTestCase(CombinedPojo5.class, CombinedPojo6.class));
+        final String string = "target/generated-test/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract3.java";
+        final String string2 = "target/test-classes/com/tojc/ormlite/android/compiler/sample/CombinedPojoContract3.javasource";
         assertOutput(new File(string), new File(string2));
     }
 }
