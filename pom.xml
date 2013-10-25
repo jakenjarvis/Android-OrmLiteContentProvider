@@ -108,15 +108,13 @@
 		<android-support.version>r7</android-support.version>
 
 		<ormlite.version>4.47</ormlite.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>2.1.2</javawriter.version>
+		<javawriter.version>2.2.0</javawriter.version>
 		<spring-core.version>3.2.4.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
 		<junit.version>4.11</junit.version>
-		<easymock.version>3.2</easymock.version>
 
 		<!-- plugins -->
 		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
@@ -170,24 +168,8 @@
 			</dependency>
 			<dependency>
 				<groupId>com.j256.ormlite</groupId>
-				<artifactId>ormlite-core</artifactId>
-				<version>${ormlite.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.j256.ormlite</groupId>
 				<artifactId>ormlite-android</artifactId>
 				<version>${ormlite.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons-lang3.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>easymock</artifactId>
-				<version>${easymock.version}</version>
 			</dependency>
 
 			<dependency>
@@ -204,6 +186,7 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
+                <scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
+import android.text.TextUtils;
 
 import android.provider.BaseColumns;
 
@@ -139,7 +139,7 @@ public class TableInfo implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("classType is null.");
             }
-        } else if (StringUtils.isEmpty(name)) {
+        } else if (TextUtils.isEmpty(name)) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("name is zero string.");

@@ -40,7 +40,7 @@ public class AdditionalAnnotation {
      *      String)
      * @author Jaken
      */
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.SOURCE)
     @Target({ ElementType.TYPE })
     public @interface Contract {
         String contractClassName() default "";

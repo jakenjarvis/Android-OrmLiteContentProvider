@@ -23,8 +23,6 @@ package com.tojc.ormlite.android.framework;
 
 import java.io.File;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -36,6 +34,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
     private static final String CONTENT_MIME_TYPE_VND_NAME = "bar";
     private static final String CONTENT_MIME_TYPE_VND_TYPE = "foo";
+    private static final String EMPTY = "";
 
     private MimeTypeVnd mimeTypeVnd;
 
@@ -58,7 +57,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
         // --
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(StringUtils.EMPTY, CONTENT_MIME_TYPE_VND_TYPE));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(EMPTY, CONTENT_MIME_TYPE_VND_TYPE));
         // when
 
         // then
@@ -75,7 +74,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
         // --
         // given
-        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, StringUtils.EMPTY));
+        mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, EMPTY));
         // when
 
         // then
