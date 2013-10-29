@@ -15,7 +15,7 @@
  */
 package com.tojc.ormlite.android.compiler;
 
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -86,7 +86,7 @@ final class CodeGen {
     static Map<String, Set<Element>> groupElementsByContractClassName(final Collection<? extends Element> classElements) {
         final Map<String, Set<Element>> grouped = new HashMap<String, Set<Element>>(classElements.size());
         for (final Element classElement : classElements) {
-            final AdditionalAnnotation.Contract contractAnnotation = classElement.getAnnotation(AdditionalAnnotation.Contract.class);
+            final Contract contractAnnotation = classElement.getAnnotation(Contract.class);
             final String contractClassName = contractAnnotation.contractClassName();
 
             final String targetClassName;
