@@ -3,10 +3,10 @@ package com.tojc.ormlite.android.compiler.sample;
 import android.provider.BaseColumns;
 import com.j256.ormlite.field.DatabaseField;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SuperContract;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 
-@SuperContract(contractClassName = "com.tojc.ormlite.android.compiler.sample.SuperPojoContract")
-public class SuperPojo2 {
+@Contract(contractClassName = "com.tojc.ormlite.android.compiler.sample.CombinedPojoContract1")
+public class CombinedPojo2 {
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
     @AdditionalAnnotation.DefaultSortOrder
     private int id;

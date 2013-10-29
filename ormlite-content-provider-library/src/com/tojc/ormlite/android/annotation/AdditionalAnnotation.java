@@ -40,23 +40,10 @@ public class AdditionalAnnotation {
      *      String)
      * @author Jaken
      */
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.SOURCE)
     @Target({ ElementType.TYPE })
     public @interface Contract {
         String contractClassName() default "";
-    }
-
-    /**
-     * This specifies the classes that should be generated into one Contract file, instead of generating one Contract
-     * file for each table like the {@link Contract} annotation.
-     *
-     * @author Michael Cramer
-     * @see android.provider.ContactsContract
-     */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(ElementType.TYPE)
-    public @interface SuperContract {
-        String contractClassName();
     }
 
     /**

@@ -4,19 +4,19 @@ import android.net.Uri;
 import android.content.ContentResolver;
 import android.provider.BaseColumns;
 
-public final class SuperPojoContract3 {
-  private static final String SUPER_AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
-  private static final String SUPER_MIME_TYPE_NAME = "com.tojc.ormlite.android.compiler.sample.provider";
+public final class CombinedPojoContract2 {
+  private static final String CONTRACT_AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
+  private static final String CONTRACT_MIME_TYPE_NAME = "com.tojc.ormlite.android.compiler.sample.provider";
 
-  private SuperPojoContract3() {
+  private CombinedPojoContract2() {
   }
 
-  public static final class SuperPojo3Contract
+  public static final class CombinedPojo3Contract
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "my_pojo_3";
     public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.samplepojo";
 
-    public static final String MIMETYPE_TYPE = "my_pojo_3";
+    public static final String MIMETYPE_TYPE = "pojo3";
     public static final String MIMETYPE_NAME = "pojo3";
 
     public static final int CONTENT_URI_PATTERN_MANY = 1;
@@ -24,18 +24,18 @@ public final class SuperPojoContract3 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private SuperPojo3Contract() {
+    private CombinedPojo3Contract() {
     }
 
     public static final String NAME = "name";
   }
 
-  public static final class SuperPojo4Contract
+  public static final class CombinedPojo4Contract
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "my_pojo_4";
     public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.samplepojo";
 
-    public static final String MIMETYPE_TYPE = "my_pojo_4";
+    public static final String MIMETYPE_TYPE = "pojo4";
     public static final String MIMETYPE_NAME = "pojo4";
 
     public static final int CONTENT_URI_PATTERN_MANY = 11;
@@ -43,7 +43,7 @@ public final class SuperPojoContract3 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private SuperPojo4Contract() {
+    private CombinedPojo4Contract() {
     }
 
     public static final String NAME = "name";

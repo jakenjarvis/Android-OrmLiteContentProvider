@@ -21,8 +21,6 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.provider.BaseColumns;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -39,6 +37,7 @@ public class MatcherPatternTest extends AndroidTestCase {
 
     // activate this to debug tests
     private static final boolean DEBUG = false;
+    private static final String EMPTY = "";
 
     private MatcherPattern matcherPattern;
 
@@ -74,7 +73,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
         SubType subType = SubType.ITEM;
-        String pattern = StringUtils.EMPTY;
+        String pattern = EMPTY;
         int patternCode = 1;
 
         // when
