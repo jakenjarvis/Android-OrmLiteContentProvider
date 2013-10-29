@@ -20,6 +20,11 @@
 	</properties>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.squareup</groupId>
 			<artifactId>javawriter</artifactId>
@@ -34,11 +39,6 @@
 			<artifactId>spring-core</artifactId>
             <scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <scope>test</scope>
-        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

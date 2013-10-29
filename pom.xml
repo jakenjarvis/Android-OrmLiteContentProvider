@@ -110,7 +110,7 @@
 		<ormlite.version>4.47</ormlite.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>2.2.0</javawriter.version>
+		<javawriter.version>2.2.1</javawriter.version>
 		<spring-core.version>3.2.4.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
@@ -165,6 +165,11 @@
 				<artifactId>support-v4</artifactId>
 				<version>${android-support.version}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.j256.ormlite</groupId>
+				<artifactId>ormlite-core</artifactId>
+				<version>${ormlite.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.j256.ormlite</groupId>
