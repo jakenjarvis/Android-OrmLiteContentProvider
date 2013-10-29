@@ -90,9 +90,9 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
 
                 // package and import statements
                 writer.emitPackage(targetPackageName)
-                        .emitImports("android.net.Uri")
-                        .emitImports("android.content.ContentResolver")
-                        .emitImports("android.provider.BaseColumns")
+                        .emitImports(android.net.Uri.class.getCanonicalName())
+                        .emitImports(android.content.ContentResolver.class.getCanonicalName())
+                        .emitImports(android.provider.BaseColumns.class.getCanonicalName())
                         .emitEmptyLine();
 
                 if (multipleClassesForContract) {
