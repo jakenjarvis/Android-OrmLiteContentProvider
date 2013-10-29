@@ -5,8 +5,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 
-@Contract(contractClassName = "com.tojc.ormlite.android.compiler.sample.SuperPojoContract")
-public class SuperPojo1 {
+@Contract(contractClassName = "com.tojc.ormlite.android.compiler.sample.CombinedPojoContract3")
+public class CombinedPojo5 {
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
     @AdditionalAnnotation.DefaultSortOrder
     private int id;

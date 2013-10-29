@@ -58,8 +58,8 @@ import static javax.lang.model.element.Modifier.STATIC;
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String DEFAULT_CONTENT_URI_STATEMENT = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
-    private static final String SUPER_MIME_TYPE_NAME = "SUPER_MIME_TYPE_NAME";
-    private static final String SUPER_AUTHORITY = "SUPER_AUTHORITY";
+    private static final String SUPER_MIME_TYPE_NAME = "CONTRACT_MIME_TYPE_NAME";
+    private static final String SUPER_AUTHORITY = "CONTRACT_AUTHORITY";
     private static final String EMPTY_LITERAL = JavaWriter.stringLiteral("");
     private static final int COUNT_FACTOR = 10;
     private int contractCount = 0;
@@ -69,10 +69,10 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
         // Get all classes that has the annotation
         final Set<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(Contract.class);
 
-        // Get the annotation information grouped by SuperContractClassName
+        // Get the annotation information grouped by ContractClassName
         final Map<String, Set<Element>> grouped = CodeGen.groupElementsByContractClassName(annotatedElements);
 
-        // process every SuperContractClassName
+        // process every ContractClassName
         for (final Map.Entry<String, Set<Element>> groupedElements : grouped.entrySet()) {
             final String targetClassName = groupedElements.getKey();
             final Set<Element> classElements = groupedElements.getValue();
