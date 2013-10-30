@@ -61,8 +61,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String SUPER_MIME_TYPE_NAME = "CONTRACT_MIME_TYPE_NAME";
     private static final String SUPER_AUTHORITY = "CONTRACT_AUTHORITY";
     private static final String EMPTY_LITERAL = JavaWriter.stringLiteral("");
-    private static final int COUNT_FACTOR = 10;
-    private int contractCount = 0;
+    private int patternCode = 1;
 
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
@@ -110,7 +109,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 final Iterator<Element> iterator = classElements.iterator();
                 while (iterator.hasNext()) {
                     final Element classElement = iterator.next();
-                    int patternCode = 1;
+
                     final DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
                     final String contentUriPathFromAnnotation;
                     final String contentUriAuthorityFromAnnotation;
@@ -170,8 +169,8 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                             .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndType))
                             .emitField("String", "MIMETYPE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), vndName.isEmpty() || EMPTY_LITERAL.equals(vndName) ? JavaWriter.stringLiteral(String.format("%s.provider", targetPackageName)) : vndName)
                             .emitEmptyLine()
-                            .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(contractCount * COUNT_FACTOR + patternCode++))
-                            .emitField("int", "CONTENT_URI_PATTERN_ONE", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(contractCount * COUNT_FACTOR + patternCode++))
+                            .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))
+                            .emitField("int", "CONTENT_URI_PATTERN_ONE", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))
                             .emitEmptyLine()
                             .emitField("Uri", "CONTENT_URI", EnumSet.of(STATIC, PUBLIC, FINAL), DEFAULT_CONTENT_URI_STATEMENT)
                             .emitEmptyLine()
@@ -190,7 +189,6 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                     if (iterator.hasNext()) {
                         writer.emitEmptyLine();
                     }
-                    contractCount++;
                 }
                 if (multipleClassesForContract) {
                     writer.endType();
