@@ -11,7 +11,7 @@ public final class CombinedPojoContract3 {
   private CombinedPojoContract3() {
   }
 
-  public static final class CombinedPojo5Contract
+  public static final class CombinedPojo5
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "combinedpojo5";
     public static final String AUTHORITY = CONTRACT_AUTHORITY;
@@ -24,13 +24,13 @@ public final class CombinedPojoContract3 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private CombinedPojo5Contract() {
+    private CombinedPojo5() {
     }
 
     public static final String NAME = "name";
   }
 
-  public static final class CombinedPojo6Contract
+  public static final class CombinedPojo6
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "my_pojo_3";
     public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.samplepojo";
@@ -43,7 +43,7 @@ public final class CombinedPojoContract3 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private CombinedPojo6Contract() {
+    private CombinedPojo6() {
     }
 
     public static final String NAME = "name";

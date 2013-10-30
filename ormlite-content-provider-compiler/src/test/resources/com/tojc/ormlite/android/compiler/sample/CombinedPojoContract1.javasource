@@ -11,7 +11,7 @@ public final class CombinedPojoContract1 {
   private CombinedPojoContract1() {
   }
 
-  public static final class CombinedPojo1Contract
+  public static final class CombinedPojo1
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "combinedpojo1";
     public static final String AUTHORITY = CONTRACT_AUTHORITY;
@@ -24,13 +24,13 @@ public final class CombinedPojoContract1 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private CombinedPojo1Contract() {
+    private CombinedPojo1() {
     }
 
     public static final String NAME = "name";
   }
 
-  public static final class CombinedPojo2Contract
+  public static final class CombinedPojo2
       implements BaseColumns {
     public static final String CONTENT_URI_PATH = "combinedpojo2";
     public static final String AUTHORITY = CONTRACT_AUTHORITY;
@@ -43,7 +43,7 @@ public final class CombinedPojoContract1 {
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private CombinedPojo2Contract() {
+    private CombinedPojo2() {
     }
 
     public static final String NAME = "name";
