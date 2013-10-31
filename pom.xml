@@ -126,6 +126,7 @@
 
 		<android-maven-plugin.version>3.6.1</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
@@ -317,6 +318,16 @@
 						</compilerArguments>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.bsc.maven</groupId>
+					<artifactId>maven-processor-plugin</artifactId>
+					<version>${maven-processor-plugin.version}</version>
+					<configuration>
+						<compilerArguments>-encoding ${project.build.sourceEncoding}</compilerArguments>
+					</configuration>
+				</plugin>
+
 				<plugin>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>${maven-deploy-plugin.version}</version>
