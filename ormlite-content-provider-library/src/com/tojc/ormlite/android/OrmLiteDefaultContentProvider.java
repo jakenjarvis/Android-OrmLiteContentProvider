@@ -167,9 +167,13 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onQuery(this.getHelper(), db, pattern, parameter);
         if (result != null) {
-            result.setNotificationUri(this.getContext().getContentResolver(), uri);
+            this.onQueryCompleted(result, uri, pattern);
         }
         return result;
+    }
+
+    public void onQueryCompleted(Cursor result, Uri uri, MatcherPattern target) {
+        result.setNotificationUri(this.getContext().getContentResolver(), uri);
     }
 
     /*
@@ -194,9 +198,13 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onInsert(this.getHelper(), db, pattern, parameter);
         if (result != null) {
-            this.getContext().getContentResolver().notifyChange(result, null);
+            this.onInsertCompleted(result, uri, pattern);
         }
         return result;
+    }
+
+    public void onInsertCompleted(Uri result, Uri uri, MatcherPattern target) {
+        this.getContext().getContentResolver().notifyChange(result, null);
     }
 
     /*
@@ -222,9 +230,13 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onDelete(this.getHelper(), db, pattern, parameter);
         if (result >= 0) {
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            this.onDeleteCompleted(result, uri, pattern);
         }
         return result;
+    }
+
+    public void onDeleteCompleted(int result, Uri uri, MatcherPattern target) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
@@ -250,9 +262,13 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onUpdate(this.getHelper(), db, pattern, parameter);
         if (result >= 0) {
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            this.onUpdateCompleted(result, uri, pattern);
         }
         return result;
+    }
+
+    public void onUpdateCompleted(int result, Uri uri, MatcherPattern target) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
@@ -288,7 +304,9 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
             }
             db.setTransactionSuccessful();
 
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            if (result >= 1) {
+                this.onBulkInsertCompleted(result, uri);
+            }
         } finally {
             db.endTransaction();
         }
@@ -313,6 +331,10 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      */
     public Uri onBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
         return onInsert(helper, db, target, parameter);
+    }
+
+    public void onBulkInsertCompleted(int result, Uri uri) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
