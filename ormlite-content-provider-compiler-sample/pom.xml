@@ -124,9 +124,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-					<includes>
-						<include>${project.basedir}/target/generated-sources/apt/**</include>
-					</includes>
+					<compilerArgument>-proc:none</compilerArgument>
 				</configuration>
 				<extensions>true</extensions>
 			</plugin>
