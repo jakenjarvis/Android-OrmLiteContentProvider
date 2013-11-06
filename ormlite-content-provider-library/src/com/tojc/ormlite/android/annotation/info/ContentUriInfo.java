@@ -23,7 +23,7 @@ package com.tojc.ormlite.android.annotation.info;
 
 import java.lang.reflect.AnnotatedElement;
 
-import org.apache.commons.lang3.StringUtils;
+import android.text.TextUtils;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -55,10 +55,10 @@ public class ContentUriInfo extends AnnotationInfoBase {
 
         if (element instanceof Class<?>) {
             Class<?> clazz = (Class<?>) element;
-            if (StringUtils.isEmpty(authority)) {
+            if (TextUtils.isEmpty(authority)) {
                 authority = clazz.getPackage().getName();
             }
-            if (StringUtils.isEmpty(path)) {
+            if (TextUtils.isEmpty(path)) {
                 // TODO use DataBase annotation
                 path = clazz.getSimpleName().toLowerCase();
             }
@@ -88,7 +88,7 @@ public class ContentUriInfo extends AnnotationInfoBase {
 
     @Override
     protected boolean isValidValue() {
-        return StringUtils.isNotEmpty(this.authority) && StringUtils.isNotEmpty(this.path);
+        return !TextUtils.isEmpty(this.authority) && !TextUtils.isEmpty(this.path);
     }
 
     // ----------------------------------
@@ -98,5 +98,13 @@ public class ContentUriInfo extends AnnotationInfoBase {
         this.authority = authority;
         this.path = path;
         validFlagOn();
+    }
+
+    @Override
+    public String toString() {
+        return "ContentUriInfo{"
+                + "authority='" + authority + '\''
+                + ", path='" + path + '\''
+                + "} " + super.toString();
     }
 }

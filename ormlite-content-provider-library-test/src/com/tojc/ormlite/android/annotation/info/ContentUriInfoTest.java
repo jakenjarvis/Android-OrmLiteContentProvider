@@ -23,8 +23,6 @@ package com.tojc.ormlite.android.annotation.info;
 
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -35,6 +33,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
 
     private static final String TEST_AUTHORITY = "foo";
     private static final String TEST_PATH = "bar";
+    private static final String EMPTY = "";
 
     private ContentUriInfo contentUriInfo;
 
@@ -64,7 +63,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
 
         // --
         // given
-        contentUriInfo = new ContentUriInfo(TEST_AUTHORITY, StringUtils.EMPTY);
+        contentUriInfo = new ContentUriInfo(TEST_AUTHORITY, EMPTY);
         // when
 
         // then
@@ -72,7 +71,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
 
         // --
         // given
-        contentUriInfo = new ContentUriInfo(StringUtils.EMPTY, TEST_PATH);
+        contentUriInfo = new ContentUriInfo(EMPTY, TEST_PATH);
         // when
 
         // then

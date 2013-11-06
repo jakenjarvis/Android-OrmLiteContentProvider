@@ -67,4 +67,12 @@ public class SortOrderInfo extends AnnotationInfoBase {
     protected boolean isValidValue() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "SortOrderInfo{"
+                + "order=" + order
+                + ", weight=" + weight
+                + "} " + super.toString();
+    }
 }

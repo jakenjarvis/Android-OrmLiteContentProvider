@@ -1,6 +1,5 @@
 package com.tojc.ormlite.android.compiler.sample;
 
-
 import android.net.Uri;
 import android.content.ContentResolver;
 import android.provider.BaseColumns;
@@ -9,9 +8,8 @@ public final class Pojo4Contract
     implements BaseColumns {
   public static final String TABLE_NAME = "Pojo4";
 
-  public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
-
   public static final String CONTENT_URI_PATH = "get_lucky_from_daft_punk";
+  public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
 
   public static final String MIMETYPE_TYPE = "tetra";
   public static final String MIMETYPE_NAME = "c2c";
@@ -24,5 +22,5 @@ public final class Pojo4Contract
   private Pojo4Contract() {
   }
 
-
 }
+
