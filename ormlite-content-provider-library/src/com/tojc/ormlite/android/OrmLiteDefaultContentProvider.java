@@ -167,9 +167,28 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onQuery(this.getHelper(), db, pattern, parameter);
         if (result != null) {
-            result.setNotificationUri(this.getContext().getContentResolver(), uri);
+            this.onQueryCompleted(result, uri, pattern, parameter);
         }
         return result;
+    }
+
+    /**
+     * This method is called after the onQuery processing has been handled. If you're a need,
+     * you can override this method.
+     * @param result
+     *            This is the return value of onQuery method.
+     * @param uri
+     *            This is the Uri of target.
+     * @param target
+     *            This is identical to the argument of onQuery method.
+     *            It is MatcherPattern objects that match to evaluate Uri by UriMatcher. You can
+     *            access information in the tables and columns, ContentUri, MimeType etc.
+     * @param parameter
+     *            This is identical to the argument of onQuery method.
+     *            Arguments passed to the query() method.
+     */
+    protected void onQueryCompleted(Cursor result, Uri uri, MatcherPattern target, QueryParameters parameter) {
+        result.setNotificationUri(this.getContext().getContentResolver(), uri);
     }
 
     /*
@@ -194,9 +213,28 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onInsert(this.getHelper(), db, pattern, parameter);
         if (result != null) {
-            this.getContext().getContentResolver().notifyChange(result, null);
+            this.onInsertCompleted(result, uri, pattern, parameter);
         }
         return result;
+    }
+
+    /**
+     * This method is called after the onInsert processing has been handled. If you're a need,
+     * you can override this method.
+     * @param result
+     *            This is the return value of onInsert method.
+     * @param uri
+     *            This is the Uri of target.
+     * @param target
+     *            This is identical to the argument of onInsert method.
+     *            It is MatcherPattern objects that match to evaluate Uri by UriMatcher. You can
+     *            access information in the tables and columns, ContentUri, MimeType etc.
+     * @param parameter
+     *            This is identical to the argument of onInsert method.
+     *            Arguments passed to the insert() method.
+     */
+    protected void onInsertCompleted(Uri result, Uri uri, MatcherPattern target, InsertParameters parameter) {
+        this.getContext().getContentResolver().notifyChange(result, null);
     }
 
     /*
@@ -222,9 +260,28 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onDelete(this.getHelper(), db, pattern, parameter);
         if (result >= 0) {
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            this.onDeleteCompleted(result, uri, pattern, parameter);
         }
         return result;
+    }
+
+    /**
+     * This method is called after the onDelete processing has been handled. If you're a need,
+     * you can override this method.
+     * @param result
+     *            This is the return value of onDelete method.
+     * @param uri
+     *            This is the Uri of target.
+     * @param target
+     *            This is identical to the argument of onDelete method.
+     *            It is MatcherPattern objects that match to evaluate Uri by UriMatcher. You can
+     *            access information in the tables and columns, ContentUri, MimeType etc.
+     * @param parameter
+     *            This is identical to the argument of onDelete method.
+     *            Arguments passed to the delete() method.
+     */
+    protected void onDeleteCompleted(int result, Uri uri, MatcherPattern target, DeleteParameters parameter) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
@@ -250,9 +307,28 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
         result = onUpdate(this.getHelper(), db, pattern, parameter);
         if (result >= 0) {
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            this.onUpdateCompleted(result, uri, pattern, parameter);
         }
         return result;
+    }
+
+    /**
+     * This method is called after the onUpdate processing has been handled. If you're a need,
+     * you can override this method.
+     * @param result
+     *            This is the return value of onUpdate method.
+     * @param uri
+     *            This is the Uri of target.
+     * @param target
+     *            This is identical to the argument of onUpdate method.
+     *            It is MatcherPattern objects that match to evaluate Uri by UriMatcher. You can
+     *            access information in the tables and columns, ContentUri, MimeType etc.
+     * @param parameter
+     *            This is identical to the argument of onUpdate method.
+     *            Arguments passed to the update() method.
+     */
+    protected void onUpdateCompleted(int result, Uri uri, MatcherPattern target, UpdateParameters parameter) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
@@ -288,7 +364,9 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
             }
             db.setTransactionSuccessful();
 
-            this.getContext().getContentResolver().notifyChange(uri, null);
+            if (result >= 1) {
+                this.onBulkInsertCompleted(result, uri);
+            }
         } finally {
             db.endTransaction();
         }
@@ -313,6 +391,18 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      */
     public Uri onBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
         return onInsert(helper, db, target, parameter);
+    }
+
+    /**
+     * This method is called after the bulkInsert processing has been handled. If you're a need,
+     * you can override this method.
+     * @param result
+     *            This is the return value of bulkInsert method.
+     * @param uri
+     *            This is the Uri of target.
+     */
+    protected void onBulkInsertCompleted(int result, Uri uri) {
+        this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
     /*
