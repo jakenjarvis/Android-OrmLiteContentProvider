@@ -66,8 +66,8 @@ import static javax.lang.model.element.Modifier.STATIC;
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String DEFAULT_CONTENT_URI_STATEMENT = "new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build()";
-    private static final String SUPER_MIME_TYPE_NAME = "CONTRACT_MIME_TYPE_NAME";
-    private static final String SUPER_AUTHORITY = "CONTRACT_AUTHORITY";
+    private static final String CONTRACT_MIME_TYPE_NAME = "CONTRACT_MIME_TYPE_NAME";
+    private static final String CONTRACT_AUTHORITY = "CONTRACT_AUTHORITY";
     private static final String CONTRACT_CLASS_SUFFIX = "Contract";
     private static final String MIMETYPE_NAME_SUFFIX = "provider";
     private int patternCode = 1;
@@ -107,10 +107,10 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 final String defaultMimeTypeName = targetPackageName + "." + MIMETYPE_NAME_SUFFIX;
 
                 if (multipleClassesForContract) {
-                    // super contract class with private constructor
+                    // contract class with private constructor
                     writer.beginType(targetClassName, "class", EnumSet.of(PUBLIC, FINAL))
-                            .emitField("String", SUPER_AUTHORITY, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(defaultAuthority))
-                            .emitField("String", SUPER_MIME_TYPE_NAME, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(defaultMimeTypeName))
+                            .emitField("String", CONTRACT_AUTHORITY, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(defaultAuthority))
+                            .emitField("String", CONTRACT_MIME_TYPE_NAME, EnumSet.of(STATIC, PRIVATE, FINAL), JavaWriter.stringLiteral(defaultMimeTypeName))
                             .emitEmptyLine()
                             .beginMethod(null, targetClassName, EnumSet.of(PRIVATE))
                             .endMethod()
@@ -166,8 +166,11 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
         String defaultMimeTypeName
     ) throws IOException {
 
-        final DatabaseTable databaseTable = classElement.getAnnotation(DatabaseTable.class);
+        // --------------------------------------------------
+        // databaseTableName
+        // --------------------------------------------------
         String databaseTableName = "";
+        final DatabaseTable databaseTable = classElement.getAnnotation(DatabaseTable.class);
         if (databaseTable != null) {
             databaseTableName = databaseTable.tableName();
         }
@@ -175,6 +178,9 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             databaseTableName = classElement.getSimpleName().toString();
         }
 
+        // --------------------------------------------------
+        // contractClassName, classModifiers
+        // --------------------------------------------------
         String contractClassName = "";
         EnumSet<Modifier> classModifiers = null;
         if (multipleClassesForContract) {
@@ -185,6 +191,10 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             classModifiers = EnumSet.of(PUBLIC, FINAL);
         }
 
+        // --------------------------------------------------
+        // CONTENT_URI_PATH
+        // --------------------------------------------------
+        String writer_content_uri_path = "";
         final DefaultContentUri defaultContentUriAnnotation = classElement.getAnnotation(DefaultContentUri.class);
         String contentUriPath = "";
         String contentUriAuthority = "";
@@ -195,13 +205,17 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             contentUriPath = databaseTableName.toLowerCase();
             contentUriAuthority = defaultAuthority;
         }
+        writer_content_uri_path = JavaWriter.stringLiteral(contentUriPath);
 
+        // --------------------------------------------------
+        // AUTHORITY
+        // --------------------------------------------------
         String writer_authority = "";
         if (multipleClassesForContract) {
             if (contentUriAuthority == null || contentUriAuthority.length() == 0) {
-                writer_authority = SUPER_AUTHORITY;
+                writer_authority = CONTRACT_AUTHORITY;
             } else if (defaultAuthority.equals(contentUriAuthority)) {
-                writer_authority = SUPER_AUTHORITY;
+                writer_authority = CONTRACT_AUTHORITY;
             } else {
                 writer_authority = JavaWriter.stringLiteral(contentUriAuthority);
             }
@@ -213,6 +227,10 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             }
         }
 
+        // --------------------------------------------------
+        // MIMETYPE_TYPE
+        // --------------------------------------------------
+        String writer_mimetype_type = "";
         final DefaultContentMimeTypeVnd defaultContentMimeTypeVndAnnotation = classElement.getAnnotation(DefaultContentMimeTypeVnd.class);
         String mimeTypeVndName = "";
         String mimeTypeVndType = "";
@@ -226,13 +244,17 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
         if (mimeTypeVndType == null || mimeTypeVndType.length() == 0) {
             mimeTypeVndType = databaseTableName.toLowerCase();
         }
+        writer_mimetype_type = JavaWriter.stringLiteral(mimeTypeVndType);
 
+        // --------------------------------------------------
+        // MIMETYPE_NAME
+        // --------------------------------------------------
         String writer_mimetype_name = "";
         if (multipleClassesForContract) {
             if (mimeTypeVndName == null || mimeTypeVndName.length() == 0) {
-                writer_mimetype_name = SUPER_MIME_TYPE_NAME;
+                writer_mimetype_name = CONTRACT_MIME_TYPE_NAME;
             } else if (defaultMimeTypeName.equals(mimeTypeVndName)) {
-                writer_mimetype_name = SUPER_MIME_TYPE_NAME;
+                writer_mimetype_name = CONTRACT_MIME_TYPE_NAME;
             } else {
                 writer_mimetype_name = JavaWriter.stringLiteral(mimeTypeVndName);
             }
@@ -244,11 +266,14 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             }
         }
 
+        // --------------------------------------------------
+        // Create Contract Class
+        // --------------------------------------------------
         writer.beginType(contractClassName, "class", classModifiers, null, "BaseColumns")
-                .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(contentUriPath))
+                .emitField("String", "CONTENT_URI_PATH", EnumSet.of(STATIC, PUBLIC, FINAL), writer_content_uri_path)
                 .emitField("String", "AUTHORITY", EnumSet.of(STATIC, PUBLIC, FINAL), writer_authority)
                 .emitEmptyLine()
-                .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(mimeTypeVndType))
+                .emitField("String", "MIMETYPE_TYPE", EnumSet.of(STATIC, PUBLIC, FINAL), writer_mimetype_type)
                 .emitField("String", "MIMETYPE_NAME", EnumSet.of(STATIC, PUBLIC, FINAL), writer_mimetype_name)
                 .emitEmptyLine()
                 .emitField("int", "CONTENT_URI_PATTERN_MANY", EnumSet.of(STATIC, PUBLIC, FINAL), String.valueOf(patternCode++))
