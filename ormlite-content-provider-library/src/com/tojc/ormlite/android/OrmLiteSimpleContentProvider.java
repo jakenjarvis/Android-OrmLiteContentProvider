@@ -168,6 +168,15 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
+    /**
+     * This method gets the appropriate sort order.
+     * @param target
+     *            Arguments passed to the onQuery() method.
+     * @param parameter
+     *            Arguments passed to the onQuery() method.
+     * @return
+     * @since 1.0.4
+     */
     protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
         String result = "";
         if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {

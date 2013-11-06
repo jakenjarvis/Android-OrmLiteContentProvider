@@ -186,6 +186,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @param parameter
      *            This is identical to the argument of onQuery method.
      *            Arguments passed to the query() method.
+     * @since 1.0.4
      */
     protected void onQueryCompleted(Cursor result, Uri uri, MatcherPattern target, QueryParameters parameter) {
         result.setNotificationUri(this.getContext().getContentResolver(), uri);
@@ -232,6 +233,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @param parameter
      *            This is identical to the argument of onInsert method.
      *            Arguments passed to the insert() method.
+     * @since 1.0.4
      */
     protected void onInsertCompleted(Uri result, Uri uri, MatcherPattern target, InsertParameters parameter) {
         this.getContext().getContentResolver().notifyChange(result, null);
@@ -279,6 +281,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @param parameter
      *            This is identical to the argument of onDelete method.
      *            Arguments passed to the delete() method.
+     * @since 1.0.4
      */
     protected void onDeleteCompleted(int result, Uri uri, MatcherPattern target, DeleteParameters parameter) {
         this.getContext().getContentResolver().notifyChange(uri, null);
@@ -326,6 +329,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @param parameter
      *            This is identical to the argument of onUpdate method.
      *            Arguments passed to the update() method.
+     * @since 1.0.4
      */
     protected void onUpdateCompleted(int result, Uri uri, MatcherPattern target, UpdateParameters parameter) {
         this.getContext().getContentResolver().notifyChange(uri, null);
@@ -334,6 +338,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
     /*
      * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
      * android.content.ContentValues[])
+     * @since 1.0.1
      */
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
@@ -388,6 +393,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @param parameter
      *            Arguments passed to the insert() method.
      * @return Please set value to be returned in the original insert() method.
+     * @since 1.0.1
      */
     public Uri onBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
         return onInsert(helper, db, target, parameter);
@@ -400,6 +406,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      *            This is the return value of bulkInsert method.
      * @param uri
      *            This is the Uri of target.
+     * @since 1.0.4
      */
     protected void onBulkInsertCompleted(int result, Uri uri) {
         this.getContext().getContentResolver().notifyChange(uri, null);
@@ -407,6 +414,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
 
     /*
      * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
+     * @since 1.0.1
      */
     @Override
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
