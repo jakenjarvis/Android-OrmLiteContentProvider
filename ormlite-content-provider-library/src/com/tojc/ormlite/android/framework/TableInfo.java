@@ -82,10 +82,12 @@ public class TableInfo implements Validity {
                 ColumnInfo columnInfo = new ColumnInfo(classfield);
                 this.columns.put(columnInfo.getColumnName(), columnInfo);
 
-                // check id
+                // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
                     boolean generatedId = classfield.getAnnotation(DatabaseField.class).generatedId();
-                    if (generatedId) {
+                    boolean nonGeneratedId = classfield.getAnnotation(DatabaseField.class).id();
+
+                    if (generatedId || nonGeneratedId) {
                         this.idColumnInfo = columnInfo;
                     }
                 }
