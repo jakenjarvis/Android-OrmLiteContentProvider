@@ -85,9 +85,9 @@ public class TableInfo implements Validity {
                 // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
                     boolean generatedId = classfield.getAnnotation(DatabaseField.class).generatedId();
-                    boolean nonGeneratedId = classfield.getAnnotation(DatabaseField.class).id();
+                    boolean id = classfield.getAnnotation(DatabaseField.class).id();
 
-                    if (generatedId || nonGeneratedId) {
+                    if (generatedId || id) {
                         this.idColumnInfo = columnInfo;
                     }
                 }
@@ -107,6 +107,8 @@ public class TableInfo implements Validity {
 
         if (this.idColumnInfo == null) {
             // @DatabaseField(columnName = _ID, generatedId = true)
+            //  or
+            // @DatabaseField(columnName = _ID, id = true)
             // private int _id;
             throw new IllegalArgumentException("Proper ID is not defined for field.");
         }
