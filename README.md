@@ -432,6 +432,7 @@ Thanks to contributors!
 * [Stéphane NICOLAS](https://github.com/stephanenicolas)  
 * [Joel Steres](https://github.com/jasco)  
 * [Michael Cramer](https://github.com/BigMichi1)  
+* [Andrew Clunis](https://github.com/orospakr)  
 
 # Apache License, Version 2.0
 This document is part of the Android-OrmLiteContentProvider project.
