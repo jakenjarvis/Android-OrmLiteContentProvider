@@ -116,6 +116,10 @@
 									<type>jar</type>
 									<file>${project.build.directory}/${project.build.finalName}.jar</file>
 								</artifact>
+								<artifact>
+									<type>aar</type>
+									<file>${project.basedir}/build/libs/${project.artifactId}.aar</file>
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>

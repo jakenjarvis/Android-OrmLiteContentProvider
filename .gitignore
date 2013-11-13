@@ -28,6 +28,8 @@ release.properties
 .project
 .settings
 .settings/
+
+# Other
 .DS_Store
 
 # libraries for the Eclipse/Ant build system
@@ -44,6 +46,10 @@ proguard/
 
 # Maven project files
 target/
+
+# Gradle
+.gradle
+build
 
 # Maven release files
 *.releaseBackup

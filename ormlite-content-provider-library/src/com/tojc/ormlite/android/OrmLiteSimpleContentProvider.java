@@ -174,7 +174,7 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
      *            Arguments passed to the onQuery() method.
      * @param parameter
      *            Arguments passed to the onQuery() method.
-     * @return
+     * @return return an sort order string.
      * @since 1.0.4
      */
     protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {

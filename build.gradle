@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.+'
+    }
+}
+
+repositories{
+    mavenCentral()
+}
+
+def pomxml = new XmlSlurper().parse(new File("pom.xml"))
+
+allprojects {
+    ext {
+        groupId = "${pomxml.groupId}"
+        version = "${pomxml.version}"
+
+        pomxml.properties.children().each {
+            //println "${it.name()} = ${it.text()}"
+            ext.set(it.name(), it.text())
+        }
+    }
+
+    tasks.withType(Compile) {
+        options.encoding = "UTF-8"
+    }
+}
