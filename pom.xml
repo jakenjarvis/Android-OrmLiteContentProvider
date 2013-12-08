@@ -139,7 +139,7 @@
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>3.8.1-SNAPSHOT</android-maven-plugin.version>
+		<android-maven-plugin.version>3.8.1</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
@@ -229,7 +229,7 @@
 									<pluginExecutionFilter>
 										<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 										<artifactId>android-maven-plugin</artifactId>
-										<versionRange>[3.8,)</versionRange>
+										<versionRange>[3.8.1,)</versionRange>
 										<goals>
 											<goal>consume-aar</goal>
 										</goals>
