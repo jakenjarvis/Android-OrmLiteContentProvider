@@ -1,0 +1,47 @@
+apply plugin: 'java-library'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+task preBuild << {
+    dependsOn ':ormlite-content-provider-library:build'
+}
+
+dependencies {
+    provided "com.google.android:android:${project.'android.version'}"
+
+    compile "com.squareup:javawriter:${project.'javawriter.version'}"
+    testCompile "org.springframework:spring-core:${project.'spring-core.version'}"
+    testCompile "junit:junit:${project.'junit.version'}"
+
+    compile "com.j256.ormlite:ormlite-core:${project.'ormlite.version'}"
+    compile "com.j256.ormlite:ormlite-android:${project.'ormlite.version'}"
+
+    //compile "com.tojc.ormlite.android:ormlite-content-provider-library:${project.version}@jar"
+    //compile project(':ormlite-content-provider-library@jar')
+
+    compile project ':ormlite-content-provider-library', ext: 'jar'
+
+    //compile(project(':ormlite-content-provider-library')) {
+    //    artifact {
+    //        name = ''
+    //        extension = 'jar'
+    //        type = 'jar'
+    //        classifier = ''
+    //    }
+    //}
+
+    //runtime fileTree(dir: '../ormlite-content-provider-library/build/libs', include: '*.jar')
+
+}

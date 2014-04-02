@@ -7,24 +7,57 @@ buildscript {
     }
 }
 
-repositories{
-    mavenCentral()
-}
-
 def pomxml = new XmlSlurper().parse(new File("pom.xml"))
 
-allprojects {
-    ext {
-        groupId = "${pomxml.groupId}"
-        version = "${pomxml.version}"
+ext {
+    defaultEncoding = 'UTF-8'
+}
 
+allprojects {
+    tasks.withType(AbstractCompile) each {
+        it.options.encoding = defaultEncoding
+    }
+    tasks.withType(GroovyCompile) each {
+        it.groovyOptions.encoding = defaultEncoding
+    }
+    // TODO: How to set? android.compileOptions
+    // Deprecated Compile replaced by JavaCompile.
+    tasks.withType(JavaCompile) each {
+        it.sourceCompatibility = JavaVersion.VERSION_1_6
+        it.targetCompatibility = JavaVersion.VERSION_1_6
+    }
+
+}
+
+subprojects {
+    repositories{
+        mavenCentral()
+    }
+
+    project.group = "${pomxml.groupId}"
+    project.version = "${pomxml.version}"
+
+    ext {
         pomxml.properties.children().each {
             //println "${it.name()} = ${it.text()}"
             ext.set(it.name(), it.text())
         }
     }
-
-    tasks.withType(Compile) {
-        options.encoding = "UTF-8"
-    }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+
+apply plugin: 'android-reporting'
+
+// http://tools.android.com/tech-docs/new-build-system/user-guide
+// android.applicationVariants.each { variant ->
+// }
+
+// android.libraryVariants.each { variant ->
+// }
+
+// android.testVariants.each { variant ->
+// }
+

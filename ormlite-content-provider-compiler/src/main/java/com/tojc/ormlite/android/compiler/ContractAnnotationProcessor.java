@@ -79,6 +79,12 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String MIMETYPE_NAME_SUFFIX = "provider";
     private int patternCode = 1;
 
+    // http://stackoverflow.com/questions/8185331/forward-compatible-java-6-annotation-processor-and-supportedsourceversion
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latest();
+    }
+
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
         // Get all classes that has the annotation

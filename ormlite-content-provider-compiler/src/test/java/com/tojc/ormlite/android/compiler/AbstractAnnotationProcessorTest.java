@@ -66,7 +66,7 @@ abstract class AbstractAnnotationProcessorTest {
     private static final String SOURCE_FILE_SUFFIX = ".java";
     private static final JavaCompiler COMPILER = ToolProvider.getSystemJavaCompiler();
     protected static final String OUTPUT_FILE_SUFFIX = ".output";
-    protected static final String OUTPUT_DIRECTORY = "target/generated-test";
+    protected static final String OUTPUT_DIRECTORY = "build/generated-test";
 
     protected enum CompilerOptions {
         GENERATED_SOURCES_DIRECTORY("-s <directory>", "<directory>", "Specify where to place generated source files"), GENERATED_CLASSES_DIRECTORY("-d <directory>", "<directory>",
