@@ -7,17 +7,19 @@ repositories {
 
 dependencies {
     androidTestCompile "com.squareup:fest-android:1.0.+"
-    compile "com.j256.ormlite:ormlite-core:${project.'ormlite.version'}"
-    compile "com.j256.ormlite:ormlite-android:${project.'ormlite.version'}"
+    compile "com.j256.ormlite:ormlite-core:4.+"
+    compile "com.j256.ormlite:ormlite-android:4.+"
 }
 
 android {
-    compileSdkVersion project.'android-sdk.version'.toInteger()
-    buildToolsVersion "${project.'android-buildtools.version'}"
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.'android-min-sdk.version'.toInteger()
-        targetSdkVersion project.'android-target-sdk.version'.toInteger()
+        minSdkVersion defaultConfigMinSdkVersion
+        targetSdkVersion defaultConfigTargetSdkVersion
+        versionCode 1
+        versionName project.version
     }
 
     sourceSets {
@@ -55,11 +57,14 @@ android {
             debuggable false
         }
     }
+}
 
-    // http://stackoverflow.com/questions/20699147/gradle-build-fails-on-lint-task
-    lintOptions {
-        abortOnError false
-    }
+commonlibrary {
+    apply project, "addTaskArtifactAar"
+    apply project, "addTaskArtifactApklib"
+    apply project, "addTaskArtifactJar"
+    apply project, "addTaskArtifactJavadocJar"
+    apply project, "addTaskArtifactSourceJar"
 }
 
 ext.javadocLinks = [
@@ -67,67 +72,9 @@ ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-android/"
 ] as String[]
 
-
-// http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.javadoc.Javadoc.html
-// http://www.gradle.org/docs/current/userguide/java_plugin.html#sec:javadoc
-// http://www.gradle.org/docs/current/javadoc/org/gradle/external/javadoc/StandardJavadocDocletOptions.html
-// http://snowdream.github.io/blog/android/2013/11/01/how-to-generate-javadocs-with-android-gradle-plugin/
-// https://github.com/chrisbanes/gradle-mvn-push/issues/9
-// https://github.com/snowdream/android-autoupdater/blob/master/config/android-library.gradle
-task generateJavadoc(type: Javadoc) {
-    source = android.sourceSets.main.allJava
-    classpath += project.files(android.plugin.getRuntimeJarList().join(File.pathSeparator))
-    exclude '**/BuildConfig.java'
-    exclude '**/R.java'
-
-    options.docEncoding = rootProject.defaultEncoding
-    options.charSet = rootProject.defaultEncoding
-    options.links("http://docs.oracle.com/javase/7/docs/api/")
-    options.linksOffline("http://d.android.com/reference", "${android.plugin.sdkDirectory}/docs/reference")
-    options.links(project.ext.javadocLinks)
-}
-
-
-// http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.bundling.Zip.html
-task artifactAar(type: Zip) {
-    extension = 'aar'
-    destinationDir = file('build/libs')
-}
-
-// http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.bundling.Jar.html
-task artifactJar(type: Jar) {
-    from android.sourceSets.main.java
-    extension = 'jar'
-    destinationDir = file('build/libs/')
-}
-
-// http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.bundling.Zip.html
-// https://github.com/googlemaps/android-maps-utils/blob/master/library/build.gradle
-task artifactApklib(type: Zip) {
-    extension = 'apklib'
-    from 'AndroidManifest.xml'
-    into('res') {
-        from 'res'
-    }
-    into('src') {
-        from 'src'
-    }
-    destinationDir = file('build/libs/')
-}
-
-task artifactSourceJar(type : Jar) {
-    from android.sourceSets.main.allSource
-    classifier = 'sources'
-    extension  = 'jar'
-    destinationDir = file('build/libs/')
-}
-
-task artifactJavadocJar(type: Jar) {
-    dependsOn generateJavadoc
-    from generateJavadoc.destinationDir
-    classifier = 'javadoc'
-    extension  = 'jar'
-    destinationDir = file('build/libs/')
+// javadoc for english
+generateJavadoc {
+    options.locale = 'en_US'
 }
 
 artifacts {
@@ -141,6 +88,14 @@ artifacts {
 // http://www.gradle.org/docs/current/userguide/publishing_maven.html
 // http://www.flexlabs.org/2013/06/using-local-aar-android-library-packages-in-gradle-builds
 // http://www.rickcarragher.com/blog/2014/01/21/gradle-and-android
+
+// http://mike-neck.github.io/blog/2013/06/19/publish-maven-artifact-with-sign-files-1/
+// http://mike-neck.github.io/blog/2013/06/21/how-to-publish-artifacts-with-gradle-maven-publish-plugin-version-1-dot-6/
+
+// http://chris.banes.me/2013/08/27/pushing-aars-to-maven-central/
+// https://github.com/chrisbanes/gradle-mvn-push/blob/master/gradle-mvn-push.gradle
+// http://gmariotti.blogspot.jp/2013/09/publish-aar-file-to-maven-central-with.html
+
 android.libraryVariants
 publishing {
     publications {
@@ -162,7 +117,7 @@ publishing {
     }
     repositories {
         maven {
-            url("../repository")
+            url(mavenRepository)
         }
     }
 }

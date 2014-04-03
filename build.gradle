@@ -7,57 +7,32 @@ buildscript {
     }
 }
 
-def pomxml = new XmlSlurper().parse(new File("pom.xml"))
+apply from: "gradle/commonlibrary/CommonLibrary.gradle"
 
-ext {
-    defaultEncoding = 'UTF-8'
+commonlibrary {
+    apply project, "allprojectsSetEncoding"
+    apply project, "allprojectsSetCompatibilityJavaVersion"
+
+    // patch
+    apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
+    apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
 }
 
-allprojects {
-    tasks.withType(AbstractCompile) each {
-        it.options.encoding = defaultEncoding
-    }
-    tasks.withType(GroovyCompile) each {
-        it.groovyOptions.encoding = defaultEncoding
-    }
-    // TODO: How to set? android.compileOptions
-    // Deprecated Compile replaced by JavaCompile.
-    tasks.withType(JavaCompile) each {
-        it.sourceCompatibility = JavaVersion.VERSION_1_6
-        it.targetCompatibility = JavaVersion.VERSION_1_6
-    }
+ext {
+    mavenRepository = "../repository"
 
+    // android sdk
+    androidCompileSdkVersion = 19
+    androidBuildToolsVersion = "19.0.3"
+
+    // AndroidManifest.xml
+    defaultConfigMinSdkVersion = 10
+    defaultConfigTargetSdkVersion = 19
 }
 
 subprojects {
-    repositories{
-        mavenCentral()
-    }
-
-    project.group = "${pomxml.groupId}"
-    project.version = "${pomxml.version}"
-
-    ext {
-        pomxml.properties.children().each {
-            //println "${it.name()} = ${it.text()}"
-            ext.set(it.name(), it.text())
-        }
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    project.group = "com.tojc.ormlite.android"
+    project.version = "1.0.4"
 }
 
 apply plugin: 'android-reporting'
-
-// http://tools.android.com/tech-docs/new-build-system/user-guide
-// android.applicationVariants.each { variant ->
-// }
-
-// android.libraryVariants.each { variant ->
-// }
-
-// android.testVariants.each { variant ->
-// }
-
