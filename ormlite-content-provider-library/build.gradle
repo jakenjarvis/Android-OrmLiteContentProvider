@@ -6,9 +6,8 @@ repositories {
 }
 
 dependencies {
-    androidTestCompile "com.squareup:fest-android:1.0.+"
-    compile "com.j256.ormlite:ormlite-core:4.+"
-    compile "com.j256.ormlite:ormlite-android:4.+"
+    compile "com.j256.ormlite:ormlite-core:${ormliteVersion}"
+    compile "com.j256.ormlite:ormlite-android:${ormliteVersion}"
 }
 
 android {
@@ -72,18 +71,13 @@ ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-android/"
 ] as String[]
 
-// javadoc for english
-generateJavadoc {
-    options.locale = 'en_US'
-}
-
-artifacts {
-    archives artifactAar
-    archives artifactApklib
-    archives artifactJar
-    archives artifactSourceJar
-    archives artifactJavadocJar
-}
+//artifacts {
+//    archives artifactAar
+//    archives artifactApklib
+//    archives artifactJar
+//    archives artifactSourceJar
+//    archives artifactJavadocJar
+//}
 
 // http://www.gradle.org/docs/current/userguide/publishing_maven.html
 // http://www.flexlabs.org/2013/06/using-local-aar-android-library-packages-in-gradle-builds
@@ -100,19 +94,29 @@ android.libraryVariants
 publishing {
     publications {
         releaseAar(MavenPublication) {
-            artifact artifactAar
+            afterEvaluate {
+                artifact packageArtifactReleaseAar
+            }
         }
         releaseApklib(MavenPublication) {
-            artifact artifactApklib
+            afterEvaluate {
+                artifact packageArtifactReleaseApklib
+            }
         }
         releaseJar(MavenPublication) {
-            artifact artifactJar
+            afterEvaluate {
+                artifact packageArtifactReleaseJar
+            }
         }
         releaseSourceJar(MavenPublication) {
-            artifact artifactSourceJar
+            afterEvaluate {
+                artifact packageArtifactReleaseSourceJar
+            }
         }
-        releaseJavaDocJar(MavenPublication) {
-            artifact artifactJavadocJar
+        releaseJavadocJar(MavenPublication) {
+            afterEvaluate {
+                artifact packageArtifactReleaseJavadocJar
+            }
         }
     }
     repositories {

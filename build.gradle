@@ -12,6 +12,7 @@ apply from: "gradle/commonlibrary/CommonLibrary.gradle"
 commonlibrary {
     apply project, "allprojectsSetEncoding"
     apply project, "allprojectsSetCompatibilityJavaVersion"
+    apply project, "allprojectsAddConfigurationProvidedScope"
 
     // patch
     apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
@@ -24,10 +25,27 @@ ext {
     // android sdk
     androidCompileSdkVersion = 19
     androidBuildToolsVersion = "19.0.3"
+    androidVersion = "4.1.1.4"
+    androidSupportVersion = "r7"
 
     // AndroidManifest.xml
-    defaultConfigMinSdkVersion = 10
+    defaultConfigMinSdkVersion = 7
     defaultConfigTargetSdkVersion = 19
+
+    // main dependencies
+    ormliteVersion = "4.48"
+
+    // compiler dependencies
+    javawriterVersion = "2.4.0"
+    springCoreVersion = "4.0.3.RELEASE"
+
+    // test dependencies
+    junitVersion = "4.11"
+
+    checkstyleVersion = "2.10"
+    findbugsVersion = "2.5.2"
+    pmdVersion = "3.0.1"
+
 }
 
 subprojects {
