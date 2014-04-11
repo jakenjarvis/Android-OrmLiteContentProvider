@@ -36,11 +36,12 @@ ext {
     ormliteVersion = "4.48"
 
     // compiler dependencies
-    javawriterVersion = "2.4.0"
+    javawriterVersion = "2.4.0"  //2.4.0 2.3.1
     springCoreVersion = "4.0.3.RELEASE"
 
     // test dependencies
     junitVersion = "4.11"
+    junitUphycaAndroidVersion = "+"
 
     checkstyleVersion = "2.10"
     findbugsVersion = "2.5.2"

@@ -45,6 +45,14 @@ commonlibrary {
     apply project, "addTaskArtifactSourceJar"
 }
 
+afterEvaluate {
+    packageArtifactJar {
+        into('META-INF') {
+            from 'src/main/resources/META-INF'
+        }
+    }
+}
+
 publishing {
     publications {
         releaseJar(MavenPublication) {
