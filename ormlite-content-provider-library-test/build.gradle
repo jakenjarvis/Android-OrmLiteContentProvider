@@ -1,34 +1,81 @@
 apply plugin: 'android'
+apply plugin: 'android-test'
 apply plugin: 'maven-publish'
 
 evaluationDependsOn(':ormlite-content-provider-library')
 
 repositories{
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 dependencies {
     compile project(':ormlite-content-provider-library')
 
-    androidTestCompile "junit:junit:${junitVersion}"
-    androidTestCompile ("com.uphyca:android-junit4:${junitUphycaAndroidVersion}")
+    // Espresso
+    androidTestCompile downloadDependencies(
+        //baseurl: 'https://android-test-kit.googlecode.com/git/bin/espresso-dependencies/',
+        baseurl: 'https://android-test-kit.googlecode.com/git-history/1e71a17c26e3864b3121f59eb99e16911d0548e3/bin/espresso-dependencies/',
+        url: ['espresso-1.1.jar', 'testrunner-1.1.jar', 'testrunner-runtime-1.1.jar'])
+
+    androidTestCompile 'com.google.guava:guava:14.0.1',
+            'com.squareup.dagger:dagger:1.1.0',
+            'org.hamcrest:hamcrest-integration:1.1',
+            'org.hamcrest:hamcrest-core:1.1',
+            'org.hamcrest:hamcrest-library:1.1'
+
+    androidTestCompile('junit:junit:4.11') {
+        exclude module: 'hamcrest-core'
+    }
+    androidTestCompile('org.robolectric:robolectric:2.3-SNAPSHOT') {
+        exclude module: 'classworlds'
+        exclude module: 'maven-artifact'
+        exclude module: 'maven-artifact-manager'
+        exclude module: 'maven-error-diagnostics'
+        exclude module: 'maven-model'
+        exclude module: 'maven-plugin-registry'
+        exclude module: 'maven-profile'
+        exclude module: 'maven-project'
+        exclude module: 'maven-settings'
+        exclude module: 'nekohtml'
+        exclude module: 'plexus-container-default'
+        exclude module: 'plexus-interpolation'
+        exclude module: 'plexus-utils'
+        exclude module: 'wagon-file'
+        exclude module: 'wagon-http-lightweight'
+        exclude module: 'wagon-http-shared'
+        exclude module: 'wagon-provider-api'
+    }
+    androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
 
 android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
 
-    defaultConfig {
-        minSdkVersion defaultConfigMinSdkVersion
-        targetSdkVersion defaultConfigTargetSdkVersion
-        versionCode 1
-        versionName project.version
+    buildTypes {
+        defaultConfig {
+            minSdkVersion defaultConfigMinSdkVersion
+            targetSdkVersion defaultConfigTargetSdkVersion
+            versionCode 1
+            versionName project.version
 
-        testPackageName "com.tojc.ormlite.android.test"
-        testInstrumentationRunner "com.uphyca.testing.JUnit4InstrumentationTestRunner"
-        testFunctionalTest true
+            testPackageName "com.tojc.ormlite.android.test"
+            testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+            testFunctionalTest true
 
-        // https://groups.google.com/d/msg/adt-dev/guEZWPll6m4/XWmC8dLwCf4J
+            // https://groups.google.com/d/msg/adt-dev/guEZWPll6m4/XWmC8dLwCf4J
+        }
+
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+            runProguard false
+        }
     }
 
     sourceSets {
@@ -65,21 +112,17 @@ android {
         release.setRoot('build-types/release')
     }
 
-    buildTypes {
-        debug {
-            debuggable true
-        }
-        release {
-            debuggable false
-        }
-    }
-
     packagingOptions {
-        // hamcrest-core-1.3.jar
-        // for AndroidStudio's bug. duplication error of file below.
-        pickFirst 'META-INF/LICENSE.txt'
-        pickFirst 'LICENSE.txt'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
     }
+}
+
+androidTest {
+    include '**/*Test.class'
+    exclude '**/espresso/**/*.class'
 }
 
 commonlibrary {
@@ -112,4 +155,26 @@ publishing {
             url(mavenRepository)
         }
     }
+}
+
+def downloadDependency(String url, String filename = null, File dest = file("${projectDir}/lib")) {
+    def file = (!filename) ? new File(new URL(url).getPath()).name : filename
+    def target = new File(dest, file)
+    if(!target.exists()) {
+        println "Download : ${url}"
+        println "      to : ${target}"
+        dest.mkdirs()
+        ant.get(src:url, dest:dest)
+    }
+    return files(target)
+}
+
+def downloadDependencies(Map args) {
+    def result = files()
+    args.url.each { url ->
+        def targeturl = args.containsKey('baseurl') ? args.baseurl + url : url
+        def targetdest = args.containsKey('dest') ? args.dest : file("${projectDir}/lib")
+        result += downloadDependency(targeturl, null, targetdest)
+    }
+    return result
 }
