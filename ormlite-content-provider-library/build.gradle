@@ -14,11 +14,20 @@ android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
 
-    defaultConfig {
-        minSdkVersion defaultConfigMinSdkVersion
-        targetSdkVersion defaultConfigTargetSdkVersion
-        versionCode 1
-        versionName project.version
+    buildTypes {
+        defaultConfig {
+            minSdkVersion defaultConfigMinSdkVersion
+            targetSdkVersion defaultConfigTargetSdkVersion
+            versionCode 1
+            versionName project.version
+        }
+
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+        }
     }
 
     sourceSets {
@@ -45,17 +54,6 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-
-    // Note that most of the configuration of the Build Type do not apply to library projects.
-    // http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Differences-between-a-Project-and-a-Library-Project
-    buildTypes {
-        debug {
-            debuggable true
-        }
-        release {
-            debuggable false
-        }
-    }
 }
 
 commonlibrary {
@@ -70,14 +68,6 @@ ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-core/",
     "http://ormlite.com/javadoc/ormlite-android/"
 ] as String[]
-
-//artifacts {
-//    archives artifactAar
-//    archives artifactApklib
-//    archives artifactJar
-//    archives artifactSourceJar
-//    archives artifactJavadocJar
-//}
 
 // http://www.gradle.org/docs/current/userguide/publishing_maven.html
 // http://www.flexlabs.org/2013/06/using-local-aar-android-library-packages-in-gradle-builds

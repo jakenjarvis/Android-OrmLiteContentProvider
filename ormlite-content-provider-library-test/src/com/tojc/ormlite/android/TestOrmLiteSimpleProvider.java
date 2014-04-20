@@ -32,12 +32,14 @@ import android.database.Cursor;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.test.InstrumentationTestCase;
+import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.tojc.ormlite.android.test.model.Account;
 import com.tojc.ormlite.android.test.provider.AccountContract;
 import com.tojc.ormlite.android.test.provider.SampleHelper;
+import com.tojc.ormlite.android.test.provider.UnderTestSampleProvider;
 
 @MediumTest
 public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
@@ -45,10 +47,18 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
     private static final String TEST_NAME_1 = "Yamada Tarou";
     private static final String TEST_NAME_2 = "Stephane Nicolas";
 
+    private MockContentResolver resolver;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         getHelper().resetAllTables();
+
+        UnderTestSampleProvider provider = new UnderTestSampleProvider();
+        provider.attachInfo(getInstrumentation().getContext(), null);
+
+        this.resolver = new MockContentResolver();
+        this.resolver.addProvider(AccountContract.AUTHORITY, provider);
     }
 
     public void testOnInsert() {
@@ -58,7 +68,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         values.put(AccountContract.NAME, TEST_NAME_1);
 
         // when
-        getInstrumentation().getTargetContext().getContentResolver().insert(AccountContract.CONTENT_URI, values);
+        this.resolver.insert(AccountContract.CONTENT_URI, values);
 
         // then
         RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
@@ -76,7 +86,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(1, accountList.size());
 
         // when
-        getInstrumentation().getTargetContext().getContentResolver().delete(AccountContract.CONTENT_URI, BaseColumns._ID + " = " + account.getId(), null);
+        this.resolver.delete(AccountContract.CONTENT_URI, BaseColumns._ID + " = " + account.getId(), null);
 
         // then
         accountList = simpleDao.queryForAll();
@@ -96,7 +106,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         values.put(AccountContract.NAME, TEST_NAME_2);
 
         // when
-        getInstrumentation().getTargetContext().getContentResolver().update(AccountContract.CONTENT_URI, values, BaseColumns._ID + " = " + account.getId(), null);
+        this.resolver.update(AccountContract.CONTENT_URI, values, BaseColumns._ID + " = " + account.getId(), null);
 
         // then
         accountList = simpleDao.queryForAll();
@@ -115,7 +125,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(2, accountList.size());
 
         // when
-        Cursor cursor = getInstrumentation().getTargetContext().getContentResolver().query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, null);
+        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, null);
         accountList = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account(cursor.getString(1));
@@ -141,7 +151,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
 
         // when
         String order = BaseColumns._ID + " DESC";
-        Cursor cursor = getInstrumentation().getTargetContext().getContentResolver().query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, order);
+        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, order);
         accountList = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account(cursor.getString(1));
@@ -166,7 +176,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(2, accountList.size());
 
         // when
-        ContentProviderClient contentProviderClient = getInstrumentation().getTargetContext().getContentResolver().acquireContentProviderClient(AccountContract.CONTENT_URI);
+        ContentProviderClient contentProviderClient = this.resolver.acquireContentProviderClient(AccountContract.CONTENT_URI);
         Cursor cursor = contentProviderClient.query(AccountContract.CONTENT_URI, null, null, null, null);
 
         // then
@@ -194,7 +204,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
             contentValues[accountIndex] = values;
         }
         // when
-        getInstrumentation().getTargetContext().getContentResolver().bulkInsert(AccountContract.CONTENT_URI, contentValues);
+        this.resolver.bulkInsert(AccountContract.CONTENT_URI, contentValues);
 
         // then
         RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
@@ -213,7 +223,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         operations.add(ContentProviderOperation.newInsert(AccountContract.CONTENT_URI).withValue(AccountContract.NAME, TEST_NAME_2).build());
 
         // when
-        getInstrumentation().getTargetContext().getContentResolver().applyBatch(AccountContract.AUTHORITY, operations);
+        this.resolver.applyBatch(AccountContract.AUTHORITY, operations);
 
         // then
         RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);

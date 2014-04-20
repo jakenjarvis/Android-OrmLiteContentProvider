@@ -15,11 +15,20 @@ android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
 
-    defaultConfig {
-        minSdkVersion defaultConfigMinSdkVersion
-        targetSdkVersion defaultConfigTargetSdkVersion
-        versionCode 1
-        versionName project.version
+    buildTypes {
+        defaultConfig {
+            minSdkVersion defaultConfigMinSdkVersion
+            targetSdkVersion defaultConfigTargetSdkVersion
+            versionCode 1
+            versionName project.version
+        }
+
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+        }
     }
 
     sourceSets {
@@ -45,15 +54,6 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
-    }
-
-    buildTypes {
-        debug {
-            debuggable true
-        }
-        release {
-            debuggable false
-        }
     }
 }
 
