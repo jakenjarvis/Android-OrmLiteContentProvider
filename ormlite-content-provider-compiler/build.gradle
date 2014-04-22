@@ -43,6 +43,27 @@ commonlibrary {
     apply project, "addTaskArtifactJar"
     apply project, "addTaskArtifactJavadocJar"
     apply project, "addTaskArtifactSourceJar"
+
+    apply project, "addTaskCodeQualityCheckstyle"
+    apply project, "addTaskCodeQualityFindbugs"
+    apply project, "addTaskCodeQualityPmd"
+}
+
+checkstyle {
+    ignoreFailures = false
+    showViolations = false
+    configFile = new File("$rootDir/style_checks.xml")
+}
+
+findbugs {
+    ignoreFailures = true
+    effort = "max"
+    //excludeFilter file("$projectDir/findbugs-exclude.xml")
+}
+
+pmd {
+    ignoreFailures = true
+    ruleSets = ["basic", "design", "imports", "braces", "strings"]
 }
 
 afterEvaluate {
