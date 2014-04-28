@@ -1,5 +1,6 @@
 apply plugin: 'android-library'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 repositories {
     mavenCentral()
@@ -85,6 +86,10 @@ pmd {
     ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
 }
 
+signing {
+    sign configurations.archives
+}
+
 ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-core/",
     "http://ormlite.com/javadoc/ormlite-android/"
@@ -101,31 +106,32 @@ ext.javadocLinks = [
 // https://github.com/chrisbanes/gradle-mvn-push/blob/master/gradle-mvn-push.gradle
 // http://gmariotti.blogspot.jp/2013/09/publish-aar-file-to-maven-central-with.html
 
+
+
+
+// https://github.com/hibernate/hibernate-matrix-testing/blob/master/build.gradle
+// https://github.com/JakeWharton/hugo/blob/master/hugo-plugin/build.gradle
+
+// https://github.com/bmuschko/gradle-nexus-plugin/blob/master/src/main/groovy/org/gradle/api/plugins/nexus/NexusPlugin.groovy
+// https://github.com/bmuschko/gradle-nexus-plugin/blob/master/src/main/groovy/org/gradle/api/plugins/nexus/NexusPluginExtension.groovy
+
+// http://gradle.monochromeroad.com/docs/userguide/signing_plugin.html
+
 android.libraryVariants
 publishing {
     publications {
-        releaseAar(MavenPublication) {
+        releaseArtifact(MavenPublication) {
             afterEvaluate {
+                // TODO: Extension of the artifact is different, but they are determined to be a same artifacts...
+                // http://issues.gradle.org/browse/GRADLE-2999
                 artifact packageArtifactReleaseAar
-            }
-        }
-        releaseApklib(MavenPublication) {
-            afterEvaluate {
-                artifact packageArtifactReleaseApklib
-            }
-        }
-        releaseJar(MavenPublication) {
-            afterEvaluate {
-                artifact packageArtifactReleaseJar
-            }
-        }
-        releaseSourceJar(MavenPublication) {
-            afterEvaluate {
+                artifact packageArtifactReleaseApklib {
+                    classifier "apklib"
+                }
+                artifact packageArtifactReleaseJar {
+                    classifier "jar"
+                }
                 artifact packageArtifactReleaseSourceJar
-            }
-        }
-        releaseJavadocJar(MavenPublication) {
-            afterEvaluate {
                 artifact packageArtifactReleaseJavadocJar
             }
         }

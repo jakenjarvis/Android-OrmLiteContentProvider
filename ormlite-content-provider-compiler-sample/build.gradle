@@ -93,18 +93,10 @@ pmd {
 android.applicationVariants
 publishing {
     publications {
-        releaseApk(MavenPublication) {
+        releaseArtifact(MavenPublication) {
             afterEvaluate {
                 artifact packageArtifactReleaseApk
-            }
-        }
-        releaseSourceJar(MavenPublication) {
-            afterEvaluate {
                 artifact packageArtifactReleaseSourceJar
-            }
-        }
-        releaseJavadocJar(MavenPublication) {
-            afterEvaluate {
                 artifact packageArtifactReleaseJavadocJar
             }
         }

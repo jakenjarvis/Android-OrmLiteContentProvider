@@ -74,21 +74,45 @@ afterEvaluate {
     }
 }
 
+createPom = {
+    resolveStrategy = Closure.DELEGATE_FIRST
+    //parent {
+    //    groupId "${project.group}"
+    //    artifactId "ormlite-content-provider-parent"
+    //    version "${project.version}"
+    //    relativePath "${rootDir}/build/publications/releaseArtifact/pom-default.xml"
+    //}
+
+    name "Android-OrmLiteContentProvider Annotation processor"
+    description "Processes annotations to create a ContentProvider with OrmLite."
+
+    def mapDependsAndScope = ['compile' : null, 'testCompile' : { scope 'test' }, 'provided' : { scope 'provided' }]
+    dependencies {
+        project.configurations.matching { it.name in mapDependsAndScope.keySet() }.each { configuration ->
+            configuration.dependencies.each { depend ->
+                dependency {
+                    groupId depend.group
+                    artifactId depend.name
+                    version depend.version
+                    mapDependsAndScope[configuration.name]?.call()
+                }
+            }
+        }
+    }
+
+}
+
 publishing {
     publications {
-        releaseJar(MavenPublication) {
+        releaseArtifact(MavenPublication) {
             afterEvaluate {
                 artifact packageArtifactJar
-            }
-        }
-        releaseSourceJar(MavenPublication) {
-            afterEvaluate {
                 artifact packageArtifactSourceJar
-            }
-        }
-        releaseJavadocJar(MavenPublication) {
-            afterEvaluate {
                 artifact packageArtifactJavadocJar
+
+                pom.withXml {
+                    asNode().children().last() + createPom
+                }
             }
         }
     }
