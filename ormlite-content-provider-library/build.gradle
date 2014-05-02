@@ -1,6 +1,4 @@
 apply plugin: 'android-library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 repositories {
     mavenCentral()
@@ -67,6 +65,8 @@ commonlibrary {
     apply project, "addTaskCodeQualityCheckstyle"
     apply project, "addTaskCodeQualityFindbugs"
     apply project, "addTaskCodeQualityPmd"
+
+    apply project, "NeutralNexus"
 }
 
 checkstyle {
@@ -86,9 +86,49 @@ pmd {
     ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
 }
 
-signing {
-    sign configurations.archives
+artifacts {
+    afterEvaluate {
+        archives packageArtifactReleaseAar
+        archives packageArtifactReleaseApklib
+        archives packageArtifactReleaseJar
+        archives packageArtifactReleaseSourceJar
+        archives packageArtifactReleaseJavadocJar
+    }
 }
+
+nexus {
+    localPublishing = true
+
+    //publication {
+    //    afterEvaluate {
+    //        artifact packageArtifactReleaseAar
+    //        artifact packageArtifactReleaseApklib {
+    //            //classifier "apklib"
+    //        }
+    //        artifact packageArtifactReleaseJar {
+    //            //classifier "jar"
+    //        }
+    //        artifact packageArtifactReleaseSourceJar
+    //        artifact packageArtifactReleaseJavadocJar
+    //    }
+    //}
+}
+
+modifyPom {
+    project {
+        name "Android-OrmLiteContentProvider Library"
+        description "This is a library that easy to make using ContentProvider with OrmLite."
+        //packaging "apklib"
+    }
+}
+
+//afterEvaluate {
+//    packageArtifactDebugApklib.classifier = "apklib"
+//    packageArtifactDebugJar.classifier = "jar"
+//
+//    packageArtifactReleaseApklib.classifier = "apklib"
+//    packageArtifactReleaseJar.classifier = "jar"
+//}
 
 ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-core/",
@@ -117,28 +157,3 @@ ext.javadocLinks = [
 
 // http://gradle.monochromeroad.com/docs/userguide/signing_plugin.html
 
-android.libraryVariants
-publishing {
-    publications {
-        releaseArtifact(MavenPublication) {
-            afterEvaluate {
-                // TODO: Extension of the artifact is different, but they are determined to be a same artifacts...
-                // http://issues.gradle.org/browse/GRADLE-2999
-                artifact packageArtifactReleaseAar
-                artifact packageArtifactReleaseApklib {
-                    classifier "apklib"
-                }
-                artifact packageArtifactReleaseJar {
-                    classifier "jar"
-                }
-                artifact packageArtifactReleaseSourceJar
-                artifact packageArtifactReleaseJavadocJar
-            }
-        }
-    }
-    repositories {
-        maven {
-            url(mavenRepository)
-        }
-    }
-}
