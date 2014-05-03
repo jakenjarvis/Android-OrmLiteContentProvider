@@ -39,7 +39,7 @@ modifyPom {
 
         contributors {
             contributor {
-                name "Stéphane NICOLAS"
+                name "Stephane NICOLAS"
                 email "snicolas@octo.com"
                 url "https://github.com/stephanenicolas"
                 organization "octo-online"
