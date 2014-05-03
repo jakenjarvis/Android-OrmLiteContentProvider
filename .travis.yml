@@ -23,9 +23,13 @@ before_install:
     # git submodules update
     - git submodule update --init --recursive
 
-    # check the travis file
-    - gem install travis-lint
-    - travis-lint
+    # travis-lint bug?
+    # Found an issue with the `language:` key:
+    #   Language must be valid
+    # http://stackoverflow.com/questions/22581057/travis-lint-why-does-it-complain-about-java-language-field
+    ## check the travis file
+    #- gem install travis-lint
+    #- travis-lint
 
     # Install gradle 1.11
     - wget http://services.gradle.org/distributions/gradle-1.11-all.zip > /dev/null
