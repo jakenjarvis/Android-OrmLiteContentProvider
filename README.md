@@ -4,6 +4,7 @@ Android-OrmLiteContentProvider [![Continuous Integration status](https://travis-
 # Overview
 ## What's new
 ### Ver1.0.4
+* Throw away the Maven, I adopted the Gradle build system. I suffer from these, spent a lot of time...
 * Extended the automatic generation of the Contract class.
 This makes it possible to output by integrating multiple classes.  
 * Added the TABLE_NAME(table name) to Contract class to be generated.  
@@ -372,6 +373,31 @@ If you perform the automatic generation of Contract Class, Additional compiler i
         <version>${version}</version>
         <scope>provided</scope>
     </dependency>
+
+
+## Gradle setup
+As with Maven, you can add the library easily with Gradle.
+
+    repositories{
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "com.tojc.ormlite.android:ormlite-content-provider-library:${version}@aar" // @aar or @jar
+    }
+
+If you perform the automatic generation of Contract Class, Additional compiler is required.
+
+    dependencies {
+        compile "com.tojc.ormlite.android:ormlite-content-provider-compiler:${version}" // jar only
+    }
+
+* Other than this, you need a plugin to handle the APT. Please refer to the following.
+
+    [android-apt](https://bitbucket.org/hvisser/android-apt)  
+    [gradle-android-apt-plugin](https://github.com/uPhyca/gradle-android-apt-plugin)  
+    [gradle-apt-plugin](https://github.com/Jimdo/gradle-apt-plugin)  
+
 
 ## Manual setup
 If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
