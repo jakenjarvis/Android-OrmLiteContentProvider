@@ -1,5 +1,4 @@
 apply plugin: 'android'
-apply plugin: 'maven-publish'
 
 evaluationDependsOn(':ormlite-content-provider-library')
 
@@ -65,6 +64,8 @@ commonlibrary {
     apply project, "addTaskCodeQualityCheckstyle"
     apply project, "addTaskCodeQualityFindbugs"
     apply project, "addTaskCodeQualityPmd"
+
+    apply project, "NeutralNexus"
 }
 
 checkstyle {
@@ -84,20 +85,19 @@ pmd {
     ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
 }
 
-android.applicationVariants
-publishing {
-    publications {
-        releaseArtifact(MavenPublication) {
-            afterEvaluate {
-                artifact packageArtifactReleaseApk
-                artifact packageArtifactReleaseSourceJar
-                artifact packageArtifactReleaseJavadocJar
-            }
-        }
+artifacts {
+    afterEvaluate {
+        archives packageArtifactReleaseApk
+        archives packageArtifactReleaseSourceJar
+        archives packageArtifactReleaseJavadocJar
     }
-    repositories {
-        maven {
-            url(mavenRepository)
-        }
-    }
+}
+
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Sample"
+}
+
+nexus {
+    localPublishing = rootProject.ext.localPublishing
 }

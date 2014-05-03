@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'maven-publish'
 
 evaluationDependsOn(':ormlite-content-provider-library')
 
@@ -47,6 +46,8 @@ commonlibrary {
     apply project, "addTaskCodeQualityCheckstyle"
     apply project, "addTaskCodeQualityFindbugs"
     apply project, "addTaskCodeQualityPmd"
+
+    apply project, "NeutralNexus"
 }
 
 checkstyle {
@@ -74,51 +75,20 @@ afterEvaluate {
     }
 }
 
-createPom = {
-    resolveStrategy = Closure.DELEGATE_FIRST
-    //parent {
-    //    groupId "${project.group}"
-    //    artifactId "ormlite-content-provider-parent"
-    //    version "${project.version}"
-    //    relativePath "${rootDir}/build/publications/releaseArtifact/pom-default.xml"
-    //}
-
-    name "Android-OrmLiteContentProvider Annotation processor"
-    description "Processes annotations to create a ContentProvider with OrmLite."
-
-    def mapDependsAndScope = ['compile' : null, 'testCompile' : { scope 'test' }, 'provided' : { scope 'provided' }]
-    dependencies {
-        project.configurations.matching { it.name in mapDependsAndScope.keySet() }.each { configuration ->
-            configuration.dependencies.each { depend ->
-                dependency {
-                    groupId depend.group
-                    artifactId depend.name
-                    version depend.version
-                    mapDependsAndScope[configuration.name]?.call()
-                }
-            }
-        }
+artifacts {
+    afterEvaluate {
+        archives packageArtifactJar
+        archives packageArtifactSourceJar
+        archives packageArtifactJavadocJar
     }
-
 }
 
-publishing {
-    publications {
-        releaseArtifact(MavenPublication) {
-            afterEvaluate {
-                artifact packageArtifactJar
-                artifact packageArtifactSourceJar
-                artifact packageArtifactJavadocJar
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Annotation processor"
+    description = "Processes annotations to create a ContentProvider with OrmLite."
+}
 
-                pom.withXml {
-                    asNode().children().last() + createPom
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            url(mavenRepository)
-        }
-    }
+nexus {
+    localPublishing = rootProject.ext.localPublishing
 }

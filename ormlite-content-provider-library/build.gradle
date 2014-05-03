@@ -96,39 +96,15 @@ artifacts {
     }
 }
 
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Library"
+    description = "This is a library that easy to make using ContentProvider with OrmLite."
+}
+
 nexus {
-    localPublishing = true
-
-    //publication {
-    //    afterEvaluate {
-    //        artifact packageArtifactReleaseAar
-    //        artifact packageArtifactReleaseApklib {
-    //            //classifier "apklib"
-    //        }
-    //        artifact packageArtifactReleaseJar {
-    //            //classifier "jar"
-    //        }
-    //        artifact packageArtifactReleaseSourceJar
-    //        artifact packageArtifactReleaseJavadocJar
-    //    }
-    //}
+    localPublishing = rootProject.ext.localPublishing
 }
-
-modifyPom {
-    project {
-        name "Android-OrmLiteContentProvider Library"
-        description "This is a library that easy to make using ContentProvider with OrmLite."
-        //packaging "apklib"
-    }
-}
-
-//afterEvaluate {
-//    packageArtifactDebugApklib.classifier = "apklib"
-//    packageArtifactDebugJar.classifier = "jar"
-//
-//    packageArtifactReleaseApklib.classifier = "apklib"
-//    packageArtifactReleaseJar.classifier = "jar"
-//}
 
 ext.javadocLinks = [
     "http://ormlite.com/javadoc/ormlite-core/",

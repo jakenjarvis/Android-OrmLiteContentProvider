@@ -17,10 +17,13 @@ commonlibrary {
     // patch
     apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
     apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
+
+    apply project, "NeutralNexus"
 }
 
 ext {
     mavenRepository = file("${rootDir}/repository")
+    localPublishing = true
 
     // android sdk
     androidCompileSdkVersion = 19
@@ -56,118 +59,12 @@ allprojects {
     project.version = "1.0.4"
 }
 
+//artifactId "ormlite-content-provider-parent"
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Parent"
+    description = "This is a library that easy to make using ContentProvider with OrmLite."
+}
+
 apply plugin: 'android-reporting'
-apply plugin: 'maven-publish'
 
-createPom = {
-    parent {
-        groupId "org.sonatype.oss"
-        artifactId "oss-parent"
-        version "7"
-    }
-
-    name pomName
-    description pomDescription
-    url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/"
-    inceptionYear "2012"
-
-    modules {
-        module "ormlite-content-provider-library"
-        module "ormlite-content-provider-library-test"
-        module "ormlite-content-provider-compiler"
-        module "ormlite-content-provider-sample"
-        module "ormlite-content-provider-compiler-sample"
-    }
-
-    scm {
-        url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/"
-        connection "scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git"
-        developerConnection "scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git"
-        tag project.version.contains("SNAPSHOT") ? "HEAD" : "Ver${project.version}"
-    }
-
-    developers {
-        developer {
-            id "jakenjarvis"
-            name "Jaken Jarvis"
-            email "jaken.jarvis@gmail.com"
-            url "https://github.com/jakenjarvis"
-            roles {
-                role "architect"
-                role "developer"
-            }
-            timezone "+9"
-        }
-    }
-
-    contributors {
-        contributor {
-            name "Stéphane NICOLAS"
-            email "snicolas@octo.com"
-            url "https://github.com/stephanenicolas"
-            organization "octo-online"
-            organizationUrl "http://www.octo.com"
-            roles {
-                role "developer"
-            }
-            timezone "+1"
-        }
-    }
-
-    licenses {
-        license {
-            name "Apache License, Version 2.0"
-            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            distribution "repo"
-        }
-    }
-
-    organization {
-        name "Android-OrmLiteContentProvider Team"
-        url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider"
-    }
-
-    issueManagement {
-        system "GitHub Issues"
-        url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues"
-    }
-
-    def configScopeMap = ['compile' : null, 'testCompile' : { scope 'test' }, 'provided' : { scope 'provided' }]
-    dependencies {
-        project.configurations.matching { it.name in configScopeMap.keySet() }.each { configuration ->
-            configuration.dependencies.each { depend ->
-                dependency {
-                    groupId depend.group
-                    artifactId depend.name
-                    version depend.version
-                    configScopeMap[configuration.name]?.call()
-                }
-            }
-        }
-    }
-
-}
-
-//ext.createPom = createPom()
-
-publishing {
-    publications {
-        releaseArtifact(MavenPublication) {
-            afterEvaluate {
-                artifactId "ormlite-content-provider-parent"
-
-                pom.withXml {
-                    createPom.resolveStrategy = Closure.DELEGATE_FIRST
-                    createPom.pomName = "Android-OrmLiteContentProvider Parent"
-                    createPom.pomDescription = "This is a library that easy to make using ContentProvider with OrmLite."
-                    asNode().children().last() + createPom
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            url(mavenRepository)
-        }
-    }
-}
