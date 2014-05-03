@@ -6,6 +6,9 @@ branches:
   excludes:
     - gh-pages
 
+git:
+  submodules: false
+
 env:
     matrix:
     #- ANDROID_TARGET=android-8   ANDROID_SDKS=android-8,build-tools-17.0.0            ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
@@ -17,6 +20,9 @@ env:
     - ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.3,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.3 ANDROID_ABI=armeabi-v7a
 
 before_install:
+    # git submodules update
+    - git submodule update --init --recursive
+
     # check the travis file
     - gem install travis-lint
     - travis-lint
@@ -81,13 +87,13 @@ before_install:
     #- mvn clean install
     #- cd ..
 
+install: gradlew clean build
+
 before_script:
     # Make sure the emulator has started before running tests
     - chmod +x ./wait_for_emulator.sh
     - ./wait_for_emulator.sh > /dev/null
 
 #script: mvn install -Pintegration-tests -Dandroid.device=test
-
-install: gradlew clean build
 script: gradlew check test connectedAndroidTest
 
