@@ -91,7 +91,7 @@ before_install:
     #- mvn clean install
     #- cd ..
 
-install: gradlew clean build
+install: gradle clean build
 
 before_script:
     # Make sure the emulator has started before running tests
@@ -99,5 +99,5 @@ before_script:
     - ./wait_for_emulator.sh > /dev/null
 
 #script: mvn install -Pintegration-tests -Dandroid.device=test
-script: gradlew check test connectedAndroidTest
+script: gradle check test connectedAndroidTest
 
