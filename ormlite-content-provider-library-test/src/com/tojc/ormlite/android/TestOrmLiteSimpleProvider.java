@@ -228,7 +228,6 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         // then
         RuntimeExceptionDao<Account, Integer> simpleDao = getHelper().getRuntimeExceptionDao(Account.class);
         List<Account> accountList = simpleDao.queryForAll();
-        accountList = simpleDao.queryForAll();
         assertEquals(2, accountList.size());
         assertEquals(TEST_NAME_1, accountList.get(0).getName());
         assertEquals(TEST_NAME_2, accountList.get(1).getName());
