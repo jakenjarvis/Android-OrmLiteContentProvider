@@ -25,6 +25,7 @@ import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.test.model.Account;
+import com.tojc.ormlite.android.test.model.InheritanceAccount;
 import com.tojc.ormlite.android.test.model.Membership;
 
 public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
@@ -40,7 +41,9 @@ public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<Sample
                 .add(Account.class, SubType.DIRECTORY, "", patternCode++)//
                 .add(Account.class, SubType.ITEM, "#", patternCode++)//
                 .add(Membership.class, SubType.DIRECTORY, "", patternCode++)//
-                .add(Membership.class, SubType.ITEM, "#", patternCode++));
+                .add(Membership.class, SubType.ITEM, "#", patternCode++)//
+                .add(InheritanceAccount.class, SubType.DIRECTORY, "", patternCode++)//
+                .add(InheritanceAccount.class, SubType.ITEM, "#", patternCode++));
         return true;
     }
 }

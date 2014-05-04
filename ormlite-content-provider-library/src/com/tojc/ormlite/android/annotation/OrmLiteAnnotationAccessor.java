@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.annotation;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 
@@ -70,4 +71,43 @@ public final class OrmLiteAnnotationAccessor {
         }
         return result;
     }
+
+    /**
+     * Gets the annotation of a class that is defined by recursion for superclass.
+     * @param classfield
+     *            Element to be evaluated.
+     * @param annotationClass
+     *            Annotation classes type to be acquired.
+     * @param <A>
+     *            Annotation classes.
+     * @return Annotation object of a class that is defined in practice.
+     */
+    public static <A extends Annotation> A getDefinedClassAnnotation(Field classfield, Class<A> annotationClass) {
+        A result = null;
+        Class<?> superclazz = classfield.getClass().getSuperclass();
+        if (superclazz != null) {
+            Field superclassfield = null;
+            try {
+                superclassfield = superclazz.getDeclaredField(classfield.getName());
+            } catch (NoSuchFieldException e) {
+                superclassfield = null;
+            }
+            if (superclassfield != null) {
+                result = getDefinedClassAnnotation(superclassfield, annotationClass);
+            }
+        }
+        if (result == null) {
+            for (Annotation annotation : classfield.getDeclaredAnnotations()) {
+                result = annotation.annotationType().getAnnotation(annotationClass);
+                if (result != null) {
+                    break;
+                }
+            }
+        }
+        if (result == null) {
+            result = classfield.getAnnotation(annotationClass);
+        }
+        return result;
+    }
+
 }

@@ -84,8 +84,10 @@ public class TableInfo implements Validity {
 
                 // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
-                    boolean generatedId = classfield.getAnnotation(DatabaseField.class).generatedId();
-                    boolean id = classfield.getAnnotation(DatabaseField.class).id();
+                    //boolean generatedId = classfield.getAnnotation(DatabaseField.class).generatedId();
+                    //boolean id = classfield.getAnnotation(DatabaseField.class).id();
+                    boolean generatedId = OrmLiteAnnotationAccessor.getDefinedClassAnnotation(classfield, DatabaseField.class).generatedId();
+                    boolean id = OrmLiteAnnotationAccessor.getDefinedClassAnnotation(classfield, DatabaseField.class).id();
 
                     if (generatedId || id) {
                         this.idColumnInfo = columnInfo;
