@@ -23,11 +23,14 @@ package com.tojc.ormlite.android.framework;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import android.content.UriMatcher;
 
+import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
@@ -43,15 +46,20 @@ public class MatcherController {
     private UriMatcher matcher = null;
     private Map<Class<?>, TableInfo> tables = null;
     private List<MatcherPattern> matcherPatterns = null;
+    private Map<String, OrmLiteContentProviderFragment<?, ?>> contentProviderFragments;
 
     private TableInfo lastAddTableInfo = null;
+    // MEMO: LIFO stack list. Support of Queue and Deque from API-Lv9...
+    private LinkedList<OrmLiteContentProviderFragment<?, ?>> stackFragments = null;
 
     public MatcherController() {
         this.matcher = new UriMatcher(UriMatcher.NO_MATCH);
         this.tables = new HashMap<Class<?>, TableInfo>();
         this.matcherPatterns = new ArrayList<MatcherPattern>();
+        this.contentProviderFragments = new LinkedHashMap<String, OrmLiteContentProviderFragment<?, ?>>();
 
         this.lastAddTableInfo = null;
+        this.stackFragments = new LinkedList<OrmLiteContentProviderFragment<?, ?>>();
     }
 
     /**
@@ -85,7 +93,8 @@ public class MatcherController {
      */
     public MatcherController add(Class<?> tableClassType, SubType subType, String pattern, int patternCode) {
         this.addTableClass(tableClassType);
-        this.addMatcherPattern(subType, pattern, patternCode);
+        MatcherPattern result = this.createMatcherPattern(subType, pattern, patternCode);
+        this.add(result);
         return this;
     }
 
@@ -107,7 +116,8 @@ public class MatcherController {
      * @return Instance of the MatcherController class.
      */
     public MatcherController add(SubType subType, String pattern, int patternCode) {
-        this.addMatcherPattern(subType, pattern, patternCode);
+        MatcherPattern result = this.createMatcherPattern(subType, pattern, patternCode);
+        this.add(result);
         return this;
     }
 
@@ -129,7 +139,41 @@ public class MatcherController {
             throw new IllegalArgumentException("patternCode has been specified already exists.");
         }
 
+        if (this.stackFragments.size() >= 1) {
+            OrmLiteContentProviderFragment<?, ?> fragment = this.stackFragments.getLast();
+            matcherPattern.setParentContentProviderFragment(fragment);
+        } else {
+            matcherPattern.setParentContentProviderFragment(null);
+        }
         this.matcherPatterns.add(matcherPattern);
+        return this;
+    }
+
+    /**
+     * Add the ContentProviderFragment to receive the event. It corresponds to the definition nested.
+     * Object to be added must implement OrmLiteContentProviderFragment.
+     * @param fragment
+     * @return
+     * @since 1.0.5
+     */
+    public MatcherController addFragment(OrmLiteContentProviderFragment<?, ?> fragment) {
+        if (fragment == null) {
+            throw new IllegalArgumentException("fragment is null.");
+        }
+
+        String key = fragment.getKeyName();
+        if ((key == null) || (key.length() <= 0)) {
+            throw new IllegalStateException("key is invalid. Please check the return value of the getKeyName().");
+        }
+
+        if (this.contentProviderFragments.containsKey(key)) {
+            throw new IllegalArgumentException("key has been specified already exists. Please check the return value of the getKeyName().");
+        }
+        this.contentProviderFragments.put(key, fragment);
+
+        this.stackFragments.addLast(fragment);
+        fragment.onFragmentInitialize(this);
+        this.stackFragments.removeLast();
         return this;
     }
 
@@ -173,6 +217,10 @@ public class MatcherController {
     public MatcherController initialize() {
         this.lastAddTableInfo = null;
 
+        if (this.stackFragments.size() >= 1) {
+            throw new IllegalStateException("There is a problem with the management of ContentProviderFragment.");
+        }
+
         for (Map.Entry<Class<?>, TableInfo> entry : this.tables.entrySet()) {
             entry.getValue().isValid(true);
         }
@@ -213,25 +261,16 @@ public class MatcherController {
             this.tables.put(tableClassType, result);
         }
 
-        // referenced in addMatcherPattern
+        // referenced in createMatcherPattern
         this.lastAddTableInfo = result;
         return result;
     }
 
-    private MatcherPattern addMatcherPattern(SubType subType, String pattern, int patternCode) {
-        MatcherPattern result = null;
-
+    private MatcherPattern createMatcherPattern(SubType subType, String pattern, int patternCode) {
         if (this.lastAddTableInfo == null) {
             throw new IllegalStateException("There is a problem with the order of function call.");
         }
-
-        if (findMatcherPattern(patternCode) != null) {
-            throw new IllegalArgumentException("patternCode has been specified already exists.");
-        }
-
-        result = new MatcherPattern(this.lastAddTableInfo, subType, pattern, patternCode);
-        this.matcherPatterns.add(result);
-        return result;
+        return new MatcherPattern(this.lastAddTableInfo, subType, pattern, patternCode);
     }
 
     public boolean hasPreinitialized() {
@@ -266,5 +305,14 @@ public class MatcherController {
             throw new IllegalStateException("Controller has not been initialized.");
         }
         return this.matcherPatterns;
+    }
+
+    /**
+     * ContentProviderFragment that has been added to this MatcherController.
+     * @return contentProviderFragments
+     * @since 1.0.5
+     */
+    public Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
+        return this.contentProviderFragments;
     }
 }

@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.framework;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,9 @@ import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
  * Manage the database table information.
  * @author Jaken
  */
-public class TableInfo implements Validity {
+public class TableInfo implements Serializable, Validity {
+    private static final long serialVersionUID = -5200432176239214792L;
+
     private Class<?> classType;
     private String name;
 

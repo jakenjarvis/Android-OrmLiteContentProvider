@@ -1,0 +1,396 @@
+package com.tojc.ormlite.android;
+
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
+import android.content.ContentValues;
+import android.content.OperationApplicationException;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.tojc.ormlite.android.framework.MatcherController;
+import com.tojc.ormlite.android.framework.MatcherPattern;
+import com.tojc.ormlite.android.framework.Parameter;
+import com.tojc.ormlite.android.framework.event.EventClasses;
+import com.tojc.ormlite.android.framework.event.EventController;
+import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnInsertCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnQueryCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnQueryMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateMultiEventObject;
+
+import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.Map;
+
+/**
+ * This class is a base class to control the event-handling. Express the standard structure,
+ * which classifies the program by event-handling.
+ *
+ * @author Jaken
+ * @since 1.0.5
+ */
+public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteBaseContentProvider<T> implements DefaultContentProviderAllListenerSet<T> {
+    private static final String EVENT_DEFAULT_KEY = "__default__";
+
+    /**
+     * This is the object which manages the event-handling.
+     * It has registered an event-handling of ContentProvider here.
+     */
+    private EventController eventController = new EventController();
+
+    /**
+     * To register an object that notify an event. Without overwriting, notified will be added.
+     * It is necessary to implement the following interfaces in order to notify.
+     *
+     * @param key      Specify a unique event listener key to identify.(Grouping for each object)
+     * @param listener Listener object to register
+     * @see com.tojc.ormlite.android.framework.event.listener
+     * @see com.tojc.ormlite.android.framework.event.listenerset
+     */
+    protected void registerEventListenerObject(String key, Object listener) {
+        this.eventController.registerEventListenerObject(key, listener);
+    }
+
+    /**
+     * Holds an instance of MatcherController. You must be at the stage of initialization, call the
+     * add method to class and registration information in table, the pattern required to
+     * UriMatcher. In addition, the registration is complete, you must call initialize method in the
+     * end.
+     */
+    private MatcherController matcherController = null;
+
+    protected void setMatcherController(MatcherController controller) {
+        this.matcherController = controller;
+        controller.initialize();
+
+        this.onRegisterEventListenerObject(this.matcherController);
+    }
+
+    /**
+     * Called at the time to register event listeners.
+     * If you want to change the registration process, please override this method.
+     * You do not need to be changed in normal conditions of use.
+     */
+    protected void onRegisterEventListenerObject(MatcherController controller) {
+        // Register an event listener for ContentProvider.
+        this.registerEventListenerObject(EVENT_DEFAULT_KEY, this);
+
+        // Register an event listener for all of ContentProviderFragments.
+        for (Map.Entry<String, OrmLiteContentProviderFragment<?, ?>> entry : controller.getContentProviderFragments().entrySet()) {
+            this.registerEventListenerObject(entry.getKey(), entry.getValue());
+        }
+    }
+
+    /*
+     * @see android.content.ContentProvider#getType(android.net.Uri)
+     */
+    @Override
+    public String getType(Uri uri) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+        return pattern.getMimeTypeVndString();
+    }
+
+    /*
+     * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[],
+     * java.lang.String, java.lang.String[], java.lang.String)
+     */
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+
+        Parameter parameter = new Parameter(uri, projection, selection, selectionArgs, sortOrder);
+        SQLiteDatabase db = this.getHelper().getReadableDatabase();
+
+        return this.internalOnQuery(null, db, pattern, parameter);
+    }
+
+    /**
+     * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[],
+     * java.lang.String, java.lang.String[], java.lang.String)
+     * @see com.tojc.ormlite.android.framework.event.listener.OnQueryListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnQueryCompletedListener
+     * @since 1.0.5
+     */
+    protected Cursor internalOnQuery(Cursor result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
+        Uri uri = parameter.getUri();
+
+        OnQueryMultiEventObject paramOnQuery = new OnQueryMultiEventObject(this, this.getHelper(), db, pattern, parameter);
+        paramOnQuery.setReturnValue(result);
+        this.raiseEvent(EventClasses.OnQuery, pattern, paramOnQuery);
+        result = paramOnQuery.getReturnValue();
+
+        if (result != null) {
+            OnQueryCompletedMultiEventObject paramOnQueryCompleted = new OnQueryCompletedMultiEventObject(this, result, uri, pattern, parameter);
+            this.raiseEvent(EventClasses.OnQueryCompleted, pattern, paramOnQueryCompleted);
+        }
+        return result;
+    }
+
+    /*
+     * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
+     */
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+
+        Parameter parameter = new Parameter(uri, values);
+        SQLiteDatabase db = this.getHelper().getWritableDatabase();
+
+        return this.internalOnInsert(null, db, pattern, parameter);
+    }
+
+    /**
+     * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
+     * @see com.tojc.ormlite.android.framework.event.listener.OnInsertListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnInsertCompletedListener
+     * @since 1.0.5
+     */
+    protected Uri internalOnInsert(Uri result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
+        Uri uri = parameter.getUri();
+
+        OnInsertMultiEventObject paramOnInsert = new OnInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
+        paramOnInsert.setReturnValue(result);
+        this.raiseEvent(EventClasses.OnInsert, pattern, paramOnInsert);
+        result = paramOnInsert.getReturnValue();
+
+        if (result != null) {
+            OnInsertCompletedMultiEventObject paramOnInsertCompleted = new OnInsertCompletedMultiEventObject(this, result, uri, pattern, parameter);
+            this.raiseEvent(EventClasses.OnInsertCompleted, pattern, paramOnInsertCompleted);
+        }
+        return result;
+    }
+
+    /*
+     * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
+     * java.lang.String[])
+     */
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+
+        Parameter parameter = new Parameter(uri, selection, selectionArgs);
+        SQLiteDatabase db = this.getHelper().getWritableDatabase();
+
+        return this.internalOnDelete(-1, db, pattern, parameter);
+    }
+
+    /**
+     * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
+     * java.lang.String[])
+     * @see com.tojc.ormlite.android.framework.event.listener.OnDeleteListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnDeleteCompletedListener
+     * @since 1.0.5
+     */
+    protected int internalOnDelete(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
+        Uri uri = parameter.getUri();
+
+        OnDeleteMultiEventObject paramOnDelete = new OnDeleteMultiEventObject(this, this.getHelper(), db, pattern, parameter);
+        paramOnDelete.setReturnValue(result);
+        this.raiseEvent(EventClasses.OnDelete, pattern, paramOnDelete);
+        result = paramOnDelete.getReturnValue();
+
+        if (result >= 0) {
+            OnDeleteCompletedMultiEventObject paramOnDeleteCompleted = new OnDeleteCompletedMultiEventObject(this, result, uri, pattern, parameter);
+            this.raiseEvent(EventClasses.OnDeleteCompleted, pattern, paramOnDeleteCompleted);
+        }
+        return result;
+    }
+
+    /*
+     * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues,
+     * java.lang.String, java.lang.String[])
+     */
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+
+        Parameter parameter = new Parameter(uri, values, selection, selectionArgs);
+        SQLiteDatabase db = this.getHelper().getWritableDatabase();
+
+        return this.internalOnUpdate(-1, db, pattern, parameter);
+    }
+
+    /**
+     * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues,
+     * java.lang.String, java.lang.String[])
+     * @see com.tojc.ormlite.android.framework.event.listener.OnUpdateListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnUpdateCompletedListener
+     * @since 1.0.5
+     */
+    protected int internalOnUpdate(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
+        Uri uri = parameter.getUri();
+
+        OnUpdateMultiEventObject paramOnUpdate = new OnUpdateMultiEventObject(this, this.getHelper(), db, pattern, parameter);
+        paramOnUpdate.setReturnValue(result);
+        this.raiseEvent(EventClasses.OnUpdate, pattern, paramOnUpdate);
+        result = paramOnUpdate.getReturnValue();
+
+        if (result >= 0) {
+            OnUpdateCompletedMultiEventObject paramOnUpdateCompleted = new OnUpdateCompletedMultiEventObject(this, result, uri, pattern, parameter);
+            this.raiseEvent(EventClasses.OnUpdateCompleted, pattern, paramOnUpdateCompleted);
+        }
+        return result;
+    }
+
+    /*
+     * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
+     * android.content.ContentValues[])
+     * @since 1.0.1
+     */
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        if (!this.matcherController.hasPreinitialized()) {
+            throw new IllegalStateException("Controller has not been initialized.");
+        }
+
+        int patternCode = this.matcherController.getUriMatcher().match(uri);
+        MatcherPattern pattern = this.matcherController.findMatcherPattern(patternCode);
+        if (pattern == null) {
+            throw new IllegalArgumentException("unknown uri : " + uri.toString());
+        }
+
+        SQLiteDatabase db = this.getHelper().getWritableDatabase();
+
+        return this.internalOnBulkInsert(0, db, pattern, uri, values);
+    }
+
+    /**
+     * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
+     * android.content.ContentValues[])
+     * @see com.tojc.ormlite.android.framework.event.listener.OnBulkInsertListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnBulkInsertCompletedListener
+     * @since 1.0.5
+     */
+    protected int internalOnBulkInsert(int result, SQLiteDatabase db, MatcherPattern pattern, Uri uri, ContentValues[] values) {
+        db.beginTransaction();
+        try {
+            for (ContentValues value : values) {
+                Parameter parameter = new Parameter(uri, value);
+
+                OnBulkInsertMultiEventObject paramOnBulkInsert = new OnBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
+                paramOnBulkInsert.setReturnValue(null);
+                this.raiseEvent(EventClasses.OnBulkInsert, pattern, paramOnBulkInsert);
+                Uri resultBulkInsert = paramOnBulkInsert.getReturnValue();
+
+                if (resultBulkInsert != null) {
+                    result++;
+                    // this.getContext().getContentResolver().notifyChange(resultBulkInsert, null);
+                }
+            }
+            db.setTransactionSuccessful();
+
+            if (result >= 1) {
+                OnBulkInsertCompletedMultiEventObject paramOnBulkInsertCompleted = new OnBulkInsertCompletedMultiEventObject(this, result, uri);
+                this.raiseEvent(EventClasses.OnBulkInsertCompleted, pattern, paramOnBulkInsertCompleted);
+            }
+        } finally {
+            db.endTransaction();
+        }
+        return result;
+    }
+
+    /*
+     * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
+     * @since 1.0.1
+     */
+    @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        SQLiteDatabase db = this.getHelper().getWritableDatabase();
+
+        return this.internalOnApplyBatch(null, db, operations);
+    }
+
+    /**
+     * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
+     * @see com.tojc.ormlite.android.framework.event.listener.OnBeforeApplyBatchListener
+     * @see com.tojc.ormlite.android.framework.event.listener.OnAfterApplyBatchListener
+     * @since 1.0.5
+     */
+    protected ContentProviderResult[] internalOnApplyBatch(ContentProviderResult[] result, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        db.beginTransaction();
+        try {
+            // MEMO: Notify all listeners.
+            OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, this.getHelper(), db, operations);
+            this.raiseEvent(EventClasses.OnBeforeApplyBatch, null, paramOnBeforeApplyBatch);
+
+            result = super.applyBatch(operations);
+
+            // MEMO: Notify all listeners.
+            OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, this.getHelper(), db, operations, result);
+            this.raiseEvent(EventClasses.OnAfterApplyBatch, null, paramOnAfterApplyBatch);
+
+            if (result != null) {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
+        }
+        return result;
+    }
+
+    private <V extends EventObject> void raiseEvent(EventClasses eventClasses, MatcherPattern pattern, V param) {
+        if (pattern != null) {
+            OrmLiteContentProviderFragment<?, ?> fragment = pattern.getParentContentProviderFragment();
+            if (fragment != null) {
+                String key = fragment.getKeyName();
+                this.eventController.raise(eventClasses, key, param);
+            } else {
+                this.eventController.raise(eventClasses, EVENT_DEFAULT_KEY, param);
+            }
+        } else {
+            // Calling all events.
+            this.eventController.raise(eventClasses, null, param);
+        }
+    }
+
+}

@@ -39,10 +39,10 @@ import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
  * This is a simple class that utilizes the framework. You can make
  * ContentProvider minimal implementation. This is an example of how to
  * implement OrmLiteDefaultContentProvider.
+ *
  * @author Jaken
  */
-public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends
-    OrmLiteDefaultContentProvider<T> {
+public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T> {
     /*
      * @see
      * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256
@@ -79,7 +79,7 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         String orderBy = getSortOrderStringForQuery(target, parameter);
 
         result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(),
-            null, null, orderBy);
+                null, null, orderBy);
         return result;
     }
 
@@ -117,12 +117,12 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
                 result = db.delete(target.getTableInfo().getName(), parameter.getSelection(),
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
-                    + parameter.getUri().getPathSegments().get(1);
+                        + parameter.getUri().getPathSegments().get(1);
                 if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
@@ -149,40 +149,21 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
                 result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(),
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
-                    + parameter.getUri().getPathSegments().get(1);
+                        + parameter.getUri().getPathSegments().get(1);
                 if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
                 result = db.update(target.getTableInfo().getName(), parameter.getValues(), where,
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             default:
                 break;
-        }
-        return result;
-    }
-
-    /**
-     * This method gets the appropriate sort order.
-     * @param target
-     *            Arguments passed to the onQuery() method.
-     * @param parameter
-     *            Arguments passed to the onQuery() method.
-     * @return return an sort order string.
-     * @since 1.0.4
-     */
-    protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
-        String result = "";
-        if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
-            result = parameter.getSortOrder();
-        } else {
-            result = target.getTableInfo().getDefaultSortOrderString();
         }
         return result;
     }

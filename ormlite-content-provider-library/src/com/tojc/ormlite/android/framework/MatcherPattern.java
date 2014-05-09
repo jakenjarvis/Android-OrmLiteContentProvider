@@ -23,16 +23,23 @@ package com.tojc.ormlite.android.framework;
 
 import android.net.Uri;
 
+import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+
+import java.io.Serializable;
 
 /**
  * Manage the UriMatcher pattern. It holds information related to the pattern code.
  * @author Jaken
  */
-public class MatcherPattern implements Validity {
+public class MatcherPattern implements Serializable, Validity {
+    private static final long serialVersionUID = 330324277949148494L;
+
     private boolean initialized = false;
+
+    private OrmLiteContentProviderFragment<?, ?> parentContentProviderFragment;
 
     private TableInfo tableInfo;
     private SubType subType;
@@ -45,6 +52,7 @@ public class MatcherPattern implements Validity {
     private MimeTypeVnd mimeTypeVnd;
 
     public MatcherPattern(TableInfo tableInfo, SubType subType, String pattern, int patternCode) {
+        this.parentContentProviderFragment = null;
         this.tableInfo = tableInfo;
         this.subType = subType;
         this.pattern = pattern;
@@ -123,6 +131,22 @@ public class MatcherPattern implements Validity {
      */
     protected void initialize() {
         this.initialized = true;
+    }
+
+    /**
+     * This will get the ContentProviderFragment that are associated with as a parent.
+     * @return Instance of ContentProviderFragment that are associated as a parent
+     */
+    public OrmLiteContentProviderFragment<?, ?> getParentContentProviderFragment() {
+        return this.parentContentProviderFragment;
+    }
+
+    /**
+     * This associates the ContentProviderFragment as a parent.
+     * @param parentContentProviderFragment
+     */
+    public void setParentContentProviderFragment(OrmLiteContentProviderFragment<?, ?> parentContentProviderFragment) {
+        this.parentContentProviderFragment = parentContentProviderFragment;
     }
 
     /**

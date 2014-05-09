@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
+import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
@@ -30,7 +31,9 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.SortOrder;
  * Manage the SortOrder information.
  * @author Jaken
  */
-public class SortOrderInfo extends AnnotationInfoBase {
+public class SortOrderInfo extends AnnotationInfoBase implements Serializable {
+    private static final long serialVersionUID = -2184441082984803644L;
+
     private static final String SQL_ORDER_SEPARATOR = " ";
 
     private SortOrder order;

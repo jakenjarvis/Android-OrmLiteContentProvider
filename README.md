@@ -3,6 +3,10 @@ Android-OrmLiteContentProvider [![Continuous Integration status](https://travis-
 
 # Overview
 ## What's new
+### Ver1.0.5
+* Added OrmLiteContentProviderFragment class. This has enabled the process in fragmentation of classification!
+* Added OrmLiteClassifierContentProvider base class. This is the basic structure class to event handling.
+
 ### Ver1.0.4
 * Throw away the Maven, I adopted the Gradle build system. I suffer from these, spent a lot of time...
 * Extended the automatic generation of the Contract class.
@@ -25,8 +29,11 @@ You can from among the following three of the abstract class, select the inherit
 
     android.content.ContentProvider  
     　　└ OrmLiteBaseContentProvider  
-    　　　└ OrmLiteDefaultContentProvider  
-    　　　　└ OrmLiteSimpleContentProvider  
+    　　　└ OrmLiteClassifierContentProvider(New!)  
+    　　　　└ OrmLiteDefaultContentProvider  
+    　　　　　└ OrmLiteSimpleContentProvider  
+    Fragment▼
+    　　　　└OrmLiteContentProviderFragment(New!)
 
 You can be used to match the level of your implementation.  
 You can focus on implementing the original function.  

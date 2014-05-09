@@ -22,6 +22,7 @@
 package com.tojc.ormlite.android.framework;
 
 import java.io.File;
+import java.io.Serializable;
 
 import android.content.ContentResolver;
 
@@ -38,7 +39,9 @@ import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
  * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
  * @author Jaken
  */
-public class MimeTypeVnd implements Validity {
+public class MimeTypeVnd implements Serializable, Validity {
+    private static final long serialVersionUID = -5451386892898706057L;
+
     public enum SubType {
         ITEM(ContentResolver.CURSOR_ITEM_BASE_TYPE), //
         DIRECTORY(ContentResolver.CURSOR_DIR_BASE_TYPE);
