@@ -152,6 +152,8 @@ public class EventMulticasterTest extends AndroidTestCase {
         eventMulticaster.fireEvent(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY, param);
 
         assertEquals(this.count, 1);
+        assertTrue(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, "DUMMY"));
     }
 
     public void testEventMulticaster_the_call_by_mixed_specifying_key_events_of_two_case2() {
@@ -192,6 +194,8 @@ public class EventMulticasterTest extends AndroidTestCase {
         eventMulticaster.fireEvent(OnInsertCompletedMultiEventListener.class, param);
 
         assertEquals(this.count, 2);
+        assertTrue(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, "DUMMY"));
     }
 
 
@@ -242,6 +246,10 @@ public class EventMulticasterTest extends AndroidTestCase {
         eventMulticaster.fireEvent(OnInsertCompletedMultiEventListener.class, param);
 
         assertEquals(this.count, 1);
+        assertTrue(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, "DUMMY"));
+        assertTrue(eventMulticaster.containsEventKey(OnUpdateCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnUpdateCompletedMultiEventListener.class, "DUMMY"));
     }
 
     public void testEventMulticaster_the_call_by_specifying_key_events_of_two_different_mixed_event_case2() {
@@ -291,5 +299,9 @@ public class EventMulticasterTest extends AndroidTestCase {
         eventMulticaster.fireEvent(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY, param);
 
         assertEquals(this.count, 1);
+        assertTrue(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnInsertCompletedMultiEventListener.class, "DUMMY"));
+        assertTrue(eventMulticaster.containsEventKey(OnUpdateCompletedMultiEventListener.class, TEST_EVENT_KEY));
+        assertFalse(eventMulticaster.containsEventKey(OnUpdateCompletedMultiEventListener.class, "DUMMY"));
     }
 }

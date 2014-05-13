@@ -32,6 +32,8 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.AccountContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.BlockContract;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.CarContract;
 
 import java.util.ArrayList;
 
@@ -68,6 +70,41 @@ public class MainActivity extends Activity {
             }
         } while (c.moveToNext());
         c.close();
+
+        // select test
+        Log.d("", "test car start");
+        Cursor ccar = getContentResolver().query(CarContract.CONTENT_URI, null, null, null, null);
+        ccar.moveToFirst();
+        do {
+            for (int i = 0; i < ccar.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), ccar.getColumnName(i) + " : " + ccar.getString(i));
+            }
+        } while (ccar.moveToNext());
+        ccar.close();
+        Log.d("", "test car end");
+
+        // select test
+        Log.d("", "test block start");
+        Cursor cblock = getContentResolver().query(BlockContract.buildBlockUri(1), null, null, null, null);
+        cblock.moveToFirst();
+        do {
+            for (int i = 0; i < cblock.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), cblock.getColumnName(i) + " : " + cblock.getString(i));
+            }
+        } while (cblock.moveToNext());
+        cblock.close();
+
+        Log.d("", "test block step1");
+
+        Cursor cblock2 = getContentResolver().query(BlockContract.buildBlockNameUri("ma"), null, null, null, null);
+        cblock2.moveToFirst();
+        do {
+            for (int i = 0; i < cblock2.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), cblock2.getColumnName(i) + " : " + cblock2.getString(i));
+            }
+        } while (cblock2.moveToNext());
+        cblock2.close();
+        Log.d("", "test block end");
 
         // applyBatch test
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();

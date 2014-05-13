@@ -21,6 +21,8 @@
  */
 package com.tojc.ormlite.android.framework;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -28,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import android.content.ContentProvider;
 import android.content.UriMatcher;
 
 import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
@@ -148,6 +151,13 @@ public class MatcherController {
         this.matcherPatterns.add(matcherPattern);
         return this;
     }
+
+    // TODO: The argument is not cool... It should be passed in the constructor of MatcherController?
+//    public MatcherController addFragment(Class<OrmLiteContentProviderFragment<?, ?>> clazzFragment, ContentProvider contentProvider) {
+//        OrmLiteContentProviderFragment<?, ?> instance = this.createContentProviderFragment(clazzFragment, contentProvider);
+//        this.addFragment(instance);
+//        return this;
+//    }
 
     /**
      * Add the ContentProviderFragment to receive the event. It corresponds to the definition nested.
@@ -314,5 +324,30 @@ public class MatcherController {
      */
     public Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
         return this.contentProviderFragments;
+    }
+
+    private OrmLiteContentProviderFragment<?, ?> createContentProviderFragment(Class<OrmLiteContentProviderFragment<?, ?>> clazzFragment, ContentProvider contentProvider) {
+        OrmLiteContentProviderFragment<?, ?> instance;
+        Exception innerException = null;
+        try {
+            Constructor constructor = clazzFragment.getConstructor(ContentProvider.class);
+            instance = (OrmLiteContentProviderFragment<?, ?>) constructor.newInstance(contentProvider);
+        } catch (NoSuchMethodException e) {
+            instance = null;
+            innerException = e;
+        } catch (InstantiationException e) {
+            instance = null;
+            innerException = e;
+        } catch (IllegalAccessException e) {
+            instance = null;
+            innerException = e;
+        } catch (InvocationTargetException e) {
+            instance = null;
+            innerException = e;
+        }
+        if (innerException != null) {
+            throw new IllegalStateException("Failed to create an instance of ContentProviderFragment.", innerException);
+        }
+        return instance;
     }
 }

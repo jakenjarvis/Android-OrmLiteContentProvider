@@ -91,9 +91,8 @@ public class EventMulticaster {
     public <T extends EventListener> void removeEventListener(Class<T> token, String key, T listener) {
         List<String> removeList = new LinkedList<String>();
 
-        if (this.multiEventListenerList.containsKey(token)) {
-            Map<String, EventListener> list = this.multiEventListenerList.get(token);
-
+        Map<String, EventListener> list = this.multiEventListenerList.get(token);
+        if (list != null) {
             if ((key == null) || (key.length() <= 0)) {
                 for (Map.Entry<String, EventListener> entry : list.entrySet()) {
                     if (entry.getValue().equals(listener)) {
@@ -108,6 +107,15 @@ public class EventMulticaster {
                 list.remove(target);
             }
         }
+    }
+
+    public <T extends EventListener> boolean containsEventKey(Class<T> token, String key) {
+        boolean result = false;
+        Map<String, EventListener> list = this.multiEventListenerList.get(token);
+        if (list != null) {
+            result = list.containsKey(key);
+        }
+        return result;
     }
 
     public <T extends EventListener, S extends EventObject> void fireEvent(Class<T> token, S param) {

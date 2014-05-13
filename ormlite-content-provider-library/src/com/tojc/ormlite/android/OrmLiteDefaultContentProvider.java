@@ -89,7 +89,7 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
      * @return return an sort order string.
      * @since 1.0.4
      */
-    protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
+    public String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
         String result = "";
         if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
             result = parameter.getSortOrder();

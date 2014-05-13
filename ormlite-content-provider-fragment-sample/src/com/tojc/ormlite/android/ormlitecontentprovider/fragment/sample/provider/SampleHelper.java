@@ -23,11 +23,16 @@ package com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Account;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Block;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Car;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Fuel;
 
 import java.sql.SQLException;
 
@@ -39,7 +44,42 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
+            TableUtils.dropTable(connectionSource, Account.class, true);
+            TableUtils.dropTable(connectionSource, Car.class, true);
+            TableUtils.dropTable(connectionSource, Fuel.class, true);
+            TableUtils.dropTable(connectionSource, Block.class, true);
+
             TableUtils.createTableIfNotExists(connectionSource, Account.class);
+            TableUtils.createTableIfNotExists(connectionSource, Car.class);
+            TableUtils.createTableIfNotExists(connectionSource, Fuel.class);
+            TableUtils.createTableIfNotExists(connectionSource, Block.class);
+
+            final Dao<Car, Integer> carDao = this.getDao(Car.class);
+            final Dao<Fuel, Integer> fuelDao = this.getDao(Fuel.class);
+            final Dao<Block, Integer> blockDao = this.getDao(Block.class);
+
+            // create test data
+            Fuel fuel = new Fuel("45L");
+            fuelDao.create(fuel);
+
+            Car car = new Car("PRIUS", fuel);
+            carDao.create(car);
+
+            // check
+            for (Car targetcar : carDao.queryForAll())
+            {
+                Log.d("", targetcar.getName());
+                Fuel targetfuel = targetcar.getFuel();
+                Log.d("", targetfuel.getName());
+            }
+
+            blockDao.create(new Block("Yamada"));
+            blockDao.create(new Block("Kawada"));
+            blockDao.create(new Block("Hamada"));
+            blockDao.create(new Block("Madara"));
+            blockDao.create(new Block("Suzuki"));
+            blockDao.create(new Block("Okehazama"));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,7 +89,15 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
             TableUtils.dropTable(connectionSource, Account.class, true);
+            TableUtils.dropTable(connectionSource, Car.class, true);
+            TableUtils.dropTable(connectionSource, Fuel.class, true);
+            TableUtils.dropTable(connectionSource, Block.class, true);
+
             TableUtils.createTable(connectionSource, Account.class);
+            TableUtils.createTable(connectionSource, Car.class);
+            TableUtils.createTable(connectionSource, Fuel.class);
+            TableUtils.createTableIfNotExists(connectionSource, Block.class);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

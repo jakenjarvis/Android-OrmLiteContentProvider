@@ -25,6 +25,8 @@ import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Account;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.fragment.DaoRESTFulLikeFragment;
+import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.fragment.SqlForeignFragment;
 
 public class SampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
     @Override
@@ -34,9 +36,14 @@ public class SampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
 
     @Override
     public boolean onCreate() {
+        // These are read in the sequentially while expanded all to flat.
         setMatcherController(new MatcherController()//
-                .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
-                .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE));
+            .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+            .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+            //.addFragment(new DaoForeignFragment(this))//
+            .addFragment(new SqlForeignFragment(this))//
+            .addFragment(new DaoRESTFulLikeFragment(this))//
+        );
         return true;
     }
 }

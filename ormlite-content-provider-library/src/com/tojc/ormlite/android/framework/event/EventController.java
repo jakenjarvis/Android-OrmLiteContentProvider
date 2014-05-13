@@ -81,6 +81,10 @@ public class EventController {
         return this;
     }
 
+    public boolean containsEventKey(EventClasses eventClasses, String key) {
+        return this.eventMulticaster.containsEventKey(eventClasses.getMultiEventListenerClass(), key);
+    }
+
     public <V extends EventObject> void raise(EventClasses eventClasses, String key, V param) {
         this.eventMulticaster.fireEvent(eventClasses.getMultiEventListenerClass(), key, param);
     }

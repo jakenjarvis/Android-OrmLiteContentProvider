@@ -9,8 +9,8 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>ormlite-content-provider-sample</artifactId>
-	<name>Android-OrmLiteContentProvider Sample</name>
+	<artifactId>ormlite-content-provider-fragment-sample</artifactId>
+	<name>Android-OrmLiteContentProvider Fragment Sample</name>
 	<packaging>apk</packaging>
 
 	<properties>

@@ -14,6 +14,7 @@ import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.Parameter;
 import com.tojc.ormlite.android.framework.event.EventClasses;
 import com.tojc.ormlite.android.framework.event.EventController;
+import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
 import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
@@ -57,7 +58,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.framework.event.listener
      * @see com.tojc.ormlite.android.framework.event.listenerset
      */
-    protected void registerEventListenerObject(String key, Object listener) {
+    public void registerEventListenerObject(String key, Object listener) {
         this.eventController.registerEventListenerObject(key, listener);
     }
 
@@ -142,12 +143,12 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
         OnQueryMultiEventObject paramOnQuery = new OnQueryMultiEventObject(this, this.getHelper(), db, pattern, parameter);
         paramOnQuery.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnQuery, pattern, paramOnQuery);
+        this.raiseEvent(EventClasses.OnQuery, paramOnQuery, pattern);
         result = paramOnQuery.getReturnValue();
 
         if (result != null) {
             OnQueryCompletedMultiEventObject paramOnQueryCompleted = new OnQueryCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnQueryCompleted, pattern, paramOnQueryCompleted);
+            this.raiseEvent(EventClasses.OnQueryCompleted, paramOnQueryCompleted, pattern);
         }
         return result;
     }
@@ -184,12 +185,12 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
         OnInsertMultiEventObject paramOnInsert = new OnInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
         paramOnInsert.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnInsert, pattern, paramOnInsert);
+        this.raiseEvent(EventClasses.OnInsert, paramOnInsert, pattern);
         result = paramOnInsert.getReturnValue();
 
         if (result != null) {
             OnInsertCompletedMultiEventObject paramOnInsertCompleted = new OnInsertCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnInsertCompleted, pattern, paramOnInsertCompleted);
+            this.raiseEvent(EventClasses.OnInsertCompleted, paramOnInsertCompleted, pattern);
         }
         return result;
     }
@@ -228,12 +229,12 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
         OnDeleteMultiEventObject paramOnDelete = new OnDeleteMultiEventObject(this, this.getHelper(), db, pattern, parameter);
         paramOnDelete.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnDelete, pattern, paramOnDelete);
+        this.raiseEvent(EventClasses.OnDelete, paramOnDelete, pattern);
         result = paramOnDelete.getReturnValue();
 
         if (result >= 0) {
             OnDeleteCompletedMultiEventObject paramOnDeleteCompleted = new OnDeleteCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnDeleteCompleted, pattern, paramOnDeleteCompleted);
+            this.raiseEvent(EventClasses.OnDeleteCompleted, paramOnDeleteCompleted, pattern);
         }
         return result;
     }
@@ -272,12 +273,12 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
         OnUpdateMultiEventObject paramOnUpdate = new OnUpdateMultiEventObject(this, this.getHelper(), db, pattern, parameter);
         paramOnUpdate.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnUpdate, pattern, paramOnUpdate);
+        this.raiseEvent(EventClasses.OnUpdate, paramOnUpdate, pattern);
         result = paramOnUpdate.getReturnValue();
 
         if (result >= 0) {
             OnUpdateCompletedMultiEventObject paramOnUpdateCompleted = new OnUpdateCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnUpdateCompleted, pattern, paramOnUpdateCompleted);
+            this.raiseEvent(EventClasses.OnUpdateCompleted, paramOnUpdateCompleted, pattern);
         }
         return result;
     }
@@ -319,7 +320,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
                 OnBulkInsertMultiEventObject paramOnBulkInsert = new OnBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
                 paramOnBulkInsert.setReturnValue(null);
-                this.raiseEvent(EventClasses.OnBulkInsert, pattern, paramOnBulkInsert);
+                this.raiseEvent(EventClasses.OnBulkInsert, paramOnBulkInsert, pattern);
                 Uri resultBulkInsert = paramOnBulkInsert.getReturnValue();
 
                 if (resultBulkInsert != null) {
@@ -331,7 +332,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
             if (result >= 1) {
                 OnBulkInsertCompletedMultiEventObject paramOnBulkInsertCompleted = new OnBulkInsertCompletedMultiEventObject(this, result, uri);
-                this.raiseEvent(EventClasses.OnBulkInsertCompleted, pattern, paramOnBulkInsertCompleted);
+                this.raiseEvent(EventClasses.OnBulkInsertCompleted, paramOnBulkInsertCompleted, pattern);
             }
         } finally {
             db.endTransaction();
@@ -361,13 +362,13 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         try {
             // MEMO: Notify all listeners.
             OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, this.getHelper(), db, operations);
-            this.raiseEvent(EventClasses.OnBeforeApplyBatch, null, paramOnBeforeApplyBatch);
+            this.raiseEvent(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch, null);
 
             result = super.applyBatch(operations);
 
             // MEMO: Notify all listeners.
             OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, this.getHelper(), db, operations, result);
-            this.raiseEvent(EventClasses.OnAfterApplyBatch, null, paramOnAfterApplyBatch);
+            this.raiseEvent(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch, null);
 
             if (result != null) {
                 db.setTransactionSuccessful();
@@ -378,19 +379,60 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    private <V extends EventObject> void raiseEvent(EventClasses eventClasses, MatcherPattern pattern, V param) {
+    private <V extends EventObject> void raiseEvent(EventClasses eventClasses, V param, MatcherPattern pattern) {
         if (pattern != null) {
             OrmLiteContentProviderFragment<?, ?> fragment = pattern.getParentContentProviderFragment();
             if (fragment != null) {
-                String key = fragment.getKeyName();
-                this.eventController.raise(eventClasses, key, param);
+                this.onFragmentEventHandling(eventClasses, param, fragment);
             } else {
-                this.eventController.raise(eventClasses, EVENT_DEFAULT_KEY, param);
+                this.raise(eventClasses, EVENT_DEFAULT_KEY, param);
             }
         } else {
-            // Calling all events.
-            this.eventController.raise(eventClasses, null, param);
+            // Calling all listeners.
+            this.raise(eventClasses, null, param);
         }
     }
 
+    /**
+     *
+     * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
+     * @see com.tojc.ormlite.android.OrmLiteContentProviderFragment#getFragmentEventHandling()
+     * @param eventClasses
+     * @param param
+     * @param fragment
+     * @param <V>
+     */
+    protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, OrmLiteContentProviderFragment<?, ?> fragment) {
+        String key = fragment.getKeyName();
+        int handling = fragment.getFragmentEventHandling();
+        switch (handling) {
+            case FragmentEventHandling.FRAGMENT_ONLY:
+                this.raise(eventClasses, key, param);
+                break;
+
+            case FragmentEventHandling.FRAGMENT_AND_DEFAULT_FORWARD:
+                if (this.containsEventKey(eventClasses, key)) {
+                    this.raise(eventClasses, key, param);
+                } else {
+                    this.raise(eventClasses, EVENT_DEFAULT_KEY, param);
+                }
+                break;
+
+            case FragmentEventHandling.FRAGMENT_AND_DEFAULT_DUPLICATE:
+                this.raise(eventClasses, EVENT_DEFAULT_KEY, param);
+                this.raise(eventClasses, key, param); // Prefer the return value of the fragment.
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    protected final <V extends EventObject> void raise(EventClasses eventClasses, String key, V param) {
+        this.eventController.raise(eventClasses, key, param);
+    }
+
+    protected final boolean containsEventKey(EventClasses eventClasses, String key) {
+        return this.eventController.containsEventKey(eventClasses, key);
+    }
 }
