@@ -1,7 +1,9 @@
 package com.tojc.ormlite.android.framework.event;
 
 import com.tojc.ormlite.android.framework.event.dispatcher.OnAfterApplyBatchEventDispatcher;
+import com.tojc.ormlite.android.framework.event.dispatcher.OnAfterBulkInsertEventDispatcher;
 import com.tojc.ormlite.android.framework.event.dispatcher.OnBeforeApplyBatchEventDispatcher;
+import com.tojc.ormlite.android.framework.event.dispatcher.OnBeforeBulkInsertEventDispatcher;
 import com.tojc.ormlite.android.framework.event.dispatcher.OnBulkInsertCompletedEventDispatcher;
 import com.tojc.ormlite.android.framework.event.dispatcher.OnBulkInsertEventDispatcher;
 import com.tojc.ormlite.android.framework.event.dispatcher.OnDeleteCompletedEventDispatcher;
@@ -13,7 +15,9 @@ import com.tojc.ormlite.android.framework.event.dispatcher.OnQueryEventDispatche
 import com.tojc.ormlite.android.framework.event.dispatcher.OnUpdateCompletedEventDispatcher;
 import com.tojc.ormlite.android.framework.event.dispatcher.OnUpdateEventDispatcher;
 import com.tojc.ormlite.android.framework.event.exchanger.OnAfterApplyBatchEventExchanger;
+import com.tojc.ormlite.android.framework.event.exchanger.OnAfterBulkInsertEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnBeforeApplyBatchEventExchanger;
+import com.tojc.ormlite.android.framework.event.exchanger.OnBeforeBulkInsertEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnBulkInsertCompletedEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnBulkInsertEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnDeleteCompletedEventExchanger;
@@ -25,7 +29,9 @@ import com.tojc.ormlite.android.framework.event.exchanger.OnQueryEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnUpdateCompletedEventExchanger;
 import com.tojc.ormlite.android.framework.event.exchanger.OnUpdateEventExchanger;
 import com.tojc.ormlite.android.framework.event.listener.OnAfterApplyBatchListener;
+import com.tojc.ormlite.android.framework.event.listener.OnAfterBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBeforeApplyBatchListener;
+import com.tojc.ormlite.android.framework.event.listener.OnBeforeBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBulkInsertCompletedListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnDeleteCompletedListener;
@@ -40,7 +46,9 @@ import com.tojc.ormlite.android.framework.event.listenerbase.ContentProviderEven
 import com.tojc.ormlite.android.framework.event.multieventbase.MultiEventListenerInterfaceBase;
 import com.tojc.ormlite.android.framework.event.multieventbase.MultiEventObjectBase;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnAfterApplyBatchMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multieventlistener.OnAfterBulkInsertMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnBeforeApplyBatchMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multieventlistener.OnBeforeBulkInsertMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnBulkInsertCompletedMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnBulkInsertMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnDeleteCompletedMultiEventListener;
@@ -52,7 +60,9 @@ import com.tojc.ormlite.android.framework.event.multieventlistener.OnQueryMultiE
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnUpdateCompletedMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventlistener.OnUpdateMultiEventListener;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteCompletedMultiEventObject;
@@ -78,7 +88,9 @@ public enum EventClasses {
     OnDeleteCompleted(OnDeleteCompletedEventDispatcher.class, OnDeleteCompletedMultiEventListener.class, OnDeleteCompletedMultiEventObject.class, OnDeleteCompletedListener.class, OnDeleteCompletedEventExchanger.class),
     OnUpdate(OnUpdateEventDispatcher.class, OnUpdateMultiEventListener.class, OnUpdateMultiEventObject.class, OnUpdateListener.class, OnUpdateEventExchanger.class),
     OnUpdateCompleted(OnUpdateCompletedEventDispatcher.class, OnUpdateCompletedMultiEventListener.class, OnUpdateCompletedMultiEventObject.class, OnUpdateCompletedListener.class, OnUpdateCompletedEventExchanger.class),
+    OnBeforeBulkInsert(OnBeforeBulkInsertEventDispatcher.class, OnBeforeBulkInsertMultiEventListener.class, OnBeforeBulkInsertMultiEventObject.class, OnBeforeBulkInsertListener.class, OnBeforeBulkInsertEventExchanger.class),
     OnBulkInsert(OnBulkInsertEventDispatcher.class, OnBulkInsertMultiEventListener.class, OnBulkInsertMultiEventObject.class, OnBulkInsertListener.class, OnBulkInsertEventExchanger.class),
+    OnAfterBulkInsert(OnAfterBulkInsertEventDispatcher.class, OnAfterBulkInsertMultiEventListener.class, OnAfterBulkInsertMultiEventObject.class, OnAfterBulkInsertListener.class, OnAfterBulkInsertEventExchanger.class),
     OnBulkInsertCompleted(OnBulkInsertCompletedEventDispatcher.class, OnBulkInsertCompletedMultiEventListener.class, OnBulkInsertCompletedMultiEventObject.class, OnBulkInsertCompletedListener.class, OnBulkInsertCompletedEventExchanger.class),
     OnBeforeApplyBatch(OnBeforeApplyBatchEventDispatcher.class, OnBeforeApplyBatchMultiEventListener.class, OnBeforeApplyBatchMultiEventObject.class, OnBeforeApplyBatchListener.class, OnBeforeApplyBatchEventExchanger.class),
     OnAfterApplyBatch(OnAfterApplyBatchEventDispatcher.class, OnAfterApplyBatchMultiEventListener.class, OnAfterApplyBatchMultiEventObject.class, OnAfterApplyBatchListener.class, OnAfterApplyBatchEventExchanger.class);

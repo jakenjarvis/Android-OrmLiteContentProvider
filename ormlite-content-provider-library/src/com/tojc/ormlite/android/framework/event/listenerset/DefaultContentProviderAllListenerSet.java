@@ -2,7 +2,9 @@ package com.tojc.ormlite.android.framework.event.listenerset;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.tojc.ormlite.android.framework.event.listener.OnAfterApplyBatchListener;
+import com.tojc.ormlite.android.framework.event.listener.OnAfterBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBeforeApplyBatchListener;
+import com.tojc.ormlite.android.framework.event.listener.OnBeforeBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBulkInsertCompletedListener;
 import com.tojc.ormlite.android.framework.event.listener.OnBulkInsertListener;
 import com.tojc.ormlite.android.framework.event.listener.OnDeleteCompletedListener;
@@ -26,7 +28,9 @@ public interface DefaultContentProviderAllListenerSet<T extends OrmLiteSqliteOpe
         OnDeleteCompletedListener<T>,
         OnUpdateListener<T>,
         OnUpdateCompletedListener<T>,
+        OnBeforeBulkInsertListener<T>,
         OnBulkInsertListener<T>,
+        OnAfterBulkInsertListener<T>,
         OnBulkInsertCompletedListener<T>,
         OnBeforeApplyBatchListener<T>,
         OnAfterApplyBatchListener<T> {

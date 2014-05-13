@@ -23,6 +23,7 @@ package com.tojc.ormlite.android;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * To take advantage of the framework, it provides a standard class. If you use this library, you
@@ -64,8 +66,16 @@ public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenH
     }
 
     @Override
+    public void onBeforeBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
+    }
+
+    @Override
     public Uri onBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
         return onInsert(helper, db, target, parameter);
+    }
+
+    @Override
+    public void onAfterBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
     }
 
     @Override

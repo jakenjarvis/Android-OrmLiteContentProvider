@@ -17,7 +17,9 @@ import com.tojc.ormlite.android.framework.event.EventController;
 import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
 import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteCompletedMultiEventObject;
@@ -30,7 +32,9 @@ import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateComplet
 import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateMultiEventObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventObject;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -315,6 +319,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected int internalOnBulkInsert(int result, SQLiteDatabase db, MatcherPattern pattern, Uri uri, ContentValues[] values) {
         db.beginTransaction();
         try {
+            List<ContentValues> arrayBeforeBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
+            OnBeforeBulkInsertMultiEventObject paramOnBeforeBulkInsert = new OnBeforeBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, uri, arrayBeforeBulkInsertValues);
+            this.raiseEvent(EventClasses.OnBeforeBulkInsert, paramOnBeforeBulkInsert, pattern);
+
             for (ContentValues value : values) {
                 Parameter parameter = new Parameter(uri, value);
 
@@ -325,9 +333,13 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
                 if (resultBulkInsert != null) {
                     result++;
-                    // this.getContext().getContentResolver().notifyChange(resultBulkInsert, null);
                 }
             }
+
+            List<ContentValues> arrayAfterBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
+            OnAfterBulkInsertMultiEventObject paramOnAfterBulkInsert = new OnAfterBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, uri, arrayAfterBulkInsertValues);
+            this.raiseEvent(EventClasses.OnAfterBulkInsert, paramOnAfterBulkInsert, pattern);
+
             db.setTransactionSuccessful();
 
             if (result >= 1) {
@@ -394,13 +406,12 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
-     *
-     * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
-     * @see com.tojc.ormlite.android.OrmLiteContentProviderFragment#getFragmentEventHandling()
      * @param eventClasses
      * @param param
      * @param fragment
      * @param <V>
+     * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
+     * @see com.tojc.ormlite.android.OrmLiteContentProviderFragment#getFragmentEventHandling()
      */
     protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, OrmLiteContentProviderFragment<?, ?> fragment) {
         String key = fragment.getKeyName();

@@ -3,6 +3,7 @@ package com.tojc.ormlite.android.framework.event;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.CharArrayBuffer;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -17,7 +18,9 @@ import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.OperationParameters;
 import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteCompletedMultiEventObject;
@@ -30,6 +33,7 @@ import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateComplet
 import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateMultiEventObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jaken on 2014/05/08.
@@ -85,22 +89,30 @@ public class EventControllerTest extends AndroidTestCase {
         eventController.raise(EventClasses.OnUpdateCompleted, paramOnUpdateCompleted);
         assertEquals(testListener.getCount(), 255);
 
+        OnBeforeBulkInsertMultiEventObject paramOnBeforeBulkInsert = new OnBeforeBulkInsertMultiEventObject(this, null, null, null, null, null);
+        eventController.raise(EventClasses.OnBeforeBulkInsert, paramOnBeforeBulkInsert);
+        assertEquals(testListener.getCount(), 511);
+
         OnBulkInsertMultiEventObject paramOnBulkInsert = new OnBulkInsertMultiEventObject(this, null, null, null, null);
         eventController.raise(EventClasses.OnBulkInsert, paramOnBulkInsert);
-        assertEquals(testListener.getCount(), 511);
+        assertEquals(testListener.getCount(), 1023);
         assertEquals(paramOnBulkInsert.getReturnValue().toString(), targetTestUri.toString());
+
+        OnAfterBulkInsertMultiEventObject paramOnAfterBulkInsert = new OnAfterBulkInsertMultiEventObject(this, null, null, null, null, null);
+        eventController.raise(EventClasses.OnAfterBulkInsert, paramOnAfterBulkInsert);
+        assertEquals(testListener.getCount(), 2047);
 
         OnBulkInsertCompletedMultiEventObject paramOnBulkInsertCompleted = new OnBulkInsertCompletedMultiEventObject(this, 0, null);
         eventController.raise(EventClasses.OnBulkInsertCompleted, paramOnBulkInsertCompleted);
-        assertEquals(testListener.getCount(), 1023);
+        assertEquals(testListener.getCount(), 4095);
 
         OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, null, null, null);
         eventController.raise(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch);
-        assertEquals(testListener.getCount(), 2047);
+        assertEquals(testListener.getCount(), 8191);
 
         OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, null, null, null, null);
         eventController.raise(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch);
-        assertEquals(testListener.getCount(), 4095);
+        assertEquals(testListener.getCount(), 16383);
     }
 
 
@@ -163,24 +175,34 @@ public class EventControllerTest extends AndroidTestCase {
         }
 
         @Override
-        public Uri onBulkInsert(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, MatcherPattern target, OperationParameters.InsertParameters parameter) {
+        public void onBeforeBulkInsert(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
             this.count += 256;
+        }
+
+        @Override
+        public Uri onBulkInsert(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, MatcherPattern target, OperationParameters.InsertParameters parameter) {
+            this.count += 512;
             return targetTestUri;
         }
 
         @Override
-        public void onBulkInsertCompleted(int result, Uri uri) {
-            this.count += 512;
-        }
-
-        @Override
-        public void onBeforeApplyBatch(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) {
+        public void onAfterBulkInsert(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
             this.count += 1024;
         }
 
         @Override
-        public void onAfterApplyBatch(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations, ContentProviderResult[] result) {
+        public void onBulkInsertCompleted(int result, Uri uri) {
             this.count += 2048;
+        }
+
+        @Override
+        public void onBeforeApplyBatch(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) {
+            this.count += 4096;
+        }
+
+        @Override
+        public void onAfterApplyBatch(OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations, ContentProviderResult[] result) {
+            this.count += 8192;
         }
     }
 
