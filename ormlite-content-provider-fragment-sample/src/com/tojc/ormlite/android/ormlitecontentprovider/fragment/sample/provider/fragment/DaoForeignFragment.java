@@ -8,7 +8,6 @@ import android.util.Log;
 import com.j256.ormlite.android.AndroidDatabaseResults;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.ColumnArg;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.framework.MatcherController;
@@ -29,7 +28,7 @@ import java.sql.SQLException;
  * MEMO: This source code is going to be your reference(Note Ver1.0.3). Please compare.
  * This is an implementation that does not use OrmLiteContentProviderFragment.
  * https://github.com/jakenjarvis/Android-OrmLiteContentProvider/blob/Issue4_VerificationTest/ormlite-content-provider-compiler-sample/src/com/tojc/ormlite/android/ormlitecontentprovider/compiler/sample/provider/MyProvider.java
- *
+ * <p/>
  * Created by Jaken on 2014/05/10.
  */
 public class DaoForeignFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {

@@ -41,19 +41,39 @@ public final class BlockContract implements BaseColumns {
     // Blocks "blocks/#"
     public static final String PATTERN_BLOCKS_ID = "#";
     public static final int CONTENT_URI_PATTERN_BLOCKS_ID = 7;
-    public static Uri buildBlockUri(int blockId) {
-        return CONTENT_URI.buildUpon().appendPath(String.valueOf(blockId)).build();
-    }
 
     // Blocks Name "blocks/name/*"
     public static final String PATTERN_BLOCKS_NAME = "name/*";
     public static final int CONTENT_URI_PATTERN_BLOCKS_NAME = 8;
     public static final String PATH_NAME = "name";
+
+    // Blocks Left Name "blocks/lname/*"
+    public static final String PATTERN_BLOCKS_LNAME = "lname/*";
+    public static final int CONTENT_URI_PATTERN_BLOCKS_LNAME = 9;
+    public static final String PATH_LNAME = "lname";
+
+    // Blocks Right Name "blocks/rname/*"
+    public static final String PATTERN_BLOCKS_RNAME = "rname/*";
+    public static final int CONTENT_URI_PATTERN_BLOCKS_RNAME = 10;
+    public static final String PATH_RNAME = "rname";
+
+    private BlockContract() {
+        // Utility constructor
+    }
+
+    public static Uri buildBlockUri(int blockId) {
+        return CONTENT_URI.buildUpon().appendPath(String.valueOf(blockId)).build();
+    }
+
     public static Uri buildBlockNameUri(String blockName) {
         return CONTENT_URI.buildUpon().appendPath(PATH_NAME).appendPath(blockName).build();
     }
 
-    private BlockContract() {
-        // Utility constructor
+    public static Uri buildBlockLNameUri(String blockName) {
+        return CONTENT_URI.buildUpon().appendPath(PATH_LNAME).appendPath(blockName).build();
+    }
+
+    public static Uri buildBlockRNameUri(String blockName) {
+        return CONTENT_URI.buildUpon().appendPath(PATH_RNAME).appendPath(blockName).build();
     }
 }

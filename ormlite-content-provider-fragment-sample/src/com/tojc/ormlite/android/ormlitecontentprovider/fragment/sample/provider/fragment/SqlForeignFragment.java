@@ -5,11 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.j256.ormlite.android.AndroidDatabaseResults;
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.ColumnArg;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MatcherPattern;
@@ -23,13 +18,11 @@ import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.SampleHelper;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.SampleProvider;
 
-import java.sql.SQLException;
-
 /**
  * MEMO: This source code is going to be your reference(Note Ver1.0.3). Please compare.
  * https://github.com/jakenjarvis/Android-OrmLiteContentProvider/blob/Issue4_VerificationTest/ormlite-content-provider-compiler-sample/src/com/tojc/ormlite/android/ormlitecontentprovider/compiler/sample/provider/MyProvider.java
  * This is an implementation that does not use OrmLiteContentProviderFragment.
- *
+ * <p/>
  * Created by Jaken on 2014/05/10.
  */
 public class SqlForeignFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
@@ -47,10 +40,10 @@ public class SqlForeignFragment extends OrmLiteContentProviderFragment<SamplePro
     protected void onAppendMatcherPatterns(MatcherController matcherController) {
         // You register the MatcherPattern. It is only intended to handle in this fragment.
         matcherController
-                .add(Car.class, SubType.DIRECTORY, "", CarContract.CONTENT_URI_PATTERN_MANY)//
-                .add(Car.class, SubType.ITEM, "#", CarContract.CONTENT_URI_PATTERN_ONE)//
-                .add(Fuel.class, SubType.DIRECTORY, "", FuelContract.CONTENT_URI_PATTERN_MANY)//
-                .add(Fuel.class, SubType.ITEM, "#", FuelContract.CONTENT_URI_PATTERN_ONE);//
+            .add(Car.class, SubType.DIRECTORY, "", CarContract.CONTENT_URI_PATTERN_MANY)//
+            .add(Car.class, SubType.ITEM, "#", CarContract.CONTENT_URI_PATTERN_ONE)//
+            .add(Fuel.class, SubType.DIRECTORY, "", FuelContract.CONTENT_URI_PATTERN_MANY)//
+            .add(Fuel.class, SubType.ITEM, "#", FuelContract.CONTENT_URI_PATTERN_ONE);//
     }
 
     @Override

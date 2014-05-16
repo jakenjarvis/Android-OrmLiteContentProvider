@@ -66,8 +66,7 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
             carDao.create(car);
 
             // check
-            for (Car targetcar : carDao.queryForAll())
-            {
+            for (Car targetcar : carDao.queryForAll()) {
                 Log.d("", targetcar.getName());
                 Fuel targetfuel = targetcar.getFuel();
                 Log.d("", targetfuel.getName());

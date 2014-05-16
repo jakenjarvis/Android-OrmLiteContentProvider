@@ -104,6 +104,29 @@ public class MainActivity extends Activity {
             }
         } while (cblock2.moveToNext());
         cblock2.close();
+
+        Log.d("", "test block step2: left start");
+
+        Cursor cblock3 = getContentResolver().query(BlockContract.buildBlockLNameUri("ma"), null, null, null, null);
+        cblock3.moveToFirst();
+        do {
+            for (int i = 0; i < cblock3.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), cblock3.getColumnName(i) + " : " + cblock3.getString(i));
+            }
+        } while (cblock3.moveToNext());
+        cblock3.close();
+
+        Log.d("", "test block step3: right start");
+
+        Cursor cblock4 = getContentResolver().query(BlockContract.buildBlockRNameUri("ma"), null, null, null, null);
+        cblock4.moveToFirst();
+        do {
+            for (int i = 0; i < cblock4.getColumnCount(); i++) {
+                Log.d(getClass().getSimpleName(), cblock4.getColumnName(i) + " : " + cblock4.getString(i));
+            }
+        } while (cblock4.moveToNext());
+        cblock4.close();
+
         Log.d("", "test block end");
 
         // applyBatch test

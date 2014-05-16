@@ -26,26 +26,23 @@ import java.sql.SQLException;
 /**
  * Created by Jaken on 2014/05/12.
  */
-public class DaoRESTFulLikeFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
-    public DaoRESTFulLikeFragment(SampleProvider contentProvider) {
+public class DaoRESTFulLikeSubFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
+    public DaoRESTFulLikeSubFragment(SampleProvider contentProvider) {
         // This is essential.
         super(contentProvider);
     }
 
     @Override
     public Class<? extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper>> getFragmentClass() {
-        return DaoRESTFulLikeFragment.class;
+        return DaoRESTFulLikeSubFragment.class;
     }
 
     @Override
     protected void onAppendMatcherPatterns(MatcherController matcherController) {
         // You register the MatcherPattern. It is only intended to handle in this fragment.
         matcherController
-            .add(Block.class, SubType.ITEM, BlockContract.PATTERN_BLOCKS_ID, BlockContract.CONTENT_URI_PATTERN_BLOCKS_ID)//
-            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_NAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_NAME)//
-
-            // Fragment can Nesting!
-            .addFragment(new DaoRESTFulLikeSubFragment(this.getContentProvider()));//
+            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_LNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_LNAME)//
+            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_RNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_RNAME);//
     }
 
     @Override
@@ -62,16 +59,16 @@ public class DaoRESTFulLikeFragment extends OrmLiteContentProviderFragment<Sampl
             QueryBuilder<Block, Integer> queryBlock = blockDao.queryBuilder();
 
             switch (target.getPatternCode()) {
-                case BlockContract.CONTENT_URI_PATTERN_BLOCKS_ID:
-                    queryBlock.where().eq(
-                            target.getTableInfo().getIdColumnInfo().getColumnName(),
-                            parameter.getUri().getPathSegments().get(1));
-                    break;
-
-                case BlockContract.CONTENT_URI_PATTERN_BLOCKS_NAME:
+                case BlockContract.CONTENT_URI_PATTERN_BLOCKS_LNAME:
                     queryBlock.where().like(
                             BlockContract.NAME,
-                            "%" + parameter.getUri().getPathSegments().get(2) + "%");
+                            parameter.getUri().getPathSegments().get(2) + "%");
+                    break;
+
+                case BlockContract.CONTENT_URI_PATTERN_BLOCKS_RNAME:
+                    queryBlock.where().like(
+                            BlockContract.NAME,
+                            "%" + parameter.getUri().getPathSegments().get(2));
                     break;
 
                 default:
