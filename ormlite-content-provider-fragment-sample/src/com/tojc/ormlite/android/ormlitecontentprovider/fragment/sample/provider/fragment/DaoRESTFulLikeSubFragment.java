@@ -27,11 +27,6 @@ import java.sql.SQLException;
  * Created by Jaken on 2014/05/12.
  */
 public class DaoRESTFulLikeSubFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
-    public DaoRESTFulLikeSubFragment(SampleProvider contentProvider) {
-        // This is essential.
-        super(contentProvider);
-    }
-
     @Override
     public Class<? extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper>> getFragmentClass() {
         return DaoRESTFulLikeSubFragment.class;
@@ -41,8 +36,8 @@ public class DaoRESTFulLikeSubFragment extends OrmLiteContentProviderFragment<Sa
     protected void onAppendMatcherPatterns(MatcherController matcherController) {
         // You register the MatcherPattern. It is only intended to handle in this fragment.
         matcherController
-            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_LNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_LNAME)//
-            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_RNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_RNAME);//
+                .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_LNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_LNAME)//
+                .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_RNAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_RNAME);//
     }
 
     @Override

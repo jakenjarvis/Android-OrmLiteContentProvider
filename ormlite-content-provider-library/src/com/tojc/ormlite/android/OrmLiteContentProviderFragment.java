@@ -1,7 +1,5 @@
 package com.tojc.ormlite.android;
 
-import android.content.ContentProvider;
-
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.tojc.ormlite.android.framework.MatcherController;
@@ -18,20 +16,19 @@ public abstract class OrmLiteContentProviderFragment<U extends OrmLiteBaseConten
 
     private U contentProvider = null;
 
-    @SuppressWarnings("unchecked")
-    public OrmLiteContentProviderFragment(ContentProvider contentProvider) {
-        this.contentProvider = (U) contentProvider;
+    public OrmLiteContentProviderFragment() {
+        // This constructor is required.
     }
 
+    /**
+     * Please do not use this method. This argument, there is likely to change in the future.
+     *
+     * @param matcherController
+     */
+    @SuppressWarnings("unchecked")
     public final void onFragmentInitialize(MatcherController matcherController) {
+        this.contentProvider = (U) matcherController.getContentProvider();
         this.onAppendMatcherPatterns(matcherController);
-//        for (Map.Entry<String, OrmLiteContentProviderFragment> entry : this.fragmentMatcherController.getContentProviderFragments().entrySet()) {
-//            matcherController.getContentProviderFragments().put(entry.getKey(), entry.getValue());
-//        }
-//        for (MatcherPattern fragmentPattern : this.fragmentMatcherController.getMatcherPatterns()) {
-//            fragmentPattern.setParentContentProviderFragment(this);
-//            matcherController.add(fragmentPattern);
-//        }
     }
 
     /**
@@ -51,9 +48,9 @@ public abstract class OrmLiteContentProviderFragment<U extends OrmLiteBaseConten
     /**
      * This method will return the event handling type of this fragment.
      * If you want to change the behavior of the event call, please override this method.
-     * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
      *
      * @return
+     * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
      */
     public int getFragmentEventHandling() {
         return FragmentEventHandling.FRAGMENT_ONLY;

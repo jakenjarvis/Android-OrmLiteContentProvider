@@ -21,8 +21,16 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import android.content.ContentProvider;
+import android.content.UriMatcher;
+
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.tojc.ormlite.android.OrmLiteBaseContentProvider;
+import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
+import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
+import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
+import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,21 +38,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import android.content.ContentProvider;
-import android.content.UriMatcher;
-
-import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
-import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
-import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
-import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
-
 /**
  * Before ContentProvider instance is created, you need to register a pattern to UriMatcher.
  * MatcherController will help the registration process.
+ *
  * @author Jaken
  */
 public class MatcherController {
     private boolean initialized = false;
+
+    private ContentProvider contentProvider = null;
 
     private UriMatcher matcher = null;
     private Map<Class<?>, TableInfo> tables = null;
@@ -55,7 +58,23 @@ public class MatcherController {
     // MEMO: LIFO stack list. Support of Queue and Deque from API-Lv9...
     private LinkedList<OrmLiteContentProviderFragment<?, ?>> stackFragments = null;
 
+    /**
+     * @see MatcherController#MatcherController(android.content.ContentProvider)
+     * @deprecated If you are using the OrmLiteContentProviderFragment, you can not use this constructor. This is abolish in the near future.
+     * Please refer to the MatcherController#MatcherController(android.content.ContentProvider).
+     */
+    @Deprecated
     public MatcherController() {
+        this(null);
+    }
+
+    /**
+     * @param contentProvider
+     * @since 1.0.5
+     */
+    public MatcherController(ContentProvider contentProvider) {
+        this.contentProvider = contentProvider;
+
         this.matcher = new UriMatcher(UriMatcher.NO_MATCH);
         this.tables = new HashMap<Class<?>, TableInfo>();
         this.matcherPatterns = new ArrayList<MatcherPattern>();
@@ -67,8 +86,8 @@ public class MatcherController {
 
     /**
      * Register a class for table.
-     * @param tableClassType
-     *            Register a class for table.
+     *
+     * @param tableClassType Register a class for table.
      * @return Instance of the MatcherController class.
      */
     public MatcherController add(Class<?> tableClassType) {
@@ -78,20 +97,17 @@ public class MatcherController {
 
     /**
      * Register a class for table. And registers a pattern for UriMatcher.
-     * @param tableClassType
-     *            Register a class for table.
-     * @param subType
-     *            Contents to be registered in the pattern, specify single or multiple. This is used
-     *            in the MIME types. * ITEM : If the URI pattern is for a single row :
-     *            vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
-     *            : vnd.android.cursor.dir/
-     * @param pattern
-     *            registers a pattern for UriMatcher. Note: Must not contain the name of path here.
-     *            ex) content://com.example.app.provider/table1 : pattern = ""
-     *            content://com.example.app.provider/table1/# : pattern = "#"
-     *            content://com.example.app.provider/table1/dataset2 : pattern = "dataset2"
-     * @param patternCode
-     *            UriMatcher code is returned
+     *
+     * @param tableClassType Register a class for table.
+     * @param subType        Contents to be registered in the pattern, specify single or multiple. This is used
+     *                       in the MIME types. * ITEM : If the URI pattern is for a single row :
+     *                       vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
+     *                       : vnd.android.cursor.dir/
+     * @param pattern        registers a pattern for UriMatcher. Note: Must not contain the name of path here.
+     *                       ex) content://com.example.app.provider/table1 : pattern = ""
+     *                       content://com.example.app.provider/table1/# : pattern = "#"
+     *                       content://com.example.app.provider/table1/dataset2 : pattern = "dataset2"
+     * @param patternCode    UriMatcher code is returned
      * @return Instance of the MatcherController class.
      */
     public MatcherController add(Class<?> tableClassType, SubType subType, String pattern, int patternCode) {
@@ -104,18 +120,16 @@ public class MatcherController {
     /**
      * Registers a pattern for UriMatcher. It refer to the class that was last registered from add
      * method.
-     * @param subType
-     *            Contents to be registered in the pattern, specify single or multiple. This is used
-     *            in the MIME types. * ITEM : If the URI pattern is for a single row :
-     *            vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
-     *            : vnd.android.cursor.dir/
-     * @param pattern
-     *            registers a pattern for UriMatcher. Note: Must not contain the name of path here.
-     *            ex) content://com.example.app.provider/table1 : pattern = ""
-     *            content://com.example.app.provider/table1/# : pattern = "#"
-     *            content://com.example.app.provider/table1/dataset2 : pattern = "dataset2"
-     * @param patternCode
-     *            UriMatcher code is returned
+     *
+     * @param subType     Contents to be registered in the pattern, specify single or multiple. This is used
+     *                    in the MIME types. * ITEM : If the URI pattern is for a single row :
+     *                    vnd.android.cursor.item/ * DIRECTORY : If the URI pattern is for more than one row
+     *                    : vnd.android.cursor.dir/
+     * @param pattern     registers a pattern for UriMatcher. Note: Must not contain the name of path here.
+     *                    ex) content://com.example.app.provider/table1 : pattern = ""
+     *                    content://com.example.app.provider/table1/# : pattern = "#"
+     *                    content://com.example.app.provider/table1/dataset2 : pattern = "dataset2"
+     * @param patternCode UriMatcher code is returned
      * @return Instance of the MatcherController class.
      */
     public MatcherController add(SubType subType, String pattern, int patternCode) {
@@ -127,8 +141,8 @@ public class MatcherController {
     /**
      * Registers a pattern for UriMatcher. To register you have to create an instance of
      * MatcherPattern.
-     * @param matcherPattern
-     *            register MatcherPattern.
+     *
+     * @param matcherPattern register MatcherPattern.
      * @return Instance of the MatcherController class.
      */
     public MatcherController add(MatcherPattern matcherPattern) {
@@ -152,16 +166,23 @@ public class MatcherController {
         return this;
     }
 
-    // TODO: The argument is not cool... It should be passed in the constructor of MatcherController?
-//    public MatcherController addFragment(Class<OrmLiteContentProviderFragment<?, ?>> clazzFragment, ContentProvider contentProvider) {
-//        OrmLiteContentProviderFragment<?, ?> instance = this.createContentProviderFragment(clazzFragment, contentProvider);
-//        this.addFragment(instance);
-//        return this;
-//    }
+    /**
+     * Add the ContentProviderFragment to receive the event. It corresponds to the definition nested.
+     * Class Object to be added must implement OrmLiteContentProviderFragment.
+     *
+     * @param clazzFragment
+     * @return
+     */
+    public <V extends OrmLiteContentProviderFragment<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> MatcherController addFragment(Class<V> clazzFragment) {
+        OrmLiteContentProviderFragment<?, ?> instance = this.createContentProviderFragment(clazzFragment);
+        this.addFragment(instance);
+        return this;
+    }
 
     /**
      * Add the ContentProviderFragment to receive the event. It corresponds to the definition nested.
-     * Object to be added must implement OrmLiteContentProviderFragment.
+     * Object instance to be added must implement OrmLiteContentProviderFragment.
+     *
      * @param fragment
      * @return
      * @since 1.0.5
@@ -169,6 +190,10 @@ public class MatcherController {
     public MatcherController addFragment(OrmLiteContentProviderFragment<?, ?> fragment) {
         if (fragment == null) {
             throw new IllegalArgumentException("fragment is null.");
+        }
+        if (this.contentProvider == null) {
+            // @see MatcherController#MatcherController(android.content.ContentProvider)
+            throw new IllegalStateException("contentProvider is null. The constructor for MatcherController, please use the MatcherController(ContentProvider).");
         }
 
         String key = fragment.getKeyName();
@@ -190,10 +215,11 @@ public class MatcherController {
     /**
      * Set the DefaultContentUri. If you did not use the DefaultContentUri annotation, you must call
      * this method.
-     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
+     *
      * @param authority
      * @param path
      * @return Instance of the MatcherController class.
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
      */
     public MatcherController setDefaultContentUri(String authority, String path) {
         if (this.lastAddTableInfo == null) {
@@ -206,10 +232,11 @@ public class MatcherController {
     /**
      * Set the DefaultContentMimeTypeVnd. If you did not use the DefaultContentMimeTypeVnd
      * annotation, you must call this method.
-     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
+     *
      * @param name
      * @param type
      * @return Instance of the MatcherController class.
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
      */
     public MatcherController setDefaultContentMimeTypeVnd(String name, String type) {
         if (this.lastAddTableInfo == null) {
@@ -222,6 +249,7 @@ public class MatcherController {
     /**
      * initialized with the contents that are registered by the add method. This method checks the
      * registration details.
+     *
      * @return Instance of the MatcherController class.
      */
     public MatcherController initialize() {
@@ -247,8 +275,8 @@ public class MatcherController {
 
     /**
      * This will search the MatcherPattern that are registered based on the return code UriMatcher.
-     * @param patternCode
-     *            UriMatcher code is returned
+     *
+     * @param patternCode UriMatcher code is returned
      * @return Instance of the MatcherPattern class. if no match is found will return null.
      */
     public MatcherPattern findMatcherPattern(int patternCode) {
@@ -318,7 +346,18 @@ public class MatcherController {
     }
 
     /**
+     * Get the content provider instance.
+     *
+     * @return
+     * @since 1.0.5
+     */
+    public ContentProvider getContentProvider() {
+        return contentProvider;
+    }
+
+    /**
      * ContentProviderFragment that has been added to this MatcherController.
+     *
      * @return contentProviderFragments
      * @since 1.0.5
      */
@@ -326,22 +365,15 @@ public class MatcherController {
         return this.contentProviderFragments;
     }
 
-    private OrmLiteContentProviderFragment<?, ?> createContentProviderFragment(Class<OrmLiteContentProviderFragment<?, ?>> clazzFragment, ContentProvider contentProvider) {
-        OrmLiteContentProviderFragment<?, ?> instance;
+    private <V extends OrmLiteContentProviderFragment<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> V createContentProviderFragment(Class<V> clazzFragment) {
+        V instance;
         Exception innerException = null;
         try {
-            Constructor constructor = clazzFragment.getConstructor(ContentProvider.class);
-            instance = (OrmLiteContentProviderFragment<?, ?>) constructor.newInstance(contentProvider);
-        } catch (NoSuchMethodException e) {
-            instance = null;
-            innerException = e;
+            instance = clazzFragment.newInstance();
         } catch (InstantiationException e) {
             instance = null;
             innerException = e;
         } catch (IllegalAccessException e) {
-            instance = null;
-            innerException = e;
-        } catch (InvocationTargetException e) {
             instance = null;
             innerException = e;
         }

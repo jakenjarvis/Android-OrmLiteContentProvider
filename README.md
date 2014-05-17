@@ -247,7 +247,7 @@ Implement an abstract class OrmLiteSimpleContentProvider.
         @Override
         public boolean onCreate()
         {
-	        setMatcherController(new MatcherController()
+	        setMatcherController(new MatcherController(this)
                 .add(Account.class, SubType.DIRECTORY, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
                 .add(Account.class, SubType.ITEM, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
                 );
@@ -292,7 +292,7 @@ This is the most important key points of the Android-OrmLiteContentProvider libr
         @Override
         public boolean onCreate()
         {
-	        setMatcherController(new MatcherController()
+	        setMatcherController(new MatcherController(this)
                 .add(Account.class, SubType.DIRECTORY, "", Contract.Account.CONTENT_URI_PATTERN_MANY)
                 .add(Account.class, SubType.ITEM, "#", Contract.Account.CONTENT_URI_PATTERN_ONE)
                 

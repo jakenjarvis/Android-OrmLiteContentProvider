@@ -34,7 +34,7 @@ public class SampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
 
     @Override
     public boolean onCreate() {
-        setMatcherController(new MatcherController()//
+        setMatcherController(new MatcherController(this)//
                 .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
                 .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE));
         return true;

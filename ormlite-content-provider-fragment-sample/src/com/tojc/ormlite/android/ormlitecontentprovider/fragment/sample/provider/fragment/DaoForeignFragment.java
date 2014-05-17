@@ -32,11 +32,6 @@ import java.sql.SQLException;
  * Created by Jaken on 2014/05/10.
  */
 public class DaoForeignFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
-    public DaoForeignFragment(SampleProvider contentProvider) {
-        // This is essential.
-        super(contentProvider);
-    }
-
     @Override
     public Class<? extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper>> getFragmentClass() {
         return DaoForeignFragment.class;
@@ -46,10 +41,10 @@ public class DaoForeignFragment extends OrmLiteContentProviderFragment<SamplePro
     protected void onAppendMatcherPatterns(MatcherController matcherController) {
         // You register the MatcherPattern. It is only intended to handle in this fragment.
         matcherController
-            .add(Car.class, SubType.DIRECTORY, "", CarContract.CONTENT_URI_PATTERN_MANY)//
-            .add(Car.class, SubType.ITEM, "#", CarContract.CONTENT_URI_PATTERN_ONE)//
-            .add(Fuel.class, SubType.DIRECTORY, "", FuelContract.CONTENT_URI_PATTERN_MANY)//
-            .add(Fuel.class, SubType.ITEM, "#", FuelContract.CONTENT_URI_PATTERN_ONE);//
+                .add(Car.class, SubType.DIRECTORY, "", CarContract.CONTENT_URI_PATTERN_MANY)//
+                .add(Car.class, SubType.ITEM, "#", CarContract.CONTENT_URI_PATTERN_ONE)//
+                .add(Fuel.class, SubType.DIRECTORY, "", FuelContract.CONTENT_URI_PATTERN_MANY)//
+                .add(Fuel.class, SubType.ITEM, "#", FuelContract.CONTENT_URI_PATTERN_ONE);//
     }
 
     @Override

@@ -36,7 +36,7 @@ public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<Sample
     @Override
     public boolean onCreate() {
         int patternCode = 1;
-        setMatcherController(new MatcherController()//
+        setMatcherController(new MatcherController(this)//
                 .add(Account.class, SubType.DIRECTORY, "", patternCode++)//
                 .add(Account.class, SubType.ITEM, "#", patternCode++)//
                 .add(Membership.class, SubType.DIRECTORY, "", patternCode++)//

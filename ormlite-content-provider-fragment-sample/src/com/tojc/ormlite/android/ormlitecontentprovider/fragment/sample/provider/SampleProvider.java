@@ -37,12 +37,12 @@ public class SampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
     @Override
     public boolean onCreate() {
         // These are read in the sequentially while expanded all to flat.
-        setMatcherController(new MatcherController()//
+        setMatcherController(new MatcherController(this)//
             .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
             .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
-            //.addFragment(new DaoForeignFragment(this))//
-            .addFragment(new SqlForeignFragment(this))//
-            .addFragment(new DaoRESTFulLikeFragment(this))//
+            //.addFragment(new DaoForeignFragment())//
+            .addFragment(new SqlForeignFragment())//
+            .addFragment(DaoRESTFulLikeFragment.class)//
         );
         return true;
     }

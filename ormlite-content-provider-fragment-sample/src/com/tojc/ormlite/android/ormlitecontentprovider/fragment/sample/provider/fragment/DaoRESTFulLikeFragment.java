@@ -27,11 +27,6 @@ import java.sql.SQLException;
  * Created by Jaken on 2014/05/12.
  */
 public class DaoRESTFulLikeFragment extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper> implements DefaultOnQueryListenerSet<SampleHelper> {
-    public DaoRESTFulLikeFragment(SampleProvider contentProvider) {
-        // This is essential.
-        super(contentProvider);
-    }
-
     @Override
     public Class<? extends OrmLiteContentProviderFragment<SampleProvider, SampleHelper>> getFragmentClass() {
         return DaoRESTFulLikeFragment.class;
@@ -41,11 +36,11 @@ public class DaoRESTFulLikeFragment extends OrmLiteContentProviderFragment<Sampl
     protected void onAppendMatcherPatterns(MatcherController matcherController) {
         // You register the MatcherPattern. It is only intended to handle in this fragment.
         matcherController
-            .add(Block.class, SubType.ITEM, BlockContract.PATTERN_BLOCKS_ID, BlockContract.CONTENT_URI_PATTERN_BLOCKS_ID)//
-            .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_NAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_NAME)//
+                .add(Block.class, SubType.ITEM, BlockContract.PATTERN_BLOCKS_ID, BlockContract.CONTENT_URI_PATTERN_BLOCKS_ID)//
+                .add(Block.class, SubType.DIRECTORY, BlockContract.PATTERN_BLOCKS_NAME, BlockContract.CONTENT_URI_PATTERN_BLOCKS_NAME)//
 
-            // Fragment can Nesting!
-            .addFragment(new DaoRESTFulLikeSubFragment(this.getContentProvider()));//
+                        // Fragment can Nesting!
+                .addFragment(DaoRESTFulLikeSubFragment.class);// .addFragment(new DaoRESTFulLikeSubFragment());
     }
 
     @Override
