@@ -29,16 +29,19 @@ import android.test.suitebuilder.annotation.MediumTest;
 import com.tojc.ormlite.android.test.provider.AccountContract;
 import com.tojc.ormlite.android.test.provider.UnderTestSampleProvider;
 
+// TODO: This test class is cutting corners. Need to modify them.
 @MediumTest
-public class TestOrmLiteSimpleProvider extends OrmLiteSimpleProviderTestBase {
+public class TestOrmLiteSimpleProviderCase2 extends OrmLiteSimpleProviderTestBase {
+    protected static final String TEST_FRAGMENT_KEY_NAME = "UnderTestSampleFragment";
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         getHelper().resetAllTables();
 
-        this.provider = new UnderTestSampleProvider();
+        this.provider = new UnderTestSampleProvider(2);
         this.provider.attachInfo(getInstrumentation().getContext(), null);
-        assertEquals(this.provider.getContentProviderFragments().size(), 0);
+        assertEquals(this.provider.getContentProviderFragments().size(), 1);
 
         this.resolver = new MockContentResolver();
         this.resolver.addProvider(AccountContract.AUTHORITY, provider);
@@ -46,33 +49,41 @@ public class TestOrmLiteSimpleProvider extends OrmLiteSimpleProviderTestBase {
 
     public void testOnInsert() {
         super.functionOnInsert();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testOnDelete() {
         super.functionOnDelete();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testOnUpdate() {
         super.functionOnUpdate();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testOnQuery() {
         super.functionOnQuery();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testOnQueryWithOrder() {
         super.functionOnQueryWithOrder();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testContentProviderAcquisition() throws RemoteException {
         super.functionContentProviderAcquisition();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 2);
     }
 
     public void testBulkInsert() {
         super.functionBulkInsert();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 13);
     }
 
     public void testApplyBatch() throws RemoteException, OperationApplicationException {
         super.functionApplyBatch();
+        assertEquals(this.getContentProviderFragment(TEST_FRAGMENT_KEY_NAME).getEventClassesList().size(), 6);
     }
 }

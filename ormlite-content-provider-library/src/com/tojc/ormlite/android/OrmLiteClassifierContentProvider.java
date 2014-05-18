@@ -96,6 +96,18 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         }
     }
 
+    /**
+     * ContentProviderFragment that has been added to MatcherController.
+     * This is for reference only. Please do not operate the collection.
+     *
+     * @return contentProviderFragments
+     * @since 1.0.5
+     * @see com.tojc.ormlite.android.framework.MatcherController#getContentProviderFragments()
+     */
+    public Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
+        return this.matcherController.getContentProviderFragments();
+    }
+
     /*
      * @see android.content.ContentProvider#getType(android.net.Uri)
      */

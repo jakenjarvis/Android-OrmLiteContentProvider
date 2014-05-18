@@ -80,20 +80,22 @@ import java.lang.reflect.Modifier;
  * Created by Jaken on 2014/05/08.
  */
 public enum EventClasses {
-    OnQuery(OnQueryEventDispatcher.class, OnQueryMultiEventListener.class, OnQueryMultiEventObject.class, OnQueryListener.class, OnQueryEventExchanger.class),
-    OnQueryCompleted(OnQueryCompletedEventDispatcher.class, OnQueryCompletedMultiEventListener.class, OnQueryCompletedMultiEventObject.class, OnQueryCompletedListener.class, OnQueryCompletedEventExchanger.class),
-    OnInsert(OnInsertEventDispatcher.class, OnInsertMultiEventListener.class, OnInsertMultiEventObject.class, OnInsertListener.class, OnInsertEventExchanger.class),
-    OnInsertCompleted(OnInsertCompletedEventDispatcher.class, OnInsertCompletedMultiEventListener.class, OnInsertCompletedMultiEventObject.class, OnInsertCompletedListener.class, OnInsertCompletedEventExchanger.class),
-    OnDelete(OnDeleteEventDispatcher.class, OnDeleteMultiEventListener.class, OnDeleteMultiEventObject.class, OnDeleteListener.class, OnDeleteEventExchanger.class),
-    OnDeleteCompleted(OnDeleteCompletedEventDispatcher.class, OnDeleteCompletedMultiEventListener.class, OnDeleteCompletedMultiEventObject.class, OnDeleteCompletedListener.class, OnDeleteCompletedEventExchanger.class),
-    OnUpdate(OnUpdateEventDispatcher.class, OnUpdateMultiEventListener.class, OnUpdateMultiEventObject.class, OnUpdateListener.class, OnUpdateEventExchanger.class),
-    OnUpdateCompleted(OnUpdateCompletedEventDispatcher.class, OnUpdateCompletedMultiEventListener.class, OnUpdateCompletedMultiEventObject.class, OnUpdateCompletedListener.class, OnUpdateCompletedEventExchanger.class),
-    OnBeforeBulkInsert(OnBeforeBulkInsertEventDispatcher.class, OnBeforeBulkInsertMultiEventListener.class, OnBeforeBulkInsertMultiEventObject.class, OnBeforeBulkInsertListener.class, OnBeforeBulkInsertEventExchanger.class),
-    OnBulkInsert(OnBulkInsertEventDispatcher.class, OnBulkInsertMultiEventListener.class, OnBulkInsertMultiEventObject.class, OnBulkInsertListener.class, OnBulkInsertEventExchanger.class),
-    OnAfterBulkInsert(OnAfterBulkInsertEventDispatcher.class, OnAfterBulkInsertMultiEventListener.class, OnAfterBulkInsertMultiEventObject.class, OnAfterBulkInsertListener.class, OnAfterBulkInsertEventExchanger.class),
-    OnBulkInsertCompleted(OnBulkInsertCompletedEventDispatcher.class, OnBulkInsertCompletedMultiEventListener.class, OnBulkInsertCompletedMultiEventObject.class, OnBulkInsertCompletedListener.class, OnBulkInsertCompletedEventExchanger.class),
-    OnBeforeApplyBatch(OnBeforeApplyBatchEventDispatcher.class, OnBeforeApplyBatchMultiEventListener.class, OnBeforeApplyBatchMultiEventObject.class, OnBeforeApplyBatchListener.class, OnBeforeApplyBatchEventExchanger.class),
-    OnAfterApplyBatch(OnAfterApplyBatchEventDispatcher.class, OnAfterApplyBatchMultiEventListener.class, OnAfterApplyBatchMultiEventObject.class, OnAfterApplyBatchListener.class, OnAfterApplyBatchEventExchanger.class);
+    OnQuery(0x0001, OnQueryEventDispatcher.class, OnQueryMultiEventListener.class, OnQueryMultiEventObject.class, OnQueryListener.class, OnQueryEventExchanger.class),
+    OnQueryCompleted(0x0002, OnQueryCompletedEventDispatcher.class, OnQueryCompletedMultiEventListener.class, OnQueryCompletedMultiEventObject.class, OnQueryCompletedListener.class, OnQueryCompletedEventExchanger.class),
+    OnInsert(0x0004, OnInsertEventDispatcher.class, OnInsertMultiEventListener.class, OnInsertMultiEventObject.class, OnInsertListener.class, OnInsertEventExchanger.class),
+    OnInsertCompleted(0x0008, OnInsertCompletedEventDispatcher.class, OnInsertCompletedMultiEventListener.class, OnInsertCompletedMultiEventObject.class, OnInsertCompletedListener.class, OnInsertCompletedEventExchanger.class),
+    OnDelete(0x0010, OnDeleteEventDispatcher.class, OnDeleteMultiEventListener.class, OnDeleteMultiEventObject.class, OnDeleteListener.class, OnDeleteEventExchanger.class),
+    OnDeleteCompleted(0x0020, OnDeleteCompletedEventDispatcher.class, OnDeleteCompletedMultiEventListener.class, OnDeleteCompletedMultiEventObject.class, OnDeleteCompletedListener.class, OnDeleteCompletedEventExchanger.class),
+    OnUpdate(0x0040, OnUpdateEventDispatcher.class, OnUpdateMultiEventListener.class, OnUpdateMultiEventObject.class, OnUpdateListener.class, OnUpdateEventExchanger.class),
+    OnUpdateCompleted(0x0080, OnUpdateCompletedEventDispatcher.class, OnUpdateCompletedMultiEventListener.class, OnUpdateCompletedMultiEventObject.class, OnUpdateCompletedListener.class, OnUpdateCompletedEventExchanger.class),
+    OnBeforeBulkInsert(0x0100, OnBeforeBulkInsertEventDispatcher.class, OnBeforeBulkInsertMultiEventListener.class, OnBeforeBulkInsertMultiEventObject.class, OnBeforeBulkInsertListener.class, OnBeforeBulkInsertEventExchanger.class),
+    OnBulkInsert(0x0200, OnBulkInsertEventDispatcher.class, OnBulkInsertMultiEventListener.class, OnBulkInsertMultiEventObject.class, OnBulkInsertListener.class, OnBulkInsertEventExchanger.class),
+    OnAfterBulkInsert(0x0400, OnAfterBulkInsertEventDispatcher.class, OnAfterBulkInsertMultiEventListener.class, OnAfterBulkInsertMultiEventObject.class, OnAfterBulkInsertListener.class, OnAfterBulkInsertEventExchanger.class),
+    OnBulkInsertCompleted(0x0800, OnBulkInsertCompletedEventDispatcher.class, OnBulkInsertCompletedMultiEventListener.class, OnBulkInsertCompletedMultiEventObject.class, OnBulkInsertCompletedListener.class, OnBulkInsertCompletedEventExchanger.class),
+    OnBeforeApplyBatch(0x1000, OnBeforeApplyBatchEventDispatcher.class, OnBeforeApplyBatchMultiEventListener.class, OnBeforeApplyBatchMultiEventObject.class, OnBeforeApplyBatchListener.class, OnBeforeApplyBatchEventExchanger.class),
+    OnAfterApplyBatch(0x2000, OnAfterApplyBatchEventDispatcher.class, OnAfterApplyBatchMultiEventListener.class, OnAfterApplyBatchMultiEventObject.class, OnAfterApplyBatchListener.class, OnAfterApplyBatchEventExchanger.class);
+
+    private final long internalId;
 
     private final Class<?> clazzEventDispatcher;
 
@@ -103,12 +105,21 @@ public enum EventClasses {
     private final Class<?> clazzContentProviderListener;
     private final Class<?> clazzEventExchanger;
 
-    private EventClasses(Class<?> clazzEventDispatcher, Class<?> clazzMultiEventListener, Class<?> clazzMultiEventObject, Class<?> clazzContentProviderListener, Class<?> clazzEventExchanger) {
+    private EventClasses(long internalId, Class<?> clazzEventDispatcher, Class<?> clazzMultiEventListener, Class<?> clazzMultiEventObject, Class<?> clazzContentProviderListener, Class<?> clazzEventExchanger) {
+        this.internalId = internalId;
         this.clazzEventDispatcher = clazzEventDispatcher;
         this.clazzMultiEventListener = clazzMultiEventListener;
         this.clazzMultiEventObject = clazzMultiEventObject;
         this.clazzContentProviderListener = clazzContentProviderListener;
         this.clazzEventExchanger = clazzEventExchanger;
+    }
+
+    /**
+     * This method is for testing. I will change this value on a whim. Please do not use.
+     * @return
+     */
+    public long getInternalId() {
+        return this.internalId;
     }
 
     public static EventClasses toEventClasses(String name) {

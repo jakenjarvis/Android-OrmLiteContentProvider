@@ -28,14 +28,16 @@ import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
+import com.tojc.ormlite.android.test.provider.MembershipContract;
 
 /**
  * Did you know ? All annotations and parameters are optionnal ! You just need the @Contract
+ *
  * @author SNI
  */
-@DatabaseTable(tableName = "membership")
-@DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "membership")
-@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "membership")
+@DatabaseTable(tableName = MembershipContract.TABLE_NAME)
+@DefaultContentUri(authority = MembershipContract.AUTHORITY, path = MembershipContract.CONTENT_URI_PATH)
+@DefaultContentMimeTypeVnd(name = MembershipContract.MIMETYPE_NAME, type = MembershipContract.MIMETYPE_TYPE)
 public class Membership {
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
