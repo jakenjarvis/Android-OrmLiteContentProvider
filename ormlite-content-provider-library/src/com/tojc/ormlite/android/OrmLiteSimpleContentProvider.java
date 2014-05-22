@@ -43,12 +43,9 @@ import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
  * @author Jaken
  */
 public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T> {
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256
-     * .ormlite.android.apptools .OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnQueryListener
      */
     @Override
     public Cursor onQuery(T helper, SQLiteDatabase db, MatcherPattern target, QueryParameters parameter) {
@@ -83,12 +80,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnInsertListener
      */
     @Override
     public Uri onInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
@@ -103,12 +97,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnDeleteListener
      */
     @Override
     public int onDelete(T helper, SQLiteDatabase db, MatcherPattern target, DeleteParameters parameter) {
@@ -135,12 +126,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnUpdateListener
      */
     @Override
     public int onUpdate(T helper, SQLiteDatabase db, MatcherPattern target, UpdateParameters parameter) {

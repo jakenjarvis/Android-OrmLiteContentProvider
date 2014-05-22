@@ -45,48 +45,88 @@ import java.util.List;
  * @author Jaken
  */
 public abstract class OrmLiteDefaultContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteClassifierContentProvider<T> {
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnQueryCompletedListener
+     */
     @Override
     public void onQueryCompleted(Cursor result, Uri uri, MatcherPattern target, QueryParameters parameter) {
         result.setNotificationUri(this.getContext().getContentResolver(), uri);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnInsertCompletedListener
+     */
     @Override
     public void onInsertCompleted(Uri result, Uri uri, MatcherPattern target, InsertParameters parameter) {
         this.getContext().getContentResolver().notifyChange(result, null);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnDeleteCompletedListener
+     */
     @Override
     public void onDeleteCompleted(int result, Uri uri, MatcherPattern target, DeleteParameters parameter) {
         this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnUpdateCompletedListener
+     */
     @Override
     public void onUpdateCompleted(int result, Uri uri, MatcherPattern target, UpdateParameters parameter) {
         this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnBeforeBulkInsertListener
+     */
     @Override
     public void onBeforeBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnBulkInsertListener
+     */
     @Override
     public Uri onBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
         return onInsert(helper, db, target, parameter);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnAfterBulkInsertListener
+     */
     @Override
     public void onAfterBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values) {
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnBulkInsertCompletedListener
+     */
     @Override
     public void onBulkInsertCompleted(int result, Uri uri) {
         this.getContext().getContentResolver().notifyChange(uri, null);
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnBeforeApplyBatchListener
+     */
     @Override
     public void onBeforeApplyBatch(T helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) {
     }
 
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnAfterApplyBatchListener
+     */
     @Override
     public void onAfterApplyBatch(T helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations, ContentProviderResult[] result) {
     }

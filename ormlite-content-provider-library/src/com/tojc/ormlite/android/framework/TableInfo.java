@@ -87,7 +87,7 @@ public class TableInfo implements Serializable, Validity {
 
                 // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
-                    // MEMO: Conforms to the discretion of ORMLite.
+                    // NOTE: Conforms to the discretion of ORMLite.
                     // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
                     // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
                     DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);

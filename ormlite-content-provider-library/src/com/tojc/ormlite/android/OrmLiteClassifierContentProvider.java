@@ -1,3 +1,24 @@
+/*
+ * This file is part of the Android-OrmLiteContentProvider package.
+ *
+ * Copyright (c) 2012, Android-OrmLiteContentProvider Team.
+ *                     Jaken Jarvis (jaken.jarvis@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * The author may be contacted via
+ * https://github.com/jakenjarvis/Android-OrmLiteContentProvider
+ */
 package com.tojc.ormlite.android;
 
 import android.content.ContentProviderOperation;
@@ -9,13 +30,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.tojc.ormlite.android.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.Parameter;
 import com.tojc.ormlite.android.framework.event.EventClasses;
 import com.tojc.ormlite.android.framework.event.EventController;
 import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
-import com.tojc.ormlite.android.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnAfterApplyBatchMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnAfterBulkInsertMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnBeforeApplyBatchMultiEventObject;
@@ -62,19 +83,25 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener
      * @see com.tojc.ormlite.android.event.listenerset
      */
-    public void registerEventListenerObject(String key, Object listener) {
+    protected final void registerEventListenerObject(String key, Object listener) {
         this.eventController.registerEventListenerObject(key, listener);
     }
+
+    /**
+     * This is the object which manages the collection of MatcherPattern.
+     * Please set the instance of MatcherController using setMatcherController().
+     */
+    private MatcherController matcherController = null;
 
     /**
      * Holds an instance of MatcherController. You must be at the stage of initialization, call the
      * add method to class and registration information in table, the pattern required to
      * UriMatcher. In addition, the registration is complete, you must call initialize method in the
      * end.
+     *
+     * @param controller
      */
-    private MatcherController matcherController = null;
-
-    protected void setMatcherController(MatcherController controller) {
+    protected final void setMatcherController(MatcherController controller) {
         this.matcherController = controller;
         controller.initialize();
 
@@ -101,20 +128,22 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * This is for reference only. Please do not operate the collection.
      *
      * @return contentProviderFragments
-     * @since 1.0.5
      * @see com.tojc.ormlite.android.framework.MatcherController#getContentProviderFragments()
+     * @since 1.0.5
      */
-    public Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
+    public final Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
         return this.matcherController.getContentProviderFragments();
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#getType(android.net.Uri)
      */
     @Override
     public String getType(Uri uri) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -125,14 +154,16 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return pattern.getMimeTypeVndString();
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[],
      * java.lang.String, java.lang.String[], java.lang.String)
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -148,6 +179,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[],
      * java.lang.String, java.lang.String[], java.lang.String)
      * @see com.tojc.ormlite.android.event.listener.OnQueryListener
@@ -169,13 +204,15 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -191,6 +228,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
      * @see com.tojc.ormlite.android.event.listener.OnInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnInsertCompletedListener
@@ -211,14 +252,16 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
      * java.lang.String[])
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -234,6 +277,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
      * java.lang.String[])
      * @see com.tojc.ormlite.android.event.listener.OnDeleteListener
@@ -255,14 +302,16 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues,
      * java.lang.String, java.lang.String[])
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -278,6 +327,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues,
      * java.lang.String, java.lang.String[])
      * @see com.tojc.ormlite.android.event.listener.OnUpdateListener
@@ -299,7 +352,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
      * android.content.ContentValues[])
      * @since 1.0.1
@@ -307,7 +362,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         if (!this.matcherController.hasPreinitialized()) {
-            throw new IllegalStateException("Controller has not been initialized.");
+            throw new IllegalStateException("MatcherController has not been initialized.");
         }
 
         int patternCode = this.matcherController.getUriMatcher().match(uri);
@@ -322,9 +377,15 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
      * android.content.ContentValues[])
+     * @see com.tojc.ormlite.android.event.listener.OnBeforeBulkInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnBulkInsertListener
+     * @see com.tojc.ormlite.android.event.listener.OnAfterBulkInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnBulkInsertCompletedListener
      * @since 1.0.5
      */
@@ -364,7 +425,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
-    /*
+    /**
+     * You do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
      * @since 1.0.1
      */
@@ -376,6 +439,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This method is for internal use only. Please do not call.
+     * If you're a need, you can override this method.
+     * But, you do not need to be changed in normal conditions of use.
+     *
      * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
      * @see com.tojc.ormlite.android.event.listener.OnBeforeApplyBatchListener
      * @see com.tojc.ormlite.android.event.listener.OnAfterApplyBatchListener
@@ -384,13 +451,17 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected ContentProviderResult[] internalOnApplyBatch(ContentProviderResult[] result, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
         db.beginTransaction();
         try {
-            // MEMO: Notify all listeners.
+            // NOTE: Notify all listeners.
+            // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+            // That is a specification, because can not be associated with MatcherPattern.
             OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, this.getHelper(), db, operations);
             this.raiseEvent(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch, null);
 
             result = super.applyBatch(operations);
 
-            // MEMO: Notify all listeners.
+            // NOTE: Notify all listeners.
+            // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+            // That is a specification, because can not be associated with MatcherPattern.
             OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, this.getHelper(), db, operations, result);
             this.raiseEvent(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch, null);
 
@@ -403,6 +474,14 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         return result;
     }
 
+    /**
+     * This is the trigger to notify the event.
+     *
+     * @param eventClasses
+     * @param param
+     * @param pattern
+     * @param <V>
+     */
     private <V extends EventObject> void raiseEvent(EventClasses eventClasses, V param, MatcherPattern pattern) {
         if (pattern != null) {
             OrmLiteContentProviderFragment<?, ?> fragment = pattern.getParentContentProviderFragment();
@@ -418,6 +497,13 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This is called at handles the event of fragment.
+     * If you want to change the event-handling, please override this method.
+     * You do not need to be changed in normal conditions of use. Before you can override here,
+     * please consider that you want to override the OrmLiteContentProviderFragment#getFragmentEventHandling().
+     * <p/>
+     * NOTE: This method has the potential to change the interface in the future.
+     *
      * @param eventClasses
      * @param param
      * @param fragment
@@ -451,10 +537,27 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         }
     }
 
+    /**
+     * This is wrapping the EventController#raise() for onFragmentEventHandling().
+     * Please do not call this in other than onFragmentEventHandling().
+     *
+     * @param eventClasses
+     * @param key
+     * @param param
+     * @param <V>
+     */
     protected final <V extends EventObject> void raise(EventClasses eventClasses, String key, V param) {
         this.eventController.raise(eventClasses, key, param);
     }
 
+    /**
+     * This is wrapping the EventController#containsEventKey() for onFragmentEventHandling().
+     * Please do not call this in other than onFragmentEventHandling().
+     *
+     * @param eventClasses
+     * @param key
+     * @return
+     */
     protected final boolean containsEventKey(EventClasses eventClasses, String key) {
         return this.eventController.containsEventKey(eventClasses, key);
     }

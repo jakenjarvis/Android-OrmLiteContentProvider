@@ -55,7 +55,7 @@ public class MatcherController {
     private Map<String, OrmLiteContentProviderFragment<?, ?>> contentProviderFragments;
 
     private TableInfo lastAddTableInfo = null;
-    // MEMO: LIFO stack list. Support of Queue and Deque from API-Lv9...
+    // NOTE: LIFO stack list. Support of Queue and Deque from API-Lv9...
     private LinkedList<OrmLiteContentProviderFragment<?, ?>> stackFragments = null;
 
     /**

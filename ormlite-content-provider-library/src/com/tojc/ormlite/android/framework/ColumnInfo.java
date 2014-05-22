@@ -36,7 +36,7 @@ import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
 public class ColumnInfo implements Serializable, Validity {
     private static final long serialVersionUID = -210690551772340412L;
 
-    private transient Field field; // MEMO: findbugs : SE_BAD_FIELD
+    private transient Field field; // NOTE: findbugs : SE_BAD_FIELD
     private String columnName;
     private SortOrderInfo defaultSortOrderInfo;
     private ProjectionMapInfo projectionMapInfo;
