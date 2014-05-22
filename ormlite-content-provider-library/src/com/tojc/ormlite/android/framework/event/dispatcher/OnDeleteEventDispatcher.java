@@ -1,8 +1,8 @@
 package com.tojc.ormlite.android.framework.event.dispatcher;
 
 import com.tojc.ormlite.android.framework.event.EventDispatcherBase;
-import com.tojc.ormlite.android.framework.event.multieventlistener.OnDeleteMultiEventListener;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.listener.OnDeleteMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnDeleteMultiEventObject;
 
 /**
  * Created by Jaken on 2014/05/05.

@@ -1,6 +1,6 @@
 package com.tojc.ormlite.android.framework.event;
 
-import com.tojc.ormlite.android.framework.event.multieventbase.MultiEventListenerInterfaceBase;
+import com.tojc.ormlite.android.framework.event.multievent.MultiEventListenerInterfaceBase;
 
 import java.util.EventObject;
 

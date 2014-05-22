@@ -1,8 +1,8 @@
 package com.tojc.ormlite.android.framework.event.dispatcher;
 
 import com.tojc.ormlite.android.framework.event.EventDispatcherBase;
-import com.tojc.ormlite.android.framework.event.multieventlistener.OnBeforeBulkInsertMultiEventListener;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeBulkInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.listener.OnBeforeBulkInsertMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnBeforeBulkInsertMultiEventObject;
 
 /**
  * Created by Jaken on 2014/05/13.

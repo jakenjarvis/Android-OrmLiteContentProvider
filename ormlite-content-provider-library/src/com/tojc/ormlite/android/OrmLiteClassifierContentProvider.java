@@ -15,21 +15,21 @@ import com.tojc.ormlite.android.framework.Parameter;
 import com.tojc.ormlite.android.framework.event.EventClasses;
 import com.tojc.ormlite.android.framework.event.EventController;
 import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
-import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterApplyBatchMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnAfterBulkInsertMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeApplyBatchMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnBeforeBulkInsertMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnBulkInsertMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnDeleteMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnInsertCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnInsertMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnQueryCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnQueryMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateMultiEventObject;
+import com.tojc.ormlite.android.event.listenerset.DefaultContentProviderAllListenerSet;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnAfterApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnAfterBulkInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnBeforeApplyBatchMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnBeforeBulkInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnBulkInsertCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnBulkInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnDeleteCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnDeleteMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnInsertCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnInsertMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateMultiEventObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,8 +59,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      *
      * @param key      Specify a unique event listener key to identify.(Grouping for each object)
      * @param listener Listener object to register
-     * @see com.tojc.ormlite.android.framework.event.listener
-     * @see com.tojc.ormlite.android.framework.event.listenerset
+     * @see com.tojc.ormlite.android.event.listener
+     * @see com.tojc.ormlite.android.event.listenerset
      */
     public void registerEventListenerObject(String key, Object listener) {
         this.eventController.registerEventListenerObject(key, listener);
@@ -150,8 +150,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     /**
      * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[],
      * java.lang.String, java.lang.String[], java.lang.String)
-     * @see com.tojc.ormlite.android.framework.event.listener.OnQueryListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnQueryCompletedListener
+     * @see com.tojc.ormlite.android.event.listener.OnQueryListener
+     * @see com.tojc.ormlite.android.event.listener.OnQueryCompletedListener
      * @since 1.0.5
      */
     protected Cursor internalOnQuery(Cursor result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
@@ -192,8 +192,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
     /**
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
-     * @see com.tojc.ormlite.android.framework.event.listener.OnInsertListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnInsertCompletedListener
+     * @see com.tojc.ormlite.android.event.listener.OnInsertListener
+     * @see com.tojc.ormlite.android.event.listener.OnInsertCompletedListener
      * @since 1.0.5
      */
     protected Uri internalOnInsert(Uri result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
@@ -236,8 +236,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     /**
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String,
      * java.lang.String[])
-     * @see com.tojc.ormlite.android.framework.event.listener.OnDeleteListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnDeleteCompletedListener
+     * @see com.tojc.ormlite.android.event.listener.OnDeleteListener
+     * @see com.tojc.ormlite.android.event.listener.OnDeleteCompletedListener
      * @since 1.0.5
      */
     protected int internalOnDelete(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
@@ -280,8 +280,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     /**
      * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues,
      * java.lang.String, java.lang.String[])
-     * @see com.tojc.ormlite.android.framework.event.listener.OnUpdateListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnUpdateCompletedListener
+     * @see com.tojc.ormlite.android.event.listener.OnUpdateListener
+     * @see com.tojc.ormlite.android.event.listener.OnUpdateCompletedListener
      * @since 1.0.5
      */
     protected int internalOnUpdate(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
@@ -324,8 +324,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     /**
      * @see android.content.ContentProvider#bulkInsert(android.net.Uri,
      * android.content.ContentValues[])
-     * @see com.tojc.ormlite.android.framework.event.listener.OnBulkInsertListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnBulkInsertCompletedListener
+     * @see com.tojc.ormlite.android.event.listener.OnBulkInsertListener
+     * @see com.tojc.ormlite.android.event.listener.OnBulkInsertCompletedListener
      * @since 1.0.5
      */
     protected int internalOnBulkInsert(int result, SQLiteDatabase db, MatcherPattern pattern, Uri uri, ContentValues[] values) {
@@ -377,8 +377,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
     /**
      * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
-     * @see com.tojc.ormlite.android.framework.event.listener.OnBeforeApplyBatchListener
-     * @see com.tojc.ormlite.android.framework.event.listener.OnAfterApplyBatchListener
+     * @see com.tojc.ormlite.android.event.listener.OnBeforeApplyBatchListener
+     * @see com.tojc.ormlite.android.event.listener.OnAfterApplyBatchListener
      * @since 1.0.5
      */
     protected ContentProviderResult[] internalOnApplyBatch(ContentProviderResult[] result, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {

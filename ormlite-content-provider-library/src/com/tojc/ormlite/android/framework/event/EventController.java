@@ -1,7 +1,7 @@
 package com.tojc.ormlite.android.framework.event;
 
-import com.tojc.ormlite.android.framework.event.listenerbase.ContentProviderEventListenerInterfaceBase;
-import com.tojc.ormlite.android.framework.event.multieventbase.MultiEventListenerInterfaceBase;
+import com.tojc.ormlite.android.framework.event.expandevent.ContentProviderEventListenerInterfaceBase;
+import com.tojc.ormlite.android.framework.event.multievent.MultiEventListenerInterfaceBase;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

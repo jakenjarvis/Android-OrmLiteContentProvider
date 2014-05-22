@@ -11,7 +11,7 @@ import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.OperationParameters;
 import com.tojc.ormlite.android.framework.event.EventClasses;
-import com.tojc.ormlite.android.framework.event.listenerset.DefaultContentProviderAllListenerSet;
+import com.tojc.ormlite.android.event.listenerset.DefaultContentProviderAllListenerSet;
 import com.tojc.ormlite.android.test.provider.SampleHelper;
 import com.tojc.ormlite.android.test.provider.UnderTestSampleProvider;
 

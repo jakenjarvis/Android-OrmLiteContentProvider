@@ -14,7 +14,7 @@ import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MatcherPattern;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 import com.tojc.ormlite.android.framework.OperationParameters;
-import com.tojc.ormlite.android.framework.event.listenerset.DefaultOnQueryListenerSet;
+import com.tojc.ormlite.android.event.listenerset.DefaultOnQueryListenerSet;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Car;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.model.Fuel;
 import com.tojc.ormlite.android.ormlitecontentprovider.fragment.sample.provider.CarContract;

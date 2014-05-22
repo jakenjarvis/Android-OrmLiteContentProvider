@@ -4,10 +4,10 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.tojc.ormlite.android.framework.event.multieventlistener.OnInsertCompletedMultiEventListener;
-import com.tojc.ormlite.android.framework.event.multieventlistener.OnUpdateCompletedMultiEventListener;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnInsertCompletedMultiEventObject;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnUpdateCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.listener.OnInsertCompletedMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multievent.listener.OnUpdateCompletedMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnInsertCompletedMultiEventObject;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateCompletedMultiEventObject;
 
 /**
  * Created by Jaken on 2014/05/07.

@@ -1,10 +1,10 @@
 package com.tojc.ormlite.android.framework.event.exchanger;
 
 import com.tojc.ormlite.android.framework.event.EventExchangerBase;
-import com.tojc.ormlite.android.framework.event.listener.OnQueryListener;
-import com.tojc.ormlite.android.framework.event.listenerbase.ContentProviderEventListenerInterfaceBase;
-import com.tojc.ormlite.android.framework.event.multieventlistener.OnQueryMultiEventListener;
-import com.tojc.ormlite.android.framework.event.multieventobject.OnQueryMultiEventObject;
+import com.tojc.ormlite.android.event.listener.OnQueryListener;
+import com.tojc.ormlite.android.framework.event.expandevent.ContentProviderEventListenerInterfaceBase;
+import com.tojc.ormlite.android.framework.event.multievent.listener.OnQueryMultiEventListener;
+import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryMultiEventObject;
 
 /**
  * Created by Jaken on 2014/05/07.

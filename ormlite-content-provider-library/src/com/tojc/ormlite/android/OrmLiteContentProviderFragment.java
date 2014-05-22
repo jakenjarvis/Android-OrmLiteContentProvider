@@ -4,7 +4,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
-import com.tojc.ormlite.android.framework.event.multieventbase.MultiEventListenerInterfaceBase;
+import com.tojc.ormlite.android.framework.event.multievent.MultiEventListenerInterfaceBase;
 
 import java.io.Serializable;
 
