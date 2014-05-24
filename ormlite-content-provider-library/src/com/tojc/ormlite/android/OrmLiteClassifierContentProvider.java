@@ -51,6 +51,8 @@ import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryComplet
 import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateMultiEventObject;
+import com.tojc.ormlite.android.framework.transaction.DefaultTransactionWrapper;
+import com.tojc.ormlite.android.framework.transaction.TransactionWrapperInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,6 +126,24 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     }
 
     /**
+     * This class is wrapping the processing of transaction.
+     */
+    private TransactionWrapperInterface transactionWrapper = createTransactionWrapper();
+
+    /**
+     * You can change the processing of transaction by switching object to be generated.
+     * If you want to change the transaction process, please override this method.
+     * You do not need to be changed in normal conditions of use.
+     *
+     * @return
+     * @see com.tojc.ormlite.android.framework.transaction.DefaultTransactionWrapper
+     * @see com.tojc.ormlite.android.framework.transaction.SQLiteDatabaseTransactionWrapper
+     */
+    protected TransactionWrapperInterface createTransactionWrapper() {
+        return new DefaultTransactionWrapper();
+    }
+
+    /**
      * ContentProviderFragment that has been added to MatcherController.
      * This is for reference only. Please do not operate the collection.
      *
@@ -175,7 +195,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         Parameter parameter = new Parameter(uri, projection, selection, selectionArgs, sortOrder);
         SQLiteDatabase db = this.getHelper().getReadableDatabase();
 
-        return this.internalOnQuery(null, db, pattern, parameter);
+        return this.internalOnQuery(db, pattern, parameter);
     }
 
     /**
@@ -189,19 +209,32 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnQueryCompletedListener
      * @since 1.0.5
      */
-    protected Cursor internalOnQuery(Cursor result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
-        Uri uri = parameter.getUri();
+    protected Cursor internalOnQuery(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
+        final Uri uri = parameter.getUri();
 
-        OnQueryMultiEventObject paramOnQuery = new OnQueryMultiEventObject(this, this.getHelper(), db, pattern, parameter);
-        paramOnQuery.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnQuery, paramOnQuery, pattern);
-        result = paramOnQuery.getReturnValue();
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.Query,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionListener<Cursor>() {
+                    @Override
+                    public Cursor onTransaction() {
+                        Cursor result = null;
+                        OnQueryMultiEventObject paramOnQuery = new OnQueryMultiEventObject(this, getHelper(), db, pattern, parameter);
+                        paramOnQuery.setReturnValue(result);
+                        raiseEvent(EventClasses.OnQuery, paramOnQuery, pattern);
+                        return paramOnQuery.getReturnValue();
+                    }
 
-        if (result != null) {
-            OnQueryCompletedMultiEventObject paramOnQueryCompleted = new OnQueryCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnQueryCompleted, paramOnQueryCompleted, pattern);
-        }
-        return result;
+                    @Override
+                    public void onAfterTransactionSuccessful(Cursor result) {
+                        if (result != null) {
+                            OnQueryCompletedMultiEventObject paramOnQueryCompleted = new OnQueryCompletedMultiEventObject(this, result, uri, pattern, parameter);
+                            raiseEvent(EventClasses.OnQueryCompleted, paramOnQueryCompleted, pattern);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -224,7 +257,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         Parameter parameter = new Parameter(uri, values);
         SQLiteDatabase db = this.getHelper().getWritableDatabase();
 
-        return this.internalOnInsert(null, db, pattern, parameter);
+        return this.internalOnInsert(db, pattern, parameter);
     }
 
     /**
@@ -237,19 +270,32 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnInsertCompletedListener
      * @since 1.0.5
      */
-    protected Uri internalOnInsert(Uri result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
-        Uri uri = parameter.getUri();
+    protected Uri internalOnInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
+        final Uri uri = parameter.getUri();
 
-        OnInsertMultiEventObject paramOnInsert = new OnInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
-        paramOnInsert.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnInsert, paramOnInsert, pattern);
-        result = paramOnInsert.getReturnValue();
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.Insert,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionListener<Uri>() {
+                    @Override
+                    public Uri onTransaction() {
+                        Uri result = null;
+                        OnInsertMultiEventObject paramOnInsert = new OnInsertMultiEventObject(this, getHelper(), db, pattern, parameter);
+                        paramOnInsert.setReturnValue(result);
+                        raiseEvent(EventClasses.OnInsert, paramOnInsert, pattern);
+                        return paramOnInsert.getReturnValue();
+                    }
 
-        if (result != null) {
-            OnInsertCompletedMultiEventObject paramOnInsertCompleted = new OnInsertCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnInsertCompleted, paramOnInsertCompleted, pattern);
-        }
-        return result;
+                    @Override
+                    public void onAfterTransactionSuccessful(Uri result) {
+                        if (result != null) {
+                            OnInsertCompletedMultiEventObject paramOnInsertCompleted = new OnInsertCompletedMultiEventObject(this, result, uri, pattern, parameter);
+                            raiseEvent(EventClasses.OnInsertCompleted, paramOnInsertCompleted, pattern);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -273,7 +319,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         Parameter parameter = new Parameter(uri, selection, selectionArgs);
         SQLiteDatabase db = this.getHelper().getWritableDatabase();
 
-        return this.internalOnDelete(-1, db, pattern, parameter);
+        return this.internalOnDelete(db, pattern, parameter);
     }
 
     /**
@@ -287,19 +333,32 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnDeleteCompletedListener
      * @since 1.0.5
      */
-    protected int internalOnDelete(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
-        Uri uri = parameter.getUri();
+    protected int internalOnDelete(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
+        final Uri uri = parameter.getUri();
 
-        OnDeleteMultiEventObject paramOnDelete = new OnDeleteMultiEventObject(this, this.getHelper(), db, pattern, parameter);
-        paramOnDelete.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnDelete, paramOnDelete, pattern);
-        result = paramOnDelete.getReturnValue();
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.Delete,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+                    @Override
+                    public Integer onTransaction() {
+                        int result = -1;
+                        OnDeleteMultiEventObject paramOnDelete = new OnDeleteMultiEventObject(this, getHelper(), db, pattern, parameter);
+                        paramOnDelete.setReturnValue(result);
+                        raiseEvent(EventClasses.OnDelete, paramOnDelete, pattern);
+                        return paramOnDelete.getReturnValue();
+                    }
 
-        if (result >= 0) {
-            OnDeleteCompletedMultiEventObject paramOnDeleteCompleted = new OnDeleteCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnDeleteCompleted, paramOnDeleteCompleted, pattern);
-        }
-        return result;
+                    @Override
+                    public void onAfterTransactionSuccessful(Integer result) {
+                        if (result >= 0) {
+                            OnDeleteCompletedMultiEventObject paramOnDeleteCompleted = new OnDeleteCompletedMultiEventObject(this, result, uri, pattern, parameter);
+                            raiseEvent(EventClasses.OnDeleteCompleted, paramOnDeleteCompleted, pattern);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -323,7 +382,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         Parameter parameter = new Parameter(uri, values, selection, selectionArgs);
         SQLiteDatabase db = this.getHelper().getWritableDatabase();
 
-        return this.internalOnUpdate(-1, db, pattern, parameter);
+        return this.internalOnUpdate(db, pattern, parameter);
     }
 
     /**
@@ -337,19 +396,32 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnUpdateCompletedListener
      * @since 1.0.5
      */
-    protected int internalOnUpdate(int result, SQLiteDatabase db, MatcherPattern pattern, Parameter parameter) {
-        Uri uri = parameter.getUri();
+    protected int internalOnUpdate(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
+        final Uri uri = parameter.getUri();
 
-        OnUpdateMultiEventObject paramOnUpdate = new OnUpdateMultiEventObject(this, this.getHelper(), db, pattern, parameter);
-        paramOnUpdate.setReturnValue(result);
-        this.raiseEvent(EventClasses.OnUpdate, paramOnUpdate, pattern);
-        result = paramOnUpdate.getReturnValue();
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.Update,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+                    @Override
+                    public Integer onTransaction() {
+                        int result = -1;
+                        OnUpdateMultiEventObject paramOnUpdate = new OnUpdateMultiEventObject(this, getHelper(), db, pattern, parameter);
+                        paramOnUpdate.setReturnValue(result);
+                        raiseEvent(EventClasses.OnUpdate, paramOnUpdate, pattern);
+                        return paramOnUpdate.getReturnValue();
+                    }
 
-        if (result >= 0) {
-            OnUpdateCompletedMultiEventObject paramOnUpdateCompleted = new OnUpdateCompletedMultiEventObject(this, result, uri, pattern, parameter);
-            this.raiseEvent(EventClasses.OnUpdateCompleted, paramOnUpdateCompleted, pattern);
-        }
-        return result;
+                    @Override
+                    public void onAfterTransactionSuccessful(Integer result) {
+                        if (result >= 0) {
+                            OnUpdateCompletedMultiEventObject paramOnUpdateCompleted = new OnUpdateCompletedMultiEventObject(this, result, uri, pattern, parameter);
+                            raiseEvent(EventClasses.OnUpdateCompleted, paramOnUpdateCompleted, pattern);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -373,7 +445,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
 
         SQLiteDatabase db = this.getHelper().getWritableDatabase();
 
-        return this.internalOnBulkInsert(0, db, pattern, uri, values);
+        return this.internalOnBulkInsert(db, pattern, uri, values);
     }
 
     /**
@@ -389,40 +461,48 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnBulkInsertCompletedListener
      * @since 1.0.5
      */
-    protected int internalOnBulkInsert(int result, SQLiteDatabase db, MatcherPattern pattern, Uri uri, ContentValues[] values) {
-        db.beginTransaction();
-        try {
-            List<ContentValues> arrayBeforeBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
-            OnBeforeBulkInsertMultiEventObject paramOnBeforeBulkInsert = new OnBeforeBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, uri, arrayBeforeBulkInsertValues);
-            this.raiseEvent(EventClasses.OnBeforeBulkInsert, paramOnBeforeBulkInsert, pattern);
+    protected int internalOnBulkInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Uri uri, final ContentValues[] values) {
 
-            for (ContentValues value : values) {
-                Parameter parameter = new Parameter(uri, value);
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.BulkInsert,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+                    @Override
+                    public Integer onTransaction() {
+                        int result = 0;
+                        List<ContentValues> arrayBeforeBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
+                        OnBeforeBulkInsertMultiEventObject paramOnBeforeBulkInsert = new OnBeforeBulkInsertMultiEventObject(this, getHelper(), db, pattern, uri, arrayBeforeBulkInsertValues);
+                        raiseEvent(EventClasses.OnBeforeBulkInsert, paramOnBeforeBulkInsert, pattern);
 
-                OnBulkInsertMultiEventObject paramOnBulkInsert = new OnBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, parameter);
-                paramOnBulkInsert.setReturnValue(null);
-                this.raiseEvent(EventClasses.OnBulkInsert, paramOnBulkInsert, pattern);
-                Uri resultBulkInsert = paramOnBulkInsert.getReturnValue();
+                        for (ContentValues value : values) {
+                            Parameter parameter = new Parameter(uri, value);
 
-                if (resultBulkInsert != null) {
-                    result++;
+                            OnBulkInsertMultiEventObject paramOnBulkInsert = new OnBulkInsertMultiEventObject(this, getHelper(), db, pattern, parameter);
+                            paramOnBulkInsert.setReturnValue(null);
+                            raiseEvent(EventClasses.OnBulkInsert, paramOnBulkInsert, pattern);
+                            Uri resultBulkInsert = paramOnBulkInsert.getReturnValue();
+
+                            if (resultBulkInsert != null) {
+                                result++;
+                            }
+                        }
+
+                        List<ContentValues> arrayAfterBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
+                        OnAfterBulkInsertMultiEventObject paramOnAfterBulkInsert = new OnAfterBulkInsertMultiEventObject(this, getHelper(), db, pattern, uri, arrayAfterBulkInsertValues);
+                        raiseEvent(EventClasses.OnAfterBulkInsert, paramOnAfterBulkInsert, pattern);
+                        return result;
+                    }
+
+                    @Override
+                    public void onAfterTransactionSuccessful(Integer result) {
+                        if (result >= 1) {
+                            OnBulkInsertCompletedMultiEventObject paramOnBulkInsertCompleted = new OnBulkInsertCompletedMultiEventObject(this, result, uri);
+                            raiseEvent(EventClasses.OnBulkInsertCompleted, paramOnBulkInsertCompleted, pattern);
+                        }
+                    }
                 }
-            }
-
-            List<ContentValues> arrayAfterBulkInsertValues = new ArrayList<ContentValues>(Arrays.asList(values));
-            OnAfterBulkInsertMultiEventObject paramOnAfterBulkInsert = new OnAfterBulkInsertMultiEventObject(this, this.getHelper(), db, pattern, uri, arrayAfterBulkInsertValues);
-            this.raiseEvent(EventClasses.OnAfterBulkInsert, paramOnAfterBulkInsert, pattern);
-
-            db.setTransactionSuccessful();
-
-            if (result >= 1) {
-                OnBulkInsertCompletedMultiEventObject paramOnBulkInsertCompleted = new OnBulkInsertCompletedMultiEventObject(this, result, uri);
-                this.raiseEvent(EventClasses.OnBulkInsertCompleted, paramOnBulkInsertCompleted, pattern);
-            }
-        } finally {
-            db.endTransaction();
-        }
-        return result;
+        );
     }
 
     /**
@@ -435,7 +515,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
         SQLiteDatabase db = this.getHelper().getWritableDatabase();
 
-        return this.internalOnApplyBatch(null, db, operations);
+        return this.internalOnApplyBatch(db, operations);
     }
 
     /**
@@ -448,30 +528,37 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnAfterApplyBatchListener
      * @since 1.0.5
      */
-    protected ContentProviderResult[] internalOnApplyBatch(ContentProviderResult[] result, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
-        db.beginTransaction();
-        try {
-            // NOTE: Notify all listeners.
-            // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
-            // That is a specification, because can not be associated with MatcherPattern.
-            OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, this.getHelper(), db, operations);
-            this.raiseEvent(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch, null);
+    protected ContentProviderResult[] internalOnApplyBatch(final SQLiteDatabase db, final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
 
-            result = super.applyBatch(operations);
+        return this.transactionWrapper.transaction(
+                TransactionWrapperInterface.ProcessType.ApplyBatch,
+                this.getHelper(),
+                db,
+                new TransactionWrapperInterface.OnTransactionThrowableListener<ContentProviderResult[], OperationApplicationException>() {
+                    @Override
+                    public ContentProviderResult[] onTransaction() throws OperationApplicationException {
+                        ContentProviderResult[] result = null;
+                        // NOTE: Notify all listeners.
+                        // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+                        // That is a specification, because can not be associated with MatcherPattern.
+                        OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, getHelper(), db, operations);
+                        raiseEvent(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch, null);
 
-            // NOTE: Notify all listeners.
-            // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
-            // That is a specification, because can not be associated with MatcherPattern.
-            OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, this.getHelper(), db, operations, result);
-            this.raiseEvent(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch, null);
+                        result = OrmLiteClassifierContentProvider.super.applyBatch(operations);
 
-            if (result != null) {
-                db.setTransactionSuccessful();
-            }
-        } finally {
-            db.endTransaction();
-        }
-        return result;
+                        // NOTE: Notify all listeners.
+                        // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+                        // That is a specification, because can not be associated with MatcherPattern.
+                        OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, getHelper(), db, operations, result);
+                        raiseEvent(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch, null);
+                        return result;
+                    }
+
+                    @Override
+                    public void onAfterTransactionSuccessful(ContentProviderResult[] result) {
+                    }
+                }
+        );
     }
 
     /**
