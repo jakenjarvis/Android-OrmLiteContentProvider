@@ -23,15 +23,16 @@ package com.tojc.ormlite.android.framework;
 
 import android.net.Uri;
 
-import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+import com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterface;
 
 import java.io.Serializable;
 
 /**
  * Manage the UriMatcher pattern. It holds information related to the pattern code.
+ *
  * @author Jaken
  */
 public class MatcherPattern implements Serializable, Validity {
@@ -39,7 +40,7 @@ public class MatcherPattern implements Serializable, Validity {
 
     private boolean initialized = false;
 
-    private OrmLiteContentProviderFragment<?, ?> parentContentProviderFragment;
+    private ContentProviderFragmentInterface<?, ?> parentContentProviderFragment;
 
     private TableInfo tableInfo;
     private SubType subType;
@@ -127,6 +128,7 @@ public class MatcherPattern implements Serializable, Validity {
 
     /**
      * Do not call this method. This is only used MatcherController and tests.
+     *
      * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      */
     protected void initialize() {
@@ -135,17 +137,19 @@ public class MatcherPattern implements Serializable, Validity {
 
     /**
      * This will get the ContentProviderFragment that are associated with as a parent.
+     *
      * @return Instance of ContentProviderFragment that are associated as a parent
      */
-    public OrmLiteContentProviderFragment<?, ?> getParentContentProviderFragment() {
+    public ContentProviderFragmentInterface<?, ?> getParentContentProviderFragment() {
         return this.parentContentProviderFragment;
     }
 
     /**
      * This associates the ContentProviderFragment as a parent.
+     *
      * @param parentContentProviderFragment
      */
-    public void setParentContentProviderFragment(OrmLiteContentProviderFragment<?, ?> parentContentProviderFragment) {
+    public void setParentContentProviderFragment(ContentProviderFragmentInterface<?, ?> parentContentProviderFragment) {
         this.parentContentProviderFragment = parentContentProviderFragment;
     }
 
@@ -153,11 +157,12 @@ public class MatcherPattern implements Serializable, Validity {
      * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation, or
      * want to override the setting of the DefaultContentUri annotation. This method can not be
      * called after MatcherController#hasPreinitialized().
+     *
+     * @param contentUriInfo
+     * @return Instance of the MatcherPattern class.
      * @see com.tojc.ormlite.android.annotation.info.ContentUriInfo
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
      * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
-     * @param contentUriInfo
-     * @return Instance of the MatcherPattern class.
      */
     public MatcherPattern setContentUri(ContentUriInfo contentUriInfo) {
         if (this.initialized) {
@@ -171,11 +176,12 @@ public class MatcherPattern implements Serializable, Validity {
      * Set the ContentUri. This is used when you are not using the DefaultContentUri annotation, or
      * want to override the setting of the DefaultContentUri annotation. This method can not be
      * called after MatcherController#hasPreinitialized().
-     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
-     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
+     *
      * @param authority
      * @param path
      * @return Instance of the MatcherPattern class.
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      */
     public MatcherPattern setContentUri(String authority, String path) {
         return this.setContentUri(new ContentUriInfo(authority, path));
@@ -185,11 +191,12 @@ public class MatcherPattern implements Serializable, Validity {
      * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd
      * annotation, or want to override the setting of the DefaultContentMimeTypeVnd annotation. This
      * method can not be called after MatcherController#hasPreinitialized().
+     *
+     * @param contentMimeTypeVndInfo
+     * @return Instance of the MatcherPattern class.
      * @see com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo
      * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
      * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
-     * @param contentMimeTypeVndInfo
-     * @return Instance of the MatcherPattern class.
      */
     public MatcherPattern setContentMimeTypeVnd(ContentMimeTypeVndInfo contentMimeTypeVndInfo) {
         if (this.initialized) {
@@ -204,11 +211,12 @@ public class MatcherPattern implements Serializable, Validity {
      * Set the MIME types. This is used when you are not using the DefaultContentMimeTypeVnd
      * annotation, or want to override the setting of the DefaultContentMimeTypeVnd annotation. This
      * method can not be called after MatcherController#hasPreinitialized().
-     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
-     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
+     *
      * @param name
      * @param type
      * @return Instance of the MatcherPattern class.
+     * @see com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd
+     * @see com.tojc.ormlite.android.framework.MatcherController#hasPreinitialized()
      */
     public MatcherPattern setContentMimeTypeVnd(String name, String type) {
         return this.setContentMimeTypeVnd(new ContentMimeTypeVndInfo(name, type));
@@ -245,11 +253,11 @@ public class MatcherPattern implements Serializable, Validity {
 
     /**
      * @return Return the concatenation string of Path and Pattern from ContentUri. <br>
-     *         ex)<br>
-     *         <code>
-     *         ContentUri = "content://com.example.app.provider/table2/dataset1"<br>
-     *         Return = "table2/dataset1"<br>
-     *     </code>
+     * ex)<br>
+     * <code>
+     * ContentUri = "content://com.example.app.provider/table2/dataset1"<br>
+     * Return = "table2/dataset1"<br>
+     * </code>
      */
     public String getPathAndPatternString() {
         return this.contentUriInfo.getPath() + "/" + this.pattern;
@@ -264,10 +272,10 @@ public class MatcherPattern implements Serializable, Validity {
 
     /**
      * @return Returns the full MIME types string. <br>
-     *         ex)<br>
-     *         <code>
-     *         Return = "vnd.android.cursor.item/vnd.com.example.provider.table1"<br>
-     *     </code>
+     * ex)<br>
+     * <code>
+     * Return = "vnd.android.cursor.item/vnd.com.example.provider.table1"<br>
+     * </code>
      */
     public String getMimeTypeVndString() {
         return this.mimeTypeVnd.getMimeTypeString();

@@ -51,6 +51,7 @@ import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryComplet
 import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateMultiEventObject;
+import com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterface;
 import com.tojc.ormlite.android.framework.transaction.controller.TransactionControllerInterfaceBase.ProcessType;
 import com.tojc.ormlite.android.framework.transaction.controller.TransactionGeneralControllerInterface;
 import com.tojc.ormlite.android.framework.transaction.controller.TransactionGeneralControllerInterface.OnTransactionListener;
@@ -128,7 +129,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
         this.registerEventListenerObject(EVENT_DEFAULT_KEY, this);
 
         // Register an event listener for all of ContentProviderFragments.
-        for (Map.Entry<String, OrmLiteContentProviderFragment<?, ?>> entry : controller.getContentProviderFragments().entrySet()) {
+        for (Map.Entry<String, ContentProviderFragmentInterface<?, ?>> entry : controller.getContentProviderFragments().entrySet()) {
             this.registerEventListenerObject(entry.getKey(), entry.getValue());
         }
     }
@@ -162,7 +163,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.framework.MatcherController#getContentProviderFragments()
      * @since 1.0.5
      */
-    public final Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
+    public final Map<String, ContentProviderFragmentInterface<?, ?>> getContentProviderFragments() {
         return this.matcherController.getContentProviderFragments();
     }
 
@@ -536,7 +537,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
                     public ContentProviderResult[] onTransaction() throws OperationApplicationException {
                         ContentProviderResult[] result = null;
                         // NOTE: Notify all listeners.
-                        // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+                        // ContentProviderFragmentInterface#getFragmentEventHandling() is not referred.
                         // That is a specification, because can not be associated with MatcherPattern.
                         OnBeforeApplyBatchMultiEventObject paramOnBeforeApplyBatch = new OnBeforeApplyBatchMultiEventObject(this, getHelper(), db, operations);
                         raiseEvent(EventClasses.OnBeforeApplyBatch, paramOnBeforeApplyBatch, null);
@@ -544,7 +545,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
                         result = OrmLiteClassifierContentProvider.super.applyBatch(operations);
 
                         // NOTE: Notify all listeners.
-                        // OrmLiteContentProviderFragment#getFragmentEventHandling() is not referred.
+                        // ContentProviderFragmentInterface#getFragmentEventHandling() is not referred.
                         // That is a specification, because can not be associated with MatcherPattern.
                         OnAfterApplyBatchMultiEventObject paramOnAfterApplyBatch = new OnAfterApplyBatchMultiEventObject(this, getHelper(), db, operations, result);
                         raiseEvent(EventClasses.OnAfterApplyBatch, paramOnAfterApplyBatch, null);
@@ -568,7 +569,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      */
     private <V extends EventObject> void raiseEvent(EventClasses eventClasses, V param, MatcherPattern pattern) {
         if (pattern != null) {
-            OrmLiteContentProviderFragment<?, ?> fragment = pattern.getParentContentProviderFragment();
+            ContentProviderFragmentInterface<?, ?> fragment = pattern.getParentContentProviderFragment();
             if (fragment != null) {
                 this.onFragmentEventHandling(eventClasses, param, fragment);
             } else {
@@ -584,7 +585,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * This is called at handles the event of fragment.
      * If you want to change the event-handling, please override this method.
      * You do not need to be changed in normal conditions of use. Before you can override here,
-     * please consider that you want to override the OrmLiteContentProviderFragment#getFragmentEventHandling().
+     * please consider that you want to override the ContentProviderFragmentInterface#getFragmentEventHandling().
      * <p/>
      * NOTE: This method has the potential to change the interface in the future.
      *
@@ -593,10 +594,10 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @param fragment
      * @param <V>
      * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
-     * @see com.tojc.ormlite.android.OrmLiteContentProviderFragment#getFragmentEventHandling()
+     * @see com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterface#getFragmentEventHandling()
      * @since 1.0.5
      */
-    protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, OrmLiteContentProviderFragment<?, ?> fragment) {
+    protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, ContentProviderFragmentInterface<?, ?> fragment) {
         String key = fragment.getKeyName();
         int handling = fragment.getFragmentEventHandling();
         switch (handling) {

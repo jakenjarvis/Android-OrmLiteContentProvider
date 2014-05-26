@@ -26,10 +26,10 @@ import android.content.UriMatcher;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.tojc.ormlite.android.OrmLiteBaseContentProvider;
-import com.tojc.ormlite.android.OrmLiteContentProviderFragment;
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.annotation.info.ContentUriInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+import com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,11 +52,11 @@ public class MatcherController {
     private UriMatcher matcher = null;
     private Map<Class<?>, TableInfo> tables = null;
     private List<MatcherPattern> matcherPatterns = null;
-    private Map<String, OrmLiteContentProviderFragment<?, ?>> contentProviderFragments;
+    private Map<String, ContentProviderFragmentInterface<?, ?>> contentProviderFragments;
 
     private TableInfo lastAddTableInfo = null;
     // NOTE: LIFO stack list. Support of Queue and Deque from API-Lv9...
-    private LinkedList<OrmLiteContentProviderFragment<?, ?>> stackFragments = null;
+    private LinkedList<ContentProviderFragmentInterface<?, ?>> stackFragments = null;
 
     /**
      * @see MatcherController#MatcherController(android.content.ContentProvider)
@@ -78,10 +78,10 @@ public class MatcherController {
         this.matcher = new UriMatcher(UriMatcher.NO_MATCH);
         this.tables = new HashMap<Class<?>, TableInfo>();
         this.matcherPatterns = new ArrayList<MatcherPattern>();
-        this.contentProviderFragments = new LinkedHashMap<String, OrmLiteContentProviderFragment<?, ?>>();
+        this.contentProviderFragments = new LinkedHashMap<String, ContentProviderFragmentInterface<?, ?>>();
 
         this.lastAddTableInfo = null;
-        this.stackFragments = new LinkedList<OrmLiteContentProviderFragment<?, ?>>();
+        this.stackFragments = new LinkedList<ContentProviderFragmentInterface<?, ?>>();
     }
 
     /**
@@ -157,7 +157,7 @@ public class MatcherController {
         }
 
         if (this.stackFragments.size() >= 1) {
-            OrmLiteContentProviderFragment<?, ?> fragment = this.stackFragments.getLast();
+            ContentProviderFragmentInterface<?, ?> fragment = this.stackFragments.getLast();
             matcherPattern.setParentContentProviderFragment(fragment);
         } else {
             matcherPattern.setParentContentProviderFragment(null);
@@ -173,8 +173,8 @@ public class MatcherController {
      * @param clazzFragment
      * @return
      */
-    public <V extends OrmLiteContentProviderFragment<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> MatcherController addFragment(Class<V> clazzFragment) {
-        OrmLiteContentProviderFragment<?, ?> instance = this.createContentProviderFragment(clazzFragment);
+    public <V extends ContentProviderFragmentInterface<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> MatcherController addFragment(Class<V> clazzFragment) {
+        ContentProviderFragmentInterface<?, ?> instance = this.createContentProviderFragment(clazzFragment);
         this.addFragment(instance);
         return this;
     }
@@ -187,7 +187,7 @@ public class MatcherController {
      * @return
      * @since 1.0.5
      */
-    public MatcherController addFragment(OrmLiteContentProviderFragment<?, ?> fragment) {
+    public MatcherController addFragment(ContentProviderFragmentInterface<?, ?> fragment) {
         if (fragment == null) {
             throw new IllegalArgumentException("fragment is null.");
         }
@@ -361,11 +361,11 @@ public class MatcherController {
      * @return contentProviderFragments
      * @since 1.0.5
      */
-    public Map<String, OrmLiteContentProviderFragment<?, ?>> getContentProviderFragments() {
+    public Map<String, ContentProviderFragmentInterface<?, ?>> getContentProviderFragments() {
         return this.contentProviderFragments;
     }
 
-    private <V extends OrmLiteContentProviderFragment<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> V createContentProviderFragment(Class<V> clazzFragment) {
+    private <V extends ContentProviderFragmentInterface<? extends OrmLiteBaseContentProvider<?>, ? extends OrmLiteSqliteOpenHelper>> V createContentProviderFragment(Class<V> clazzFragment) {
         V instance;
         Exception innerException = null;
         try {
