@@ -19,42 +19,23 @@
  * The author may be contacted via
  * https://github.com/jakenjarvis/Android-OrmLiteContentProvider
  */
-package com.tojc.ormlite.android.framework.transaction;
+package com.tojc.ormlite.android.framework.transaction.controller;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-
 /**
- * Created by Jaken on 2014/05/23.
- * NOTE: This interface is incubating and may change in a future version.
+ * Created by Jaken on 2014/05/25.
+ * <p/>
+ * NOTE: This interface has the potential to change the interface in the future.
+ *
+ * @since 1.0.5
  */
-public interface TransactionWrapperInterface {
-    <T, E extends Throwable> T transaction(ProcessType processType, OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, final OnTransactionThrowableListener<T, E> listener) throws E;
-
-    <T> T transaction(ProcessType processType, OrmLiteSqliteOpenHelper helper, SQLiteDatabase db, final OnTransactionListener<T> listener);
-
-    boolean hasTransaction();
-
-    enum ProcessType {
-        Query,
-        Insert,
-        Delete,
-        Update,
-        BulkInsert,
-        ApplyBatch
-    }
+public interface TransactionThrowableControllerInterface extends TransactionControllerInterfaceBase {
+    <T, E extends Throwable> T transaction(SQLiteDatabase db, final OnTransactionThrowableListener<T, E> listener) throws E;
 
     interface OnTransactionThrowableListener<T, E extends Throwable> {
         T onTransaction() throws E;
 
         void onAfterTransactionSuccessful(T result);
     }
-
-    interface OnTransactionListener<T> {
-        T onTransaction();
-
-        void onAfterTransactionSuccessful(T result);
-    }
-
 }

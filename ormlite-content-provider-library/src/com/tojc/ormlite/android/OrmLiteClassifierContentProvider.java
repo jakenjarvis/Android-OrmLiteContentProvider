@@ -51,8 +51,13 @@ import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryComplet
 import com.tojc.ormlite.android.framework.event.multievent.object.OnQueryMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateCompletedMultiEventObject;
 import com.tojc.ormlite.android.framework.event.multievent.object.OnUpdateMultiEventObject;
-import com.tojc.ormlite.android.framework.transaction.DefaultTransactionWrapper;
-import com.tojc.ormlite.android.framework.transaction.TransactionWrapperInterface;
+import com.tojc.ormlite.android.framework.transaction.controller.TransactionControllerInterfaceBase.ProcessType;
+import com.tojc.ormlite.android.framework.transaction.controller.TransactionGeneralControllerInterface;
+import com.tojc.ormlite.android.framework.transaction.controller.TransactionGeneralControllerInterface.OnTransactionListener;
+import com.tojc.ormlite.android.framework.transaction.controller.TransactionThrowableControllerInterface;
+import com.tojc.ormlite.android.framework.transaction.controller.TransactionThrowableControllerInterface.OnTransactionThrowableListener;
+import com.tojc.ormlite.android.framework.transaction.organizer.DefaultTransactionOrganizer;
+import com.tojc.ormlite.android.framework.transaction.organizer.TransactionOrganizerInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +89,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @param listener Listener object to register
      * @see com.tojc.ormlite.android.event.listener
      * @see com.tojc.ormlite.android.event.listenerset
+     * @since 1.0.5
      */
     protected final void registerEventListenerObject(String key, Object listener) {
         this.eventController.registerEventListenerObject(key, listener);
@@ -114,6 +120,8 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * Called at the time to register event listeners.
      * If you want to change the registration process, please override this method.
      * You do not need to be changed in normal conditions of use.
+     *
+     * @since 1.0.5
      */
     protected void onRegisterEventListenerObject(MatcherController controller) {
         // Register an event listener for ContentProvider.
@@ -128,19 +136,22 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     /**
      * This class is wrapping the processing of transaction.
      */
-    private TransactionWrapperInterface transactionWrapper = createTransactionWrapper();
+    private TransactionOrganizerInterface transactionOrganizer = createTransactionOrganizer();
 
     /**
      * You can change the processing of transaction by switching object to be generated.
      * If you want to change the transaction process, please override this method.
      * You do not need to be changed in normal conditions of use.
+     * <p/>
+     * NOTE: This method has the potential to change the interface in the future.
      *
      * @return
-     * @see com.tojc.ormlite.android.framework.transaction.DefaultTransactionWrapper
-     * @see com.tojc.ormlite.android.framework.transaction.SQLiteDatabaseTransactionWrapper
+     * @see com.tojc.ormlite.android.framework.transaction.organizer.DefaultTransactionOrganizer
+     * @see com.tojc.ormlite.android.framework.transaction.organizer.SQLiteDatabaseTransactionOrganizer
+     * @since 1.0.5
      */
-    protected TransactionWrapperInterface createTransactionWrapper() {
-        return new DefaultTransactionWrapper();
+    protected TransactionOrganizerInterface createTransactionOrganizer() {
+        return new DefaultTransactionOrganizer();
     }
 
     /**
@@ -212,11 +223,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected Cursor internalOnQuery(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
 
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.Query,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionListener<Cursor>() {
+        TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.Query);
+        return transactionController.transaction(db,
+                new OnTransactionListener<Cursor>() {
                     @Override
                     public Cursor onTransaction() {
                         Cursor result = null;
@@ -273,11 +282,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected Uri internalOnInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
 
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.Insert,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionListener<Uri>() {
+        TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.Insert);
+        return transactionController.transaction(db,
+                new OnTransactionListener<Uri>() {
                     @Override
                     public Uri onTransaction() {
                         Uri result = null;
@@ -336,11 +343,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected int internalOnDelete(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
 
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.Delete,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+        TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.Delete);
+        return transactionController.transaction(db,
+                new OnTransactionListener<Integer>() {
                     @Override
                     public Integer onTransaction() {
                         int result = -1;
@@ -399,11 +404,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
     protected int internalOnUpdate(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
 
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.Update,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+        TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.Update);
+        return transactionController.transaction(db,
+                new OnTransactionListener<Integer>() {
                     @Override
                     public Integer onTransaction() {
                         int result = -1;
@@ -462,12 +465,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @since 1.0.5
      */
     protected int internalOnBulkInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Uri uri, final ContentValues[] values) {
-
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.BulkInsert,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionListener<Integer>() {
+        TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.BulkInsert);
+        return transactionController.transaction(db,
+                new OnTransactionListener<Integer>() {
                     @Override
                     public Integer onTransaction() {
                         int result = 0;
@@ -529,12 +529,9 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @since 1.0.5
      */
     protected ContentProviderResult[] internalOnApplyBatch(final SQLiteDatabase db, final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
-
-        return this.transactionWrapper.transaction(
-                TransactionWrapperInterface.ProcessType.ApplyBatch,
-                this.getHelper(),
-                db,
-                new TransactionWrapperInterface.OnTransactionThrowableListener<ContentProviderResult[], OperationApplicationException>() {
+        TransactionThrowableControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.ApplyBatch);
+        return transactionController.transaction(db,
+                new OnTransactionThrowableListener<ContentProviderResult[], OperationApplicationException>() {
                     @Override
                     public ContentProviderResult[] onTransaction() throws OperationApplicationException {
                         ContentProviderResult[] result = null;
@@ -597,6 +594,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @param <V>
      * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
      * @see com.tojc.ormlite.android.OrmLiteContentProviderFragment#getFragmentEventHandling()
+     * @since 1.0.5
      */
     protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, OrmLiteContentProviderFragment<?, ?> fragment) {
         String key = fragment.getKeyName();
