@@ -130,6 +130,7 @@ artifacts {
 apply from: "${rootDir}/pom.gradle"
 customizePom {
     name = "Android-OrmLiteContentProvider Tests"
+    description = "This is a project for OrmLiteContentProvider Library test."
 }
 
 nexus {

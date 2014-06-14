@@ -102,6 +102,7 @@ artifacts {
 apply from: "${rootDir}/pom.gradle"
 customizePom {
     name = "Android-OrmLiteContentProvider Sample using the annotation processor"
+    description = "This is a project for OrmLiteContentProvider Compiler Library sample."
 }
 
 nexus {

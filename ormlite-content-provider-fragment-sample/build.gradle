@@ -96,6 +96,7 @@ artifacts {
 apply from: "${rootDir}/pom.gradle"
 customizePom {
     name = "Android-OrmLiteContentProvider Fragment Sample"
+    description = "This is a project for OrmLiteContentProvider Library sample with using ContentProviderFragment."
 }
 
 nexus {
