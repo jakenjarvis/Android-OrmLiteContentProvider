@@ -46,7 +46,7 @@ public interface OnBeforeApplyBatchListener<T extends OrmLiteSqliteOpenHelper> e
      * @param db         This is a SQLiteDatabase object. Return the object obtained by
      *                   helper.getWritableDatabase().
      * @param operations The batch of operations to apply.
-     * @since 1.0.5
+     * @since 2.0.0
      */
     void onBeforeApplyBatch(T helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations);
 }

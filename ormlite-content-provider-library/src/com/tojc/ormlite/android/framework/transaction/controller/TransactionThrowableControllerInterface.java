@@ -28,7 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
  * <p/>
  * NOTE: This interface has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public interface TransactionThrowableControllerInterface extends TransactionControllerInterfaceBase {
     <T, E extends Throwable> T transaction(SQLiteDatabase db, final OnTransactionThrowableListener<T, E> listener) throws E;

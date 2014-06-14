@@ -28,7 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
  * <p/>
  * NOTE: This interface has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public interface TransactionGeneralControllerInterface extends TransactionControllerInterfaceBase {
     <T> T transaction(SQLiteDatabase db, final OnTransactionListener<T> listener);

@@ -3,7 +3,7 @@ Android-OrmLiteContentProvider [![Continuous Integration status](https://travis-
 
 # Overview
 ## What's new
-### Ver1.0.5
+### Ver2.0.0
 * Added OrmLiteContentProviderFragment class. This has enabled the process in fragmentation of classification!
 * Added OrmLiteClassifierContentProvider base class. This is the basic structure class to event handling.
 

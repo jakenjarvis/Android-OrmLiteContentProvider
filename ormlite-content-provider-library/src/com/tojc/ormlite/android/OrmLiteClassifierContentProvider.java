@@ -71,7 +71,7 @@ import java.util.Map;
  * which classifies the program by event-handling.
  *
  * @author Jaken
- * @since 1.0.5
+ * @since 2.0.0
  */
 public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteBaseContentProvider<T> implements DefaultContentProviderAllListenerSet<T> {
     private static final String EVENT_DEFAULT_KEY = "__default__";
@@ -90,7 +90,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @param listener Listener object to register
      * @see com.tojc.ormlite.android.event.listener
      * @see com.tojc.ormlite.android.event.listenerset
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected final void registerEventListenerObject(String key, Object listener) {
         this.eventController.registerEventListenerObject(key, listener);
@@ -122,7 +122,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * If you want to change the registration process, please override this method.
      * You do not need to be changed in normal conditions of use.
      *
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected void onRegisterEventListenerObject(MatcherController controller) {
         // Register an event listener for ContentProvider.
@@ -149,7 +149,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @return
      * @see com.tojc.ormlite.android.framework.transaction.organizer.DefaultTransactionOrganizer
      * @see com.tojc.ormlite.android.framework.transaction.organizer.SQLiteDatabaseTransactionOrganizer
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected TransactionOrganizerInterface createTransactionOrganizer() {
         return new DefaultTransactionOrganizer();
@@ -161,7 +161,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      *
      * @return contentProviderFragments
      * @see com.tojc.ormlite.android.framework.MatcherController#getContentProviderFragments()
-     * @since 1.0.5
+     * @since 2.0.0
      */
     public final Map<String, ContentProviderFragmentInterface<?, ?>> getContentProviderFragments() {
         return this.matcherController.getContentProviderFragments();
@@ -219,7 +219,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * java.lang.String, java.lang.String[], java.lang.String)
      * @see com.tojc.ormlite.android.event.listener.OnQueryListener
      * @see com.tojc.ormlite.android.event.listener.OnQueryCompletedListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected Cursor internalOnQuery(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
@@ -278,7 +278,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
      * @see com.tojc.ormlite.android.event.listener.OnInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnInsertCompletedListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected Uri internalOnInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
@@ -339,7 +339,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * java.lang.String[])
      * @see com.tojc.ormlite.android.event.listener.OnDeleteListener
      * @see com.tojc.ormlite.android.event.listener.OnDeleteCompletedListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected int internalOnDelete(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
@@ -400,7 +400,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * java.lang.String, java.lang.String[])
      * @see com.tojc.ormlite.android.event.listener.OnUpdateListener
      * @see com.tojc.ormlite.android.event.listener.OnUpdateCompletedListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected int internalOnUpdate(final SQLiteDatabase db, final MatcherPattern pattern, final Parameter parameter) {
         final Uri uri = parameter.getUri();
@@ -463,7 +463,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see com.tojc.ormlite.android.event.listener.OnBulkInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnAfterBulkInsertListener
      * @see com.tojc.ormlite.android.event.listener.OnBulkInsertCompletedListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected int internalOnBulkInsert(final SQLiteDatabase db, final MatcherPattern pattern, final Uri uri, final ContentValues[] values) {
         TransactionGeneralControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.BulkInsert);
@@ -527,7 +527,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @see android.content.ContentProvider#applyBatch(java.util.ArrayList)
      * @see com.tojc.ormlite.android.event.listener.OnBeforeApplyBatchListener
      * @see com.tojc.ormlite.android.event.listener.OnAfterApplyBatchListener
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected ContentProviderResult[] internalOnApplyBatch(final SQLiteDatabase db, final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
         TransactionThrowableControllerInterface transactionController = this.transactionOrganizer.getTransactionController(ProcessType.ApplyBatch);
@@ -595,7 +595,7 @@ public abstract class OrmLiteClassifierContentProvider<T extends OrmLiteSqliteOp
      * @param <V>
      * @see com.tojc.ormlite.android.framework.event.FragmentEventHandling
      * @see com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterface#getFragmentEventHandling()
-     * @since 1.0.5
+     * @since 2.0.0
      */
     protected <V extends EventObject> void onFragmentEventHandling(EventClasses eventClasses, V param, ContentProviderFragmentInterface<?, ?> fragment) {
         String key = fragment.getKeyName();

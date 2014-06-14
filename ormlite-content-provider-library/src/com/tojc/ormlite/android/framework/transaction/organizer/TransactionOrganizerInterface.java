@@ -28,7 +28,7 @@ import com.tojc.ormlite.android.framework.transaction.controller.TransactionCont
  * <p/>
  * NOTE: This interface has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public interface TransactionOrganizerInterface {
     <F extends TransactionControllerInterfaceBase> F getTransactionController(TransactionControllerInterfaceBase.ProcessType processType);

@@ -50,7 +50,7 @@ public interface OnAfterBulkInsertListener<T extends OrmLiteSqliteOpenHelper> ex
      * @param uri    This is the Uri of target.
      * @param values This is a conversion of the "ContentValues[] values" of android.content.ContentProvider#bulkInsert
      *               to "new ArrayList<ContentValues>(Arrays.asList(values))".
-     * @since 1.0.5
+     * @since 2.0.0
      */
     void onAfterBulkInsert(T helper, SQLiteDatabase db, MatcherPattern target, Uri uri, List<ContentValues> values);
 }

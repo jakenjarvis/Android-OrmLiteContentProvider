@@ -33,7 +33,7 @@ import java.util.Map;
  * <p/>
  * NOTE: This class has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public abstract class TransactionOrganizerBase implements TransactionOrganizerInterface {
     private Map<TransactionControllerInterfaceBase.ProcessType, TransactionControllerInterfaceBase> controllers = new EnumMap<TransactionControllerInterfaceBase.ProcessType, TransactionControllerInterfaceBase>(TransactionControllerInterfaceBase.ProcessType.class);

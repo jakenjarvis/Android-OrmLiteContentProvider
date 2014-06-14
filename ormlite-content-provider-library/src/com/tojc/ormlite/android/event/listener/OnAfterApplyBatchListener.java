@@ -48,7 +48,7 @@ public interface OnAfterApplyBatchListener<T extends OrmLiteSqliteOpenHelper> ex
      *                   helper.getWritableDatabase().
      * @param operations The batch of operations to apply.
      * @param result     Return value of applyBatch processing.
-     * @since 1.0.5
+     * @since 2.0.0
      */
     void onAfterApplyBatch(T helper, SQLiteDatabase db, ArrayList<ContentProviderOperation> operations, ContentProviderResult[] result);
 }

@@ -70,7 +70,7 @@ public class MatcherController {
 
     /**
      * @param contentProvider
-     * @since 1.0.5
+     * @since 2.0.0
      */
     public MatcherController(ContentProvider contentProvider) {
         this.contentProvider = contentProvider;
@@ -185,7 +185,7 @@ public class MatcherController {
      *
      * @param fragment
      * @return
-     * @since 1.0.5
+     * @since 2.0.0
      */
     public MatcherController addFragment(ContentProviderFragmentInterface<?, ?> fragment) {
         if (fragment == null) {
@@ -349,7 +349,7 @@ public class MatcherController {
      * Get the content provider instance.
      *
      * @return
-     * @since 1.0.5
+     * @since 2.0.0
      */
     public ContentProvider getContentProvider() {
         return contentProvider;
@@ -359,7 +359,7 @@ public class MatcherController {
      * ContentProviderFragment that has been added to this MatcherController.
      *
      * @return contentProviderFragments
-     * @since 1.0.5
+     * @since 2.0.0
      */
     public Map<String, ContentProviderFragmentInterface<?, ?>> getContentProviderFragments() {
         return this.contentProviderFragments;

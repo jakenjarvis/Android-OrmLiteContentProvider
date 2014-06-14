@@ -31,7 +31,7 @@ import com.tojc.ormlite.android.framework.transaction.controller.base.SQLiteData
  * <p/>
  * NOTE: This class has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public class SQLiteDatabaseTransactionOrganizer extends TransactionOrganizerBase {
     public SQLiteDatabaseTransactionOrganizer() {

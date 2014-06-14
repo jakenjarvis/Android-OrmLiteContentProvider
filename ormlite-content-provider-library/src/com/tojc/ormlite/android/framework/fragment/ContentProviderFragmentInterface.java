@@ -34,7 +34,7 @@ import java.io.Serializable;
  * <p/>
  * NOTE: This interface has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public interface ContentProviderFragmentInterface<U extends OrmLiteBaseContentProvider<T>, T extends OrmLiteSqliteOpenHelper> extends MultiEventListenerInterfaceBase, Serializable {
     /**
@@ -44,7 +44,7 @@ public interface ContentProviderFragmentInterface<U extends OrmLiteBaseContentPr
      * NOTE: This method has the potential to change the interface in the future.
      *
      * @param matcherController
-     * @since 1.0.5
+     * @since 2.0.0
      */
     void onFragmentInitialize(MatcherController matcherController);
 

@@ -31,7 +31,7 @@ import com.tojc.ormlite.android.framework.fragment.ContentProviderFragmentInterf
  * This class is the base class for ContentProviderFragment. All fragments must inherit from this class.
  *
  * @author Jaken
- * @since 1.0.5
+ * @since 2.0.0
  */
 public abstract class OrmLiteContentProviderFragment<U extends OrmLiteBaseContentProvider<T>, T extends OrmLiteSqliteOpenHelper> implements ContentProviderFragmentInterface<U, T> {
     private static final long serialVersionUID = 6174454914640278455L;

@@ -30,7 +30,7 @@ import com.tojc.ormlite.android.framework.transaction.controller.TransactionGene
  * <p/>
  * NOTE: This class has the potential to change the interface in the future.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 public abstract class SQLiteDatabaseTransactionControllerBase extends TransactionControllerBase implements TransactionGeneralControllerInterface {
     protected SQLiteDatabaseTransactionControllerBase() {
