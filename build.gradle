@@ -50,8 +50,8 @@ ext {
 
 allprojects {
     project.group = "com.tojc.ormlite.android"
-    project.version = "1.0.4-SNAPSHOT"
-    //project.version = "1.0.4"
+    //project.version = "1.0.4-SNAPSHOT"
+    project.version = "1.0.4"
 }
 
 //artifactId "ormlite-content-provider-parent"
