@@ -1,46 +1,103 @@
 language: java
-jdk: oraclejdk6
+jdk:
+    - oraclejdk7
+
+branches:
+  excludes:
+    - gh-pages
+
+git:
+  submodules: false
+
 env:
     matrix:
     #- ANDROID_TARGET=android-8   ANDROID_SDKS=android-8,build-tools-17.0.0            ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
     #- ANDROID_TARGET=android-10  ANDROID_SDKS=android-10,build-tools-17.0.0,sysimg-10 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi
     #- ANDROID_TARGET=android-15  ANDROID_SDKS=android-15,build-tools-17.0.0,sysimg-15 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
     #- ANDROID_TARGET=android-17  ANDROID_SDKS=android-17,build-tools-17.0.0,sysimg-17 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-18  ANDROID_SDKS=android-18,build-tools-18.0.1,sysimg-18 ANDROID_BUILD_TOOLS_VERSION=18.0.1 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_TARGET=android-18  ANDROID_SDKS=android-18,build-tools-18.1.1,sysimg-18 ANDROID_BUILD_TOOLS_VERSION=18.1.1 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.0,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.0 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.3,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.3 ANDROID_ABI=armeabi-v7a
 
 before_install:
+    # git submodules update
+    - git submodule update --init --recursive
+
+    # travis-lint bug?
+    # Found an issue with the `language:` key:
+    #   Language must be valid
+    # http://stackoverflow.com/questions/22581057/travis-lint-why-does-it-complain-about-java-language-field
+    ## check the travis file
+    #- gem install travis-lint
+    #- travis-lint
+
+    # Install gradle 1.11
+    - wget http://services.gradle.org/distributions/gradle-1.11-all.zip > /dev/null
+    - echo A | unzip gradle-1.11-all.zip > /dev/null
+    - export GRADLE_HOME=`pwd`/gradle-1.11
+    - export PATH=${GRADLE_HOME}/bin/:${PATH}
+    - gradle -v
+
+    ## Install Maven 3.1.1 for android-maven-plugin 3.8.0 over
+    #- wget http://www.us.apache.org/dist/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz > /dev/null
+    #- tar xvf apache-maven-3.1.1-bin.tar.gz > /dev/null
+    #- export M2_HOME=`pwd`/apache-maven-3.1.1
+    #- export PATH=${M2_HOME}/bin/:${PATH}
+    #- mvn --version
+
+    ## MAVEN_OPTS
+    ##- export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
+
     # Install base Android SDK
     - sudo apt-get update -qq
-    - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
-    - wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz
-    - tar xzf android-sdk_r22.0.5-linux.tgz
+    #- if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+    - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq -o Dpkg::Options::="--force-confold" --force-yes --yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null ; fi
+
+    #- wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz > /dev/null
+    #- tar xzf android-sdk_r22.0.5-linux.tgz > /dev/null
+    - wget http://dl.google.com/android/android-sdk_r22.6.2-linux.tgz > /dev/null
+    - tar xzf android-sdk_r22.6.2-linux.tgz > /dev/null
+
     - export ANDROID_HOME=`pwd`/android-sdk-linux
-    - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
+    - export PATH=${PATH}:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
 
     # Install required Android components.
-    - android list sdk --extended
-    # Do you accept the license 'android-sdk-license-bcbbd656' [y/n]:
-    - echo -e "y\n" > accept.txt
-    - android update sdk --filter platform-tools,extra-android-support,$ANDROID_SDKS --no-ui --force < accept.txt
+    - android list sdk --all --extended
 
-    # PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
-    - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
-    - if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
+    # Install android sdk.
+    - SDK_FILTERS=platform-tools,extra-android-support,extra-android-m2repository,extra-google-m2repository,$ANDROID_SDKS
+    - chmod +x ./android_update_sdk.sh
+    - ./android_update_sdk.sh "--filter ${SDK_FILTERS} --no-ui --force"
+
+    ## PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
+    #- if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
+    #- if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
 
     # Create and start emulator
     - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
     - emulator -avd test -no-skin -no-audio -no-window &
 
-    ## PROVISIONAL: android-maven-plugin 3.6.0
+    ## PROVISIONAL: android-maven-plugin
     #- git clone git://github.com/jayway/maven-android-plugin.git android-maven-plugin
     #- cd android-maven-plugin
-    #- git checkout -b refs/tags/3.6.0
+    #- git checkout
+    #- mvn clean install -N
+    #- cd ..
+
+    ## PROVISIONAL:  maven-android-sdk-deployer
+    #- git clone git@github.com:mosabua/maven-android-sdk-deployer.git maven-android-sdk-deployer
+    #- cd maven-android-sdk-deployer
+    #- git checkout
     #- mvn clean install
     #- cd ..
 
+install: gradle clean build
+
 before_script:
     # Make sure the emulator has started before running tests
-    - chmod +x ./wait_for_emulator
-    - ./wait_for_emulator
+    - chmod +x ./wait_for_emulator.sh
+    - ./wait_for_emulator.sh > /dev/null
 
-script: mvn install -Pintegration-tests -Dandroid.device=test
+#script: mvn install -Pintegration-tests -Dandroid.device=test
+script: gradle check test connectedAndroidTest
+

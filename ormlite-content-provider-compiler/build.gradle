@@ -1,0 +1,94 @@
+apply plugin: 'java'
+
+evaluationDependsOn(':ormlite-content-provider-library')
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    provided "com.google.android:android:${androidVersion}"
+
+    compile project(path: ':ormlite-content-provider-library', configuration: 'ArtifactJar')
+    compile "com.j256.ormlite:ormlite-core:${ormliteVersion}"
+    compile "com.j256.ormlite:ormlite-android:${ormliteVersion}"
+
+    compile "com.squareup:javawriter:${javawriterVersion}"
+
+    testCompile "org.springframework:spring-core:${springCoreVersion}"
+    testCompile "junit:junit:${junitVersion}"
+}
+
+
+def aptTestGeneratedDir = file("${buildDir}/source/generated-test")
+
+compileTestJava {
+    doFirst {
+        println "mkdirs : ${aptTestGeneratedDir}"
+        aptTestGeneratedDir.mkdirs()
+    }
+
+    options.compilerArgs += ['-proc:none', '-s', aptTestGeneratedDir]
+}
+
+sourceSets {
+    test {
+        // http://forums.gradle.org/gradle/topics/classpath_order_of_test_resources_and_test_classes_while_executing_tests
+        runtimeClasspath += files(sourceSets.test.java.srcDirs)
+    }
+}
+
+commonlibrary {
+    apply project, "addTaskArtifactJar"
+    apply project, "addTaskArtifactJavadocJar"
+    apply project, "addTaskArtifactSourceJar"
+
+    apply project, "addTaskCodeQualityCheckstyle"
+    apply project, "addTaskCodeQualityFindbugs"
+    apply project, "addTaskCodeQualityPmd"
+
+    apply project, "NeutralNexus"
+}
+
+checkstyle {
+    ignoreFailures = false
+    showViolations = false
+    configFile = new File("$rootDir/style_checks.xml")
+}
+
+findbugs {
+    ignoreFailures = true
+    effort = "max"
+    //excludeFilter file("$projectDir/findbugs-exclude.xml")
+}
+
+pmd {
+    ignoreFailures = true
+    ruleSets = ["basic", "design", "imports", "braces", "strings"]
+}
+
+afterEvaluate {
+    packageArtifactJar {
+        into('META-INF') {
+            from 'src/main/resources/META-INF'
+        }
+    }
+}
+
+artifacts {
+    afterEvaluate {
+        archives packageArtifactJar
+        archives packageArtifactSourceJar
+        archives packageArtifactJavadocJar
+    }
+}
+
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Annotation processor"
+    description = "Processes annotations to create a ContentProvider with OrmLite."
+}
+
+nexus {
+    localPublishing = rootProject.ext.localPublishing
+}

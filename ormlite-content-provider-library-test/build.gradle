@@ -1,0 +1,138 @@
+apply plugin: 'android'
+
+evaluationDependsOn(':ormlite-content-provider-library')
+
+repositories{
+    mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    compile project(":ormlite-content-provider-library")
+
+    androidTestCompile project(":ormlite-content-provider-library")
+
+    androidTestCompile "junit:junit:${junitVersion}"
+    androidTestCompile("com.jakewharton.espresso:espresso:${doubleEspressoVersion}") {
+        exclude group: "org.hamcrest"
+    }
+    androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+    androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
+}
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    buildTypes {
+        defaultConfig {
+            minSdkVersion defaultConfigMinSdkVersion
+            targetSdkVersion defaultConfigTargetSdkVersion
+            versionCode 1
+            versionName project.version
+
+            testPackageName "com.tojc.ormlite.android.test"
+            testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+            testFunctionalTest true
+        }
+
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+            runProguard false
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src', 'build/source/generated']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        //instrumentTest.setRoot('tests')
+        //androidTest.setRoot('tests')
+        androidTest {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src', 'build/source/generated']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    packagingOptions {
+        // hamcrest-core-1.3.jar
+        // for AndroidStudio's bug. duplication error of file below.
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'LICENSE.txt'
+    }
+}
+
+commonlibrary {
+    apply project, "addTaskArtifactApk"
+    apply project, "addTaskArtifactJavadocJar"
+    apply project, "addTaskArtifactSourceJar"
+
+    apply project, "addTaskCodeQualityCheckstyle"
+    apply project, "addTaskCodeQualityFindbugs"
+    apply project, "addTaskCodeQualityPmd"
+
+    apply project, "NeutralNexus"
+}
+
+checkstyle {
+    ignoreFailures = true
+    showViolations = false
+    configFile = new File("$rootDir/style_checks.xml")
+}
+
+findbugs {
+    ignoreFailures = true
+    effort = "max"
+    excludeFilter file("$projectDir/findbugs-exclude.xml")
+}
+
+pmd {
+    ignoreFailures = true
+    ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
+}
+
+artifacts {
+    afterEvaluate {
+        archives packageArtifactReleaseApk
+        archives packageArtifactReleaseSourceJar
+        archives packageArtifactReleaseJavadocJar
+    }
+}
+
+apply from: "${rootDir}/pom.gradle"
+customizePom {
+    name = "Android-OrmLiteContentProvider Tests"
+    description = "This is a project for OrmLiteContentProvider Library test."
+}
+
+nexus {
+    localPublishing = rootProject.ext.localPublishing
+}

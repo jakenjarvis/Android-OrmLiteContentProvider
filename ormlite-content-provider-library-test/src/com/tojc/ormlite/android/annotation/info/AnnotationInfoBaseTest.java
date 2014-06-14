@@ -86,5 +86,11 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
             return isValidValue;
         }
 
+        @Override
+        public String toString() {
+            return "DummyAnnotationInfoBase{"
+                    + "isValidValue=" + isValidValue
+                    + "} " + super.toString();
+        }
     }
 }

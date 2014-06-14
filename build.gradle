@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.+'
+    }
+}
+
+apply from: "gradle/commonlibrary/CommonLibrary.gradle"
+
+commonlibrary {
+    apply project, "allprojectsSetEncoding"
+    apply project, "allprojectsSetCompatibilityJavaVersion"
+    apply project, "allprojectsAddConfigurationProvidedScope"
+
+    // patch
+    apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
+    apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
+
+    //apply project, "NeutralNexus"
+}
+
+ext {
+    //mavenRepository = file("${rootDir}/repository")
+    localPublishing = false
+
+    // android sdk
+    androidCompileSdkVersion = 19
+    androidBuildToolsVersion = "19.0.3"
+    androidVersion = "4.1.1.4"
+    androidSupportVersion = "r7"
+
+    // AndroidManifest.xml
+    defaultConfigMinSdkVersion = 8
+    defaultConfigTargetSdkVersion = 19
+
+    // main dependencies
+    ormliteVersion = "4.48"
+
+    // compiler dependencies
+    javawriterVersion = "2.4.0"
+    springCoreVersion = "4.0.3.RELEASE"
+
+    // test dependencies
+    junitVersion = "4.11"
+    doubleEspressoVersion = "1.1-r2"
+    hamcrestVersion = "1.3"
+}
+
+allprojects {
+    project.group = "com.tojc.ormlite.android"
+    //project.version = "1.0.4-SNAPSHOT"
+    project.version = "1.0.4"
+}
+
+//artifactId "ormlite-content-provider-parent"
+
+//apply from: "${rootDir}/pom.gradle"
+//customizePom {
+//    name = "Android-OrmLiteContentProvider Parent"
+//    description = "This is a library that easy to make using ContentProvider with OrmLite."
+//}
+
+apply plugin: 'android-reporting'
+

@@ -1,0 +1,72 @@
+project.ext.customizePom = { Closure customize ->
+    customize.resolveStrategy = Closure.DELEGATE_ONLY
+    customize.delegate = project.ext.customizePomValue
+    customize()
+}
+project.ext.customizePomValue = new Object() {
+    def String name
+    def String description
+}
+
+modifyPom {
+    project {
+        if(customizePomValue.name) { name customizePomValue.name }
+        if(customizePomValue.description) { description customizePomValue.description }
+
+        url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/"
+        inceptionYear "2012"
+
+        scm {
+            url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/"
+            connection "scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git"
+            developerConnection "scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git"
+            tag project.version.contains("SNAPSHOT") ? "HEAD" : "Ver${project.version}"
+        }
+
+        developers {
+            developer {
+                id "jakenjarvis"
+                name "Jaken Jarvis"
+                email "jaken.jarvis@gmail.com"
+                url "https://github.com/jakenjarvis"
+                roles {
+                    role "architect"
+                    role "developer"
+                }
+                timezone "+9"
+            }
+        }
+
+        contributors {
+            contributor {
+                name "Stephane NICOLAS"
+                email "snicolas@octo.com"
+                url "https://github.com/stephanenicolas"
+                organization "octo-online"
+                organizationUrl "http://www.octo.com"
+                roles {
+                    role "developer"
+                }
+                timezone "+1"
+            }
+        }
+
+        licenses {
+            license {
+                name "Apache License, Version 2.0"
+                url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution "repo"
+            }
+        }
+
+        organization {
+            name "Android-OrmLiteContentProvider Team"
+            url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider"
+        }
+
+        issueManagement {
+            system "GitHub Issues"
+            url "https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues"
+        }
+    }
+}

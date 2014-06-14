@@ -23,8 +23,6 @@ package com.tojc.ormlite.android.framework;
 
 import java.lang.reflect.Field;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -33,6 +31,7 @@ import com.j256.ormlite.field.DatabaseField;
 @SmallTest
 public class ColumnInfoTest extends AndroidTestCase {
     private static final String TEST_FIELD_NAME = "annotatedField";
+    private static final String EMPTY = "";
     private ColumnInfo columnInfo;
 
     public void testIsValid_returns_true_when_field_has_empty_column_name() throws NoSuchFieldException {
@@ -132,7 +131,7 @@ public class ColumnInfoTest extends AndroidTestCase {
         @DatabaseField
         private String annotatedField;
 
-        @DatabaseField(columnName = StringUtils.EMPTY)
+        @DatabaseField(columnName = EMPTY)
         private String annotatedFieldWithEmptyColumnName;
 
         @DatabaseField(columnName = TEST_FIELD_NAME)

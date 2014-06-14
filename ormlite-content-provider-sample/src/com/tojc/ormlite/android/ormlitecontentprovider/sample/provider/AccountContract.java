@@ -31,6 +31,8 @@ public final class AccountContract implements BaseColumns {
         // Utility constructor
     }
 
+    public static final String TABLE_NAME = "Account";
+
     public static final String AUTHORITY = "com.tojc.ormlite.android.ormlitecontentprovider.sample";
 
     public static final String CONTENT_URI_PATH = "accounts";

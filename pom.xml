@@ -10,7 +10,7 @@
 
 	<groupId>com.tojc.ormlite.android</groupId>
 	<artifactId>ormlite-content-provider-parent</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>pom</packaging>
 
 	<name>Android-OrmLiteContentProvider Parent</name>
@@ -30,7 +30,7 @@
 		<url>https://github.com/jakenjarvis/Android-OrmLiteContentProvider/</url>
 		<connection>scm:git:git://github.com/jakenjarvis/Android-OrmLiteContentProvider.git</connection>
 		<developerConnection>scm:git:git@github.com:jakenjarvis/Android-OrmLiteContentProvider.git</developerConnection>
-		<tag>Ver1.0.3</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
@@ -92,6 +92,17 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oss.sonatype.org-jayway-snapshots</id>
+			<name>Jayway OpenSource SNAPSHOTs on Sonatype.org</name>
+			<url>http://oss.sonatype.org/content/repositories/jayway-snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<properties>
 	    <!-- infomation -->
 	    <root.basedir>${project.basedir}</root.basedir>
@@ -101,36 +112,40 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>1.6</java.version>
-		<android-platform.version>18</android-platform.version>
 
-		<!-- Compilation dependencies -->
+		<!-- Compilation dependencies, build.gradle -->
+		<android-sdk.version>19</android-sdk.version>
+		<android-buildtools.version>19.0.3</android-buildtools.version>
 		<android.version>4.1.1.4</android.version>
 		<android-support.version>r7</android-support.version>
 
-		<ormlite.version>4.47</ormlite.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
+		<!-- AndroidManifest -->
+		<android-min-sdk.version>7</android-min-sdk.version>
+		<android-target-sdk.version>19</android-target-sdk.version>
 
 		<!-- compiler dependencies -->
-		<javawriter.version>2.2.0</javawriter.version>
-		<spring-core.version>3.2.4.RELEASE</spring-core.version>
+		<ormlite.version>4.48</ormlite.version>
+		<javawriter.version>2.4.0</javawriter.version>
+		<spring-core.version>4.0.2.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
 		<junit.version>4.11</junit.version>
-		<easymock.version>3.2</easymock.version>
 
 		<!-- plugins -->
 		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
-		<maven-pmd-plugin.version>2.7.1</maven-pmd-plugin.version>	<!-- not update -->
+		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>3.6.1</android-maven-plugin.version>
+		<android-maven-plugin.version>3.9.0-rc.1</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
 		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
+		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
 
 		<maven-site-plugin.version>3.3</maven-site-plugin.version>
 		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
@@ -143,7 +158,6 @@
 		<!--
 			$ mvn versions:display-dependency-updates
 			$ mvn versions:update-properties
-			# maven-pmd-plugin.version -> 2.7.1
 		-->
 		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
 	</properties>
@@ -178,17 +192,6 @@
 				<artifactId>ormlite-android</artifactId>
 				<version>${ormlite.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons-lang3.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>easymock</artifactId>
-				<version>${easymock.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>com.squareup</groupId>
@@ -204,6 +207,7 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
+                <scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -211,7 +215,7 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- Eclipse config -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<!-- http://stackoverflow.com/questions/13040788/how-to-elimate-the-maven-enforcer-plugin-goal-enforce-is-ignored-by-m2e-wa -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -220,6 +224,21 @@
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+										<artifactId>android-maven-plugin</artifactId>
+										<versionRange>[3.8.1,)</versionRange>
+										<goals>
+											<goal>consume-aar</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>org.apache.maven.plugins</groupId>
@@ -233,58 +252,7 @@
 										<ignore />
 									</action>
 								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>[1.0.0,)</versionRange>
-										<goals>
-											<goal>copy-dependencies</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-checkstyle-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>check</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>build-helper-maven-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>add-source</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-antrun-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
+
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -298,29 +266,18 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-				<!-- Android config -->
-				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-					<artifactId>android-maven-plugin</artifactId>
-					<version>${android-maven-plugin.version}</version>
-					<configuration>
-						<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
-						<sdk>
-							<platform>${android-platform.version}</platform>
-						</sdk>
-						<undeployBeforeDeploy>false</undeployBeforeDeploy>
-					</configuration>
-					<extensions>true</extensions>
-				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
+						<fork>true</fork>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
 						<showWarnings>true</showWarnings>
@@ -329,19 +286,46 @@
 						</compilerArguments>
 					</configuration>
 				</plugin>
+
 				<plugin>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${maven-deploy-plugin.version}</version>
+					<groupId>org.bsc.maven</groupId>
+					<artifactId>maven-processor-plugin</artifactId>
+					<version>${maven-processor-plugin.version}</version>
+					<configuration>
+						<compilerArguments>-encoding ${project.build.sourceEncoding}</compilerArguments>
+					</configuration>
 				</plugin>
+
+				<!-- Android config -->
 				<plugin>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>${maven-antrun-plugin.version}</version>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>${android-maven-plugin.version}</version>
+					<configuration>
+						<nativeLibrariesDirectory>ignored</nativeLibrariesDirectory>
+						<sdk>
+							<platform>${android-sdk.version}</platform>
+						</sdk>
+						<undeployBeforeDeploy>false</undeployBeforeDeploy>
+						<dex>
+							<jvmArguments>
+								<jvmArgument>-Xmx1024m</jvmArgument>
+								<jvmArgument>-XX:MaxPermSize=256m</jvmArgument>
+							</jvmArguments>
+						</dex>
+					</configuration>
+					<extensions>true</extensions>
 				</plugin>
 
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>${build-helper-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven-deploy-plugin.version}</version>
 				</plugin>
 
 				<plugin>
@@ -370,6 +354,7 @@
 						</execution>
 					</executions>
 				</plugin>
+
 				<!-- issue: If apklib, sub-module is not excluded excludeFilterFile. R.java is always an error. -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -423,6 +408,11 @@
 				</plugin>
 
 				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+				</plugin>
+
+				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
 					<version>${versions-maven-plugin.version}</version>
@@ -449,6 +439,39 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<failsOnError>true</failsOnError>
+					<consoleOutput>true</consoleOutput>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>checkstyle</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>${exec-maven-plugin.version}</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>gradle</executable>
+							<arguments>
+								<argument>clean</argument>
+								<argument>assemble</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 

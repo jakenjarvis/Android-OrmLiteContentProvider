@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.tojc.ormlite.android</groupId>
 		<artifactId>ormlite-content-provider-parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -20,19 +20,11 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.j256.ormlite</groupId>
-			<artifactId>ormlite-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.j256.ormlite</groupId>
-			<artifactId>ormlite-android</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.squareup</groupId>
 			<artifactId>javawriter</artifactId>
@@ -45,6 +37,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

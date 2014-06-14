@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
+import android.text.TextUtils;
 
 import android.provider.BaseColumns;
 
@@ -82,11 +82,20 @@ public class TableInfo implements Validity {
                 ColumnInfo columnInfo = new ColumnInfo(classfield);
                 this.columns.put(columnInfo.getColumnName(), columnInfo);
 
-                // check id
+                // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
-                    boolean generatedId = classfield.getAnnotation(DatabaseField.class).generatedId();
-                    if (generatedId) {
-                        this.idColumnInfo = columnInfo;
+                    // MEMO: Conforms to the discretion of ORMLite.
+                    // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
+                    // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
+                    DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);
+                    if (databaseField != null) {
+                        if (databaseField.persisted()) {
+                            boolean generatedId = databaseField.generatedId();
+                            boolean id = databaseField.id();
+                            if (generatedId || id) {
+                                this.idColumnInfo = columnInfo;
+                            }
+                        }
                     }
                 }
 
@@ -105,6 +114,8 @@ public class TableInfo implements Validity {
 
         if (this.idColumnInfo == null) {
             // @DatabaseField(columnName = _ID, generatedId = true)
+            //  or
+            // @DatabaseField(columnName = _ID, id = true)
             // private int _id;
             throw new IllegalArgumentException("Proper ID is not defined for field.");
         }
@@ -139,7 +150,7 @@ public class TableInfo implements Validity {
             if (throwException && !result) {
                 throw new IllegalStateException("classType is null.");
             }
-        } else if (StringUtils.isEmpty(name)) {
+        } else if (TextUtils.isEmpty(name)) {
             result = false;
             if (throwException && !result) {
                 throw new IllegalStateException("name is zero string.");

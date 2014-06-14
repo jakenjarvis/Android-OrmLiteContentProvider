@@ -4,46 +4,50 @@ import android.net.Uri;
 import android.content.ContentResolver;
 import android.provider.BaseColumns;
 
-public final class SuperPojoContract5 {
-  private static final String SUPER_AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
-  private static final String SUPER_MIME_TYPE_NAME = "com.tojc.ormlite.android.compiler.sample.provider";
+public final class CombinedPojoContract3 {
+  private static final String CONTRACT_AUTHORITY = "com.tojc.ormlite.android.compiler.sample";
+  private static final String CONTRACT_MIME_TYPE_NAME = "com.tojc.ormlite.android.compiler.sample.provider";
 
-  private SuperPojoContract5() {
+  private CombinedPojoContract3() {
   }
 
-  public static final class SuperPojo5Contract
+  public static final class CombinedPojo5
       implements BaseColumns {
-    public static final String CONTENT_URI_PATH = "superpojo5";
-    public static final String AUTHORITY = SUPER_AUTHORITY;
+    public static final String TABLE_NAME = "CombinedPojo5";
 
-    public static final String MIMETYPE_TYPE = "superpojo5";
-    public static final String MIMETYPE_NAME = SUPER_MIME_TYPE_NAME;
+    public static final String CONTENT_URI_PATH = "combinedpojo5";
+    public static final String AUTHORITY = CONTRACT_AUTHORITY;
+
+    public static final String MIMETYPE_TYPE = "combinedpojo5";
+    public static final String MIMETYPE_NAME = CONTRACT_MIME_TYPE_NAME;
 
     public static final int CONTENT_URI_PATTERN_MANY = 1;
     public static final int CONTENT_URI_PATTERN_ONE = 2;
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private SuperPojo5Contract() {
+    private CombinedPojo5() {
     }
 
     public static final String NAME = "name";
   }
 
-  public static final class SuperPojo6Contract
+  public static final class CombinedPojo6
       implements BaseColumns {
+    public static final String TABLE_NAME = "pojo3";
+
     public static final String CONTENT_URI_PATH = "my_pojo_3";
     public static final String AUTHORITY = "com.tojc.ormlite.android.compiler.samplepojo";
 
-    public static final String MIMETYPE_TYPE = "my_pojo_3";
+    public static final String MIMETYPE_TYPE = "pojo3";
     public static final String MIMETYPE_NAME = "pojo3";
 
-    public static final int CONTENT_URI_PATTERN_MANY = 11;
-    public static final int CONTENT_URI_PATTERN_ONE = 12;
+    public static final int CONTENT_URI_PATTERN_MANY = 3;
+    public static final int CONTENT_URI_PATTERN_ONE = 4;
 
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-    private SuperPojo6Contract() {
+    private CombinedPojo6() {
     }
 
     public static final String NAME = "name";

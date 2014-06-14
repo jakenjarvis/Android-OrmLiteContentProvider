@@ -61,11 +61,12 @@ public class MainActivity extends Activity {
 
         // select test
         Cursor c = getContentResolver().query(AccountContract.CONTENT_URI, null, null, null, null);
-        while (c.moveToNext()) {
+        c.moveToFirst();
+        do {
             for (int i = 0; i < c.getColumnCount(); i++) {
                 Log.d(getClass().getSimpleName(), c.getColumnName(i) + " : " + c.getString(i));
             }
-        }
+        } while (c.moveToNext());
         c.close();
 
         // applyBatch test
@@ -83,11 +84,12 @@ public class MainActivity extends Activity {
         Cursor c2 = null;
         try {
             c2 = client.query(AccountContract.CONTENT_URI, null, null, null, null);
-            while (c2.moveToNext()) {
+            c2.moveToFirst();
+            do {
                 for (int i = 0; i < c2.getColumnCount(); i++) {
                     Log.d(getClass().getSimpleName(), c2.getColumnName(i) + " : " + c2.getString(i));
                 }
-            }
+            } while (c2.moveToNext());
         } catch (RemoteException e) {
             e.printStackTrace();
         } finally {

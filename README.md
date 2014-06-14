@@ -1,8 +1,17 @@
-Android-OrmLiteContentProvider [![Build Status](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider.png?branch=master)](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider)
+Android-OrmLiteContentProvider [![Continuous Integration status](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider.png)](https://travis-ci.org/jakenjarvis/Android-OrmLiteContentProvider)
 ==============================
 
 # Overview
 ## What's new
+### Ver1.0.4
+* Throw away the Maven, I adopted the Gradle build system. I suffer from these, spent a lot of time...
+* Extended the automatic generation of the Contract class.
+This makes it possible to output by integrating multiple classes.  
+* Added the TABLE_NAME(table name) to Contract class to be generated.  
+* Subdivided the internal processing.
+If you have to override the method, you will be able to intervene in the process some.  
+
+### Ver1.0.2
 * This project has changed the license at the same time as published in Maven Central Repository.
 Changed the license to 'Apache License, Version 2.0' from 'ISC License'. By this, everyone will be easy to use!  
 * Automatic generation of Contract Class.
@@ -19,8 +28,7 @@ You can from among the following three of the abstract class, select the inherit
     　　　└ OrmLiteDefaultContentProvider  
     　　　　└ OrmLiteSimpleContentProvider  
 
-Can be used to match the level of your implementation.  
-
+You can be used to match the level of your implementation.  
 You can focus on implementing the original function.  
 
 ## Quick question
@@ -51,11 +59,11 @@ You define the column name as a string. You are free to define it.
         // accounts table info
         public static class Account implements BaseColumns
         {
-            public static final String TABLENAME = "accounts";
+            public static final String TABLE_NAME = "accounts";
 
-            public static final String CONTENT_URI_PATH = TABLENAME;
+            public static final String CONTENT_URI_PATH = TABLE_NAME;
 
-            public static final String MIMETYPE_TYPE = TABLENAME;
+            public static final String MIMETYPE_TYPE = TABLE_NAME;
             public static final String MIMETYPE_NAME = AUTHORITY + ".provider";
 
             // feild info
@@ -86,7 +94,7 @@ You can use the annotations added by OrmLiteContentProvider library.
 
 For added annotations, see the javadoc.
 
-    @DatabaseTable(tableName = Contract.Account.TABLENAME)
+    @DatabaseTable(tableName = Contract.Account.TABLE_NAME)
     @DefaultContentUri(authority=Contract.AUTHORITY, path=Contract.Account.CONTENT_URI_PATH)
     @DefaultContentMimeTypeVnd(name=Contract.Account.MIMETYPE_NAME, type=Contract.Account.MIMETYPE_TYPE)
     public class Account
@@ -148,6 +156,8 @@ Compiler generates the following from this definition. You do not have to write 
 
     public final class AccountContract implements BaseColumns
     {
+        public static final String TABLE_NAME = "accounts";
+
         public static final String AUTHORITY = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample";
 
         public static final String CONTENT_URI_PATH = "accounts";
@@ -247,7 +257,7 @@ This is the most important key points of the Android-OrmLiteContentProvider libr
 
     // Undefined @DefaultContentUri and @DefaultContentMimeTypeVnd annotations.
     // This can be defined using MatcherController.
-    @DatabaseTable(tableName = Contract.NewTable.TABLENAME)
+    @DatabaseTable(tableName = Contract.NewTable.TABLE_NAME)
     public class NewTable
     {
         @DatabaseField(columnName = Contract.NewTable._ID, generatedId = true)
@@ -364,6 +374,31 @@ If you perform the automatic generation of Contract Class, Additional compiler i
         <scope>provided</scope>
     </dependency>
 
+
+## Gradle setup
+As with Maven, you can add the library easily with Gradle.
+
+    repositories{
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "com.tojc.ormlite.android:ormlite-content-provider-library:${version}@aar" // @aar or @jar
+    }
+
+If you perform the automatic generation of Contract Class, Additional compiler is required.
+
+    dependencies {
+        compile "com.tojc.ormlite.android:ormlite-content-provider-compiler:${version}" // jar only
+    }
+
+* Other than this, you need a plugin to handle the APT. Please refer to the following.
+
+    [android-apt](https://bitbucket.org/hvisser/android-apt)  
+    [gradle-android-apt-plugin](https://github.com/uPhyca/gradle-android-apt-plugin)  
+    [gradle-apt-plugin](https://github.com/Jimdo/gradle-apt-plugin)  
+
+
 ## Manual setup
 If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
 
@@ -382,14 +417,12 @@ See [Android Developers : Referencing a library project](http://developer.androi
 See [stackoverflow : How to import a jar in Eclipse?](http://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse)  
 
 Download from [ORMLite : OrmLite Releases](http://ormlite.com/releases/)  
-Download from [Apache Commons : Commons Lang](http://commons.apache.org/proper/commons-lang/)  
 
 Copy the following files to libs folder.  
 
 * ormlite-core-X.XX.jar
 * ormlite-android-X.XX.jar
 * ormlite-jdbc-X.XX.jar(If you need)
-* commons-langX-X.X.jar
 
 #### ormlite-content-provider-compiler(Optional)
 Add the Java Project(Not Android Project) to your project.  
@@ -419,6 +452,13 @@ This is a better solution to get annotation processing within eclipse using mave
 
 See [m2e-apt](https://github.com/jbosstools/m2e-apt/)  
 
+
+# Contributor
+Thanks to contributors!  
+* [Stéphane NICOLAS](https://github.com/stephanenicolas)  
+* [Joel Steres](https://github.com/jasco)  
+* [Michael Cramer](https://github.com/BigMichi1)  
+* [Andrew Clunis](https://github.com/orospakr)  
 
 # Apache License, Version 2.0
 This document is part of the Android-OrmLiteContentProvider project.

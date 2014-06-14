@@ -60,11 +60,23 @@ public class SortOrderInfo extends AnnotationInfoBase {
     }
 
     public String makeSqlOrderString(String fieldname) {
-        return (fieldname + SQL_ORDER_SEPARATOR + this.order.toString()).trim();
+        StringBuilder result = new StringBuilder();
+        result.append(fieldname);
+        result.append(SQL_ORDER_SEPARATOR);
+        result.append(this.order.toString());
+        return result.toString().trim();
     }
 
     @Override
     protected boolean isValidValue() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SortOrderInfo{"
+                + "order=" + order
+                + ", weight=" + weight
+                + "} " + super.toString();
     }
 }
