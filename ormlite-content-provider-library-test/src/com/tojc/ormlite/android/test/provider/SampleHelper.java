@@ -21,8 +21,6 @@
  */
 package com.tojc.ormlite.android.test.provider;
 
-import java.sql.SQLException;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -32,9 +30,11 @@ import com.j256.ormlite.table.TableUtils;
 import com.tojc.ormlite.android.test.model.Account;
 import com.tojc.ormlite.android.test.model.Membership;
 
+import java.sql.SQLException;
+
 public class SampleHelper extends OrmLiteSqliteOpenHelper {
 
-    /* package-private */static final Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class};
+    /* package-private */static final Class<?>[] CLASS_LIST = new Class<?>[]{Account.class, Membership.class};
 
     public SampleHelper(Context context) {
         super(context, "MyDatabase", null, 1);

@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
+import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 
 import android.text.TextUtils;
@@ -34,7 +35,9 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUr
  * Manage the ContentUri information.
  * @author Jaken
  */
-public class ContentUriInfo extends AnnotationInfoBase {
+public class ContentUriInfo extends AnnotationInfoBase implements Serializable {
+    private static final long serialVersionUID = -8904708356445486860L;
+
     // ----------------------------------
     // ATTRIBUTES
     // ----------------------------------

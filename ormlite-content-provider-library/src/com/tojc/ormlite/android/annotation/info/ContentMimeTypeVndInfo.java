@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
+import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 
 import android.text.TextUtils;
@@ -31,7 +32,9 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMi
  * Manage the MIME Types information.
  * @author Jaken
  */
-public class ContentMimeTypeVndInfo extends AnnotationInfoBase {
+public class ContentMimeTypeVndInfo extends AnnotationInfoBase implements Serializable {
+    private static final long serialVersionUID = 2111248452176376223L;
+
     // ----------------------------------
     // CONSTANTS
     // ----------------------------------

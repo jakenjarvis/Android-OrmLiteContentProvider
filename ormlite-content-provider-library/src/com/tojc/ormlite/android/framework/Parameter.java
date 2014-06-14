@@ -30,12 +30,16 @@ import com.tojc.ormlite.android.framework.OperationParameters.OperationParameter
 import com.tojc.ormlite.android.framework.OperationParameters.QueryParameters;
 import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
 
+import java.io.Serializable;
+
 /**
  * Implementation class that holds the parameter.
  * @author Jaken
  */
-public class Parameter implements OperationParametersBaseInterface, QueryParameters, InsertParameters,
+public class Parameter implements Serializable, OperationParametersBaseInterface, QueryParameters, InsertParameters,
     DeleteParameters, UpdateParameters {
+    private static final long serialVersionUID = -3344676870044742623L;
+
     // Android Event ITEM
     private Uri uri;
     private String[] projection;

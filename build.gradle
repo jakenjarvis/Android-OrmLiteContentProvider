@@ -17,8 +17,6 @@ commonlibrary {
     // patch
     apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
     apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
-
-    //apply project, "NeutralNexus"
 }
 
 ext {
@@ -50,17 +48,10 @@ ext {
 
 allprojects {
     project.group = "com.tojc.ormlite.android"
-    //project.version = "1.0.4-SNAPSHOT"
-    project.version = "1.0.4"
+    project.version = "2.0.0-SNAPSHOT"
+    //project.version = "2.0.0"
 }
 
 //artifactId "ormlite-content-provider-parent"
 
-//apply from: "${rootDir}/pom.gradle"
-//customizePom {
-//    name = "Android-OrmLiteContentProvider Parent"
-//    description = "This is a library that easy to make using ContentProvider with OrmLite."
-//}
-
 apply plugin: 'android-reporting'
-

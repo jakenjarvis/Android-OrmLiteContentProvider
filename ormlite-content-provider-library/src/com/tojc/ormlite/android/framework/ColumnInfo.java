@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.framework;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -32,8 +33,10 @@ import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
  * Manage the database column information.
  * @author Jaken
  */
-public class ColumnInfo implements Validity {
-    private Field field;
+public class ColumnInfo implements Serializable, Validity {
+    private static final long serialVersionUID = -210690551772340412L;
+
+    private transient Field field; // NOTE: findbugs : SE_BAD_FIELD
     private String columnName;
     private SortOrderInfo defaultSortOrderInfo;
     private ProjectionMapInfo projectionMapInfo;

@@ -1,5 +1,6 @@
 include ':ormlite-content-provider-library'
 include ':ormlite-content-provider-library-test'
 include ':ormlite-content-provider-sample'
+include ':ormlite-content-provider-fragment-sample'
 include ':ormlite-content-provider-compiler'
 include ':ormlite-content-provider-compiler-sample'

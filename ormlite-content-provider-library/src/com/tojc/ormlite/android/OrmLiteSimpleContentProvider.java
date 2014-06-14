@@ -39,16 +39,13 @@ import com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters;
  * This is a simple class that utilizes the framework. You can make
  * ContentProvider minimal implementation. This is an example of how to
  * implement OrmLiteDefaultContentProvider.
+ *
  * @author Jaken
  */
-public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends
-    OrmLiteDefaultContentProvider<T> {
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onQuery(com.j256
-     * .ormlite.android.apptools .OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.QueryParameters)
+public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHelper> extends OrmLiteDefaultContentProvider<T> {
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnQueryListener
      */
     @Override
     public Cursor onQuery(T helper, SQLiteDatabase db, MatcherPattern target, QueryParameters parameter) {
@@ -79,16 +76,13 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         String orderBy = getSortOrderStringForQuery(target, parameter);
 
         result = builder.query(db, parameter.getProjection(), parameter.getSelection(), parameter.getSelectionArgs(),
-            null, null, orderBy);
+                null, null, orderBy);
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onInsert(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.InsertParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnInsertListener
      */
     @Override
     public Uri onInsert(T helper, SQLiteDatabase db, MatcherPattern target, InsertParameters parameter) {
@@ -103,12 +97,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onDelete(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.DeleteParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnDeleteListener
      */
     @Override
     public int onDelete(T helper, SQLiteDatabase db, MatcherPattern target, DeleteParameters parameter) {
@@ -117,12 +108,12 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
                 result = db.delete(target.getTableInfo().getName(), parameter.getSelection(),
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
-                    + parameter.getUri().getPathSegments().get(1);
+                        + parameter.getUri().getPathSegments().get(1);
                 if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
@@ -135,12 +126,9 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         return result;
     }
 
-    /*
-     * @see
-     * com.tojc.ormlite.android.OrmLiteDefaultContentProvider#onUpdate(com.j256
-     * .ormlite.android. apptools.OrmLiteSqliteOpenHelper,
-     * com.tojc.ormlite.android.framework.MatcherPattern,
-     * com.tojc.ormlite.android.framework.OperationParameters.UpdateParameters)
+    /**
+     * If you're a need, you can override this method.
+     * @see com.tojc.ormlite.android.event.listener.OnUpdateListener
      */
     @Override
     public int onUpdate(T helper, SQLiteDatabase db, MatcherPattern target, UpdateParameters parameter) {
@@ -149,40 +137,21 @@ public abstract class OrmLiteSimpleContentProvider<T extends OrmLiteSqliteOpenHe
         switch (target.getMimeTypeVnd().getSubType()) {
             case DIRECTORY:
                 result = db.update(target.getTableInfo().getName(), parameter.getValues(), parameter.getSelection(),
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             case ITEM:
                 String where = target.getTableInfo().getIdColumnInfo().getColumnName() + "="
-                    + parameter.getUri().getPathSegments().get(1);
+                        + parameter.getUri().getPathSegments().get(1);
                 if (parameter.getSelection() != null && parameter.getSelection().length() >= 1) {
                     where += " AND ( " + parameter.getSelection() + " ) ";
                 }
                 result = db.update(target.getTableInfo().getName(), parameter.getValues(), where,
-                    parameter.getSelectionArgs());
+                        parameter.getSelectionArgs());
                 break;
 
             default:
                 break;
-        }
-        return result;
-    }
-
-    /**
-     * This method gets the appropriate sort order.
-     * @param target
-     *            Arguments passed to the onQuery() method.
-     * @param parameter
-     *            Arguments passed to the onQuery() method.
-     * @return return an sort order string.
-     * @since 1.0.4
-     */
-    protected String getSortOrderStringForQuery(MatcherPattern target, QueryParameters parameter) {
-        String result = "";
-        if (parameter.getSortOrder() != null && parameter.getSortOrder().length() >= 1) {
-            result = parameter.getSortOrder();
-        } else {
-            result = target.getTableInfo().getDefaultSortOrderString();
         }
         return result;
     }

@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.framework;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,9 @@ import com.tojc.ormlite.android.annotation.info.SortOrderInfo;
  * Manage the database table information.
  * @author Jaken
  */
-public class TableInfo implements Validity {
+public class TableInfo implements Serializable, Validity {
+    private static final long serialVersionUID = -5200432176239214792L;
+
     private Class<?> classType;
     private String name;
 
@@ -84,7 +87,7 @@ public class TableInfo implements Validity {
 
                 // check id (generated or otherwise)
                 if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
-                    // MEMO: Conforms to the discretion of ORMLite.
+                    // NOTE: Conforms to the discretion of ORMLite.
                     // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
                     // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
                     DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);

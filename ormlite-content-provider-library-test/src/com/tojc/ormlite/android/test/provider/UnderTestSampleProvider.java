@@ -24,10 +24,23 @@ package com.tojc.ormlite.android.test.provider;
 import com.tojc.ormlite.android.OrmLiteSimpleContentProvider;
 import com.tojc.ormlite.android.framework.MatcherController;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
+import com.tojc.ormlite.android.framework.event.FragmentEventHandling;
 import com.tojc.ormlite.android.test.model.Account;
 import com.tojc.ormlite.android.test.model.Membership;
+import com.tojc.ormlite.android.test.provider.fragment.UnderTestSampleFragment;
 
 public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<SampleHelper> {
+    private int testCase = 0;
+
+    public UnderTestSampleProvider() {
+        super();
+    }
+
+    public UnderTestSampleProvider(int testCase) {
+        super();
+        this.testCase = testCase;
+    }
+
     @Override
     protected Class<SampleHelper> getHelperClass() {
         return SampleHelper.class;
@@ -35,12 +48,118 @@ public class UnderTestSampleProvider extends OrmLiteSimpleContentProvider<Sample
 
     @Override
     public boolean onCreate() {
-        int patternCode = 1;
-        setMatcherController(new MatcherController()//
-                .add(Account.class, SubType.DIRECTORY, "", patternCode++)//
-                .add(Account.class, SubType.ITEM, "#", patternCode++)//
-                .add(Membership.class, SubType.DIRECTORY, "", patternCode++)//
-                .add(Membership.class, SubType.ITEM, "#", patternCode++));
+        switch (this.testCase) {
+            default:
+                setMatcherController(new MatcherController(this)//
+                        .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+                        .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+                        .add(Membership.class, SubType.DIRECTORY, "", MembershipContract.CONTENT_URI_PATTERN_MANY)//
+                        .add(Membership.class, SubType.ITEM, "#", MembershipContract.CONTENT_URI_PATTERN_ONE)//
+                );
+                break;
+
+            case 1:
+                setMatcherController(new MatcherController(this)//
+                                .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+                                .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+                                .addFragment(new UnderTestSampleFragment() {
+                                    @Override
+                                    public String getKeyName() {
+                                        return "UnderTestSampleFragment";
+                                    }
+
+                                    @Override
+                                    protected void onAppendMatcherPatterns(MatcherController matcherController) {
+                                        matcherController
+                                                .add(Membership.class, SubType.DIRECTORY, "", MembershipContract.CONTENT_URI_PATTERN_MANY)//
+                                                .add(Membership.class, SubType.ITEM, "#", MembershipContract.CONTENT_URI_PATTERN_ONE)//
+                                        ;
+                                    }
+                                })
+                );
+                break;
+
+            case 2:
+                setMatcherController(new MatcherController(this)//
+                        .addFragment(new UnderTestSampleFragment() {
+                            @Override
+                            public String getKeyName() {
+                                return "UnderTestSampleFragment";
+                            }
+
+                            @Override
+                            protected void onAppendMatcherPatterns(MatcherController matcherController) {
+                                matcherController
+                                        .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+                                        .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+                                ;
+                            }
+                        })
+                        .add(Membership.class, SubType.DIRECTORY, "", MembershipContract.CONTENT_URI_PATTERN_MANY)//
+                        .add(Membership.class, SubType.ITEM, "#", MembershipContract.CONTENT_URI_PATTERN_ONE)//
+                );
+                break;
+
+            case 3:
+                setMatcherController(new MatcherController(this)//
+                                .addFragment(new UnderTestSampleFragment() {
+                                    @Override
+                                    public String getKeyName() {
+                                        return "UnderTestSampleFragment1";
+                                    }
+
+                                    @Override
+                                    protected void onAppendMatcherPatterns(MatcherController matcherController) {
+                                        matcherController
+                                                .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+                                                .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+                                        ;
+                                    }
+                                })
+
+                                .addFragment(new UnderTestSampleFragment() {
+                                    @Override
+                                    public String getKeyName() {
+                                        return "UnderTestSampleFragment2";
+                                    }
+
+                                    @Override
+                                    protected void onAppendMatcherPatterns(MatcherController matcherController) {
+                                        matcherController
+                                                .add(Membership.class, SubType.DIRECTORY, "", MembershipContract.CONTENT_URI_PATTERN_MANY)//
+                                                .add(Membership.class, SubType.ITEM, "#", MembershipContract.CONTENT_URI_PATTERN_ONE)//
+                                        ;
+                                    }
+                                })
+                );
+                break;
+
+            case 4:
+                setMatcherController(new MatcherController(this)//
+                        .addFragment(new UnderTestSampleFragment() {
+                            @Override
+                            public String getKeyName() {
+                                return "UnderTestSampleFragment";
+                            }
+
+                            @Override
+                            public int getFragmentEventHandling() {
+                                return FragmentEventHandling.FRAGMENT_AND_DEFAULT_DUPLICATE;
+                            }
+
+                            @Override
+                            protected void onAppendMatcherPatterns(MatcherController matcherController) {
+                                matcherController
+                                        .add(Account.class, SubType.DIRECTORY, "", AccountContract.CONTENT_URI_PATTERN_MANY)//
+                                        .add(Account.class, SubType.ITEM, "#", AccountContract.CONTENT_URI_PATTERN_ONE)//
+                                ;
+                            }
+                        })
+                        .add(Membership.class, SubType.DIRECTORY, "", MembershipContract.CONTENT_URI_PATTERN_MANY)//
+                        .add(Membership.class, SubType.ITEM, "#", MembershipContract.CONTENT_URI_PATTERN_ONE)//
+                );
+                break;
+        }
         return true;
     }
 }

@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
+import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 
 import android.text.TextUtils;
@@ -31,7 +32,9 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.ProjectionMap;
  * Manage the ProjectionMap information.
  * @author Jaken
  */
-public class ProjectionMapInfo extends AnnotationInfoBase {
+public class ProjectionMapInfo extends AnnotationInfoBase implements Serializable {
+    private static final long serialVersionUID = -979022110690648355L;
+
     private String name;
 
     public ProjectionMapInfo(AnnotatedElement element) {
