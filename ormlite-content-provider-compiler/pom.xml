@@ -49,10 +49,15 @@
 		<testResources>
 			<testResource>
 				<directory>${basedir}/src/test/resources</directory>
+				<targetPath>${basedir}/build/resources/test/</targetPath>
 			</testResource>
 
 			<!-- add a directory of source files which need to be compiled during 
 				a test -->
+			<testResource>
+				<directory>${project.build.testSourceDirectory}/com/tojc/ormlite/android/compiler/sample</directory>
+				<targetPath>${basedir}/build/resources/test/com/tojc/ormlite/android/compiler/sample</targetPath>
+			</testResource>
 			<testResource>
 				<directory>${project.build.testSourceDirectory}/com/tojc/ormlite/android/compiler/sample</directory>
 				<targetPath>com/tojc/ormlite/android/compiler/sample</targetPath>
