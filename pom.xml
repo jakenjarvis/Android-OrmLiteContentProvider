@@ -20,7 +20,7 @@
 
 	<modules>
 		<module>ormlite-content-provider-library</module>
-		<module>ormlite-content-provider-library-test</module>
+		<!-- <module>ormlite-content-provider-library-test</module> -->
 		<module>ormlite-content-provider-compiler</module>
 		<module>ormlite-content-provider-sample</module>
 		<module>ormlite-content-provider-compiler-sample</module>
