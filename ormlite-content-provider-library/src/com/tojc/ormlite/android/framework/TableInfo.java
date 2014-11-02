@@ -88,13 +88,11 @@ public class TableInfo implements Validity {
                     // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
                     // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
                     DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);
-                    if (databaseField != null) {
-                        if (databaseField.persisted()) {
-                            boolean generatedId = databaseField.generatedId();
-                            boolean id = databaseField.id();
-                            if (generatedId || id) {
-                                this.idColumnInfo = columnInfo;
-                            }
+                    if (databaseField != null && databaseField.persisted()) {
+                        boolean generatedId = databaseField.generatedId();
+                        boolean id = databaseField.id();
+                        if (generatedId || id) {
+                            this.idColumnInfo = columnInfo;
                         }
                     }
                 }
