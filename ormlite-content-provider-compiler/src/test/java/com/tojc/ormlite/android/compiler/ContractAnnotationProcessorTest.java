@@ -32,6 +32,7 @@ import com.tojc.ormlite.android.compiler.sample.Pojo2;
 import com.tojc.ormlite.android.compiler.sample.Pojo3;
 import com.tojc.ormlite.android.compiler.sample.Pojo4;
 import com.tojc.ormlite.android.compiler.sample.PojoWithFields1;
+import com.tojc.ormlite.android.compiler.sample.PojoWithFields2;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
@@ -92,6 +93,14 @@ public class ContractAnnotationProcessorTest extends AbstractAnnotationProcessor
         assertCompilationSuccessful(compileTestCase(PojoWithFields1.class));
         final String string = "build/source/generated-test/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.java";
         final String string2 = "build/resources/test/com/tojc/ormlite/android/compiler/sample/PojoWithFields1Contract.javasource";
+        assertOutput(new File(string), new File(string2));
+    }
+
+    @Test
+    public void a0301ValidFieldsWithColumnNameContractAnnotation() throws IOException {
+        assertCompilationSuccessful(compileTestCase(PojoWithFields2.class));
+        final String string = "build/source/generated-test/com/tojc/ormlite/android/compiler/sample/PojoWithFields2Contract.java";
+        final String string2 = "build/resources/test/com/tojc/ormlite/android/compiler/sample/PojoWithFields2Contract.javasource";
         assertOutput(new File(string), new File(string2));
     }
 
