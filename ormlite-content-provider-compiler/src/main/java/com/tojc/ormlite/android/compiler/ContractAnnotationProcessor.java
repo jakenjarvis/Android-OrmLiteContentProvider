@@ -308,8 +308,11 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
         final List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
         for (final Element field : fields) {
             final String fieldName = field.getSimpleName().toString();
-            if (!("_id".equals(fieldName) || "_id".equals(field.getAnnotation(DatabaseField.class).columnName()))) {
-                writer.emitField("String", fieldName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(fieldName));
+            final DatabaseField databaseFieldAnnotation = field.getAnnotation(DatabaseField.class);
+            final String annotatedColumnName = databaseFieldAnnotation.columnName();
+            if (!("_id".equals(fieldName) || "_id".equals(annotatedColumnName))) {
+                final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
+                writer.emitField("String", columnName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
             }
         }
         writer.endType();
