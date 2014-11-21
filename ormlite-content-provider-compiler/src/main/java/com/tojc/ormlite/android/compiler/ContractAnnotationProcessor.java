@@ -221,7 +221,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             contentUriPath = defaultContentUriAnnotation.path();
             contentUriAuthority = defaultContentUriAnnotation.authority();
         } else {
-            contentUriPath = databaseTableName.toLowerCase();
+            contentUriPath = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, databaseTableName);
             contentUriAuthority = defaultAuthority;
         }
         writer_content_uri_path = JavaWriter.stringLiteral(contentUriPath);
@@ -261,7 +261,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             mimeTypeVndName = defaultMimeTypeName;
         }
         if (mimeTypeVndType == null || mimeTypeVndType.length() == 0) {
-            mimeTypeVndType = databaseTableName.toLowerCase();
+            mimeTypeVndType = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, databaseTableName);
         }
         writer_mimetype_type = JavaWriter.stringLiteral(mimeTypeVndType);
 
