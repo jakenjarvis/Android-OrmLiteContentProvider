@@ -126,6 +126,7 @@
 		<!-- compiler dependencies -->
 		<ormlite.version>4.48</ormlite.version>
 		<javawriter.version>2.4.0</javawriter.version>
+		<guava.version>18.0</guava.version>
 		<spring-core.version>4.0.2.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
@@ -181,6 +182,11 @@
 				<artifactId>support-v4</artifactId>
 				<version>${android-support.version}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.j256.ormlite</groupId>

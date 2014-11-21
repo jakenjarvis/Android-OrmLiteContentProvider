@@ -22,6 +22,6 @@ public final class PojoWithFields2Contract
   private PojoWithFields2Contract() {
   }
 
-  public static final String NAMEDCOLUMN = "namedColumn";
+  public static final String NAMED_COLUMN = "namedColumn";
 }
 

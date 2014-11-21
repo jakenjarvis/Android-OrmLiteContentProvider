@@ -21,6 +21,7 @@
  */
 package com.tojc.ormlite.android.compiler;
 
+import com.google.common.base.CaseFormat;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.squareup.javawriter.JavaWriter;
@@ -312,7 +313,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             final String annotatedColumnName = databaseFieldAnnotation.columnName();
             if (!("_id".equals(fieldName) || "_id".equals(annotatedColumnName))) {
                 final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
-                writer.emitField("String", columnName.toUpperCase(), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
+                writer.emitField("String", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
             }
         }
         writer.endType();
