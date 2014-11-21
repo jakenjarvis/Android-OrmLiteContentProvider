@@ -32,10 +32,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.processing.Processor;
 import javax.tools.Diagnostic;
@@ -206,9 +203,8 @@ abstract class AbstractAnnotationProcessorTest {
         assert diagnostics != null;
 
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics) {
-            assertFalse("Expected no errors", diagnostic.getKind().equals(Kind.ERROR));
+            assertFalse(String.format("Expected no errors at %s %s:%d", diagnostic.getMessage(Locale.ENGLISH), diagnostic.getSource().getName(), diagnostic.getLineNumber()), diagnostic.getKind().equals(Kind.ERROR));
         }
-
     }
 
     /**
