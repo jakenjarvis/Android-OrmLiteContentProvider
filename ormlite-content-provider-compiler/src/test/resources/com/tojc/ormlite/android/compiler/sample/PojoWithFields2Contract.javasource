@@ -23,5 +23,10 @@ public final class PojoWithFields2Contract
   }
 
   public static final String NAMED_COLUMN = "namedColumn";
+
+  public static final String[] ALL_COLUMNS = {
+    BaseColumns._ID,
+    NAMED_COLUMN
+    };
 }
 

@@ -22,5 +22,8 @@ public final class LessSimplePojoContract2
   private LessSimplePojoContract2() {
   }
 
+  public static final String[] ALL_COLUMNS = {
+    BaseColumns._ID
+    };
 }
 

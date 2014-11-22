@@ -22,5 +22,8 @@ public final class PojoContract
   private PojoContract() {
   }
 
+  public static final String[] ALL_COLUMNS = {
+    BaseColumns._ID
+    };
 }
 

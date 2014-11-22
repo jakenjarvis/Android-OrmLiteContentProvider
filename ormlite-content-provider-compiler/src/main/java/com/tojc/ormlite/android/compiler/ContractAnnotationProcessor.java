@@ -306,6 +306,9 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 .endMethod()
                 .emitEmptyLine();
 
+        final StringBuilder sbInitialValue = new StringBuilder();
+        boolean isEmittedField = false;
+        sbInitialValue.append("{\nBaseColumns._ID");
         final List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
         for (final Element field : fields) {
             final String fieldName = field.getSimpleName().toString();
@@ -313,9 +316,19 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             final String annotatedColumnName = databaseFieldAnnotation.columnName();
             if (!("_id".equals(fieldName) || "_id".equals(annotatedColumnName))) {
                 final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
-                writer.emitField("String", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName), EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
+                final String constantName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
+                writer.emitField("String", constantName, EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
+                sbInitialValue.append(",\n").append(constantName);
+                isEmittedField = true;
             }
         }
+        sbInitialValue.append("\n}");
+
+        if (isEmittedField) {
+            writer.emitEmptyLine();
+        }
+        writer.emitField("String[]", "ALL_COLUMNS", EnumSet.of(STATIC, PUBLIC, FINAL), sbInitialValue.toString());
+
         writer.endType();
     }
 
