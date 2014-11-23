@@ -308,26 +308,43 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
 
         final StringBuilder sbInitialValue = new StringBuilder();
         boolean isEmittedField = false;
-        sbInitialValue.append("{\nBaseColumns._ID");
+        final List<String> constantNames = new ArrayList<String>();
         final List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
         for (final Element field : fields) {
             final String fieldName = field.getSimpleName().toString();
             final DatabaseField databaseFieldAnnotation = field.getAnnotation(DatabaseField.class);
             final String annotatedColumnName = databaseFieldAnnotation.columnName();
+            final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
+            final String constantName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
             if (!("_id".equals(fieldName) || "_id".equals(annotatedColumnName))) {
-                final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
-                final String constantName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
                 writer.emitField("String", constantName, EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
-                sbInitialValue.append(",\n").append(constantName);
+                if (sbInitialValue.length() > 0) {
+                    sbInitialValue.append(",\n");
+                }
+                sbInitialValue.append(constantName);
                 isEmittedField = true;
+            } else {
+                sbInitialValue.append("BaseColumns._ID");
             }
+            constantNames.add(constantName);
         }
-        sbInitialValue.append("\n}");
 
-        if (isEmittedField) {
+        if (constantNames.size() > 0) {
+            if (isEmittedField) {
+                writer.emitEmptyLine();
+            }
+            writer.emitField("String[]", "ALL_COLUMNS", EnumSet.of(STATIC, PUBLIC, FINAL), "{\n" + sbInitialValue.toString() + "\n}");
+
             writer.emitEmptyLine();
+
+            writer.beginType("ColumnIndices", "interface", EnumSet.of(PUBLIC));
+            for (int i = 0; i < constantNames.size(); i++) {
+                final String constantName = constantNames.get(i);
+                final String indexName = "COL" + (constantName.startsWith("_") ? "" : "_") + constantName;
+                writer.emitField("int", indexName, EnumSet.noneOf(Modifier.class), String.valueOf(i));
+            }
+            writer.endType();
         }
-        writer.emitField("String[]", "ALL_COLUMNS", EnumSet.of(STATIC, PUBLIC, FINAL), sbInitialValue.toString());
 
         writer.endType();
     }

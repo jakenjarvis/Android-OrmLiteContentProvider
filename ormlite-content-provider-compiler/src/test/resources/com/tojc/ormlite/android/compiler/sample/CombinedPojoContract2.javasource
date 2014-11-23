@@ -35,6 +35,11 @@ public final class CombinedPojoContract2 {
       BaseColumns._ID,
       NAME
       };
+
+    public interface ColumnIndices {
+      int COL_ID = 0;
+      int COL_NAME = 1;
+    }
   }
 
   public static final class CombinedPojo4
@@ -61,6 +66,11 @@ public final class CombinedPojoContract2 {
       BaseColumns._ID,
       NAME
       };
+
+    public interface ColumnIndices {
+      int COL_ID = 0;
+      int COL_NAME = 1;
+    }
   }
 }
 
