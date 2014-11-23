@@ -23,5 +23,13 @@ public final class PojoWithFields1Contract
   }
 
   public static final String CONTRACTUAL_FIELD = "contractualField";
+
+  public static final String[] ALL_COLUMNS = {
+    CONTRACTUAL_FIELD
+    };
+
+  public interface ColumnIndices {
+    int COL_CONTRACTUAL_FIELD = 0;
+  }
 }
 

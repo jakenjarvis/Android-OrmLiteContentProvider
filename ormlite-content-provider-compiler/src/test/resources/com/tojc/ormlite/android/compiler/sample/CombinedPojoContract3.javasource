@@ -30,6 +30,16 @@ public final class CombinedPojoContract3 {
     }
 
     public static final String NAME = "name";
+
+    public static final String[] ALL_COLUMNS = {
+      BaseColumns._ID,
+      NAME
+      };
+
+    public interface ColumnIndices {
+      int COL_ID = 0;
+      int COL_NAME = 1;
+    }
   }
 
   public static final class CombinedPojo6
@@ -51,6 +61,16 @@ public final class CombinedPojoContract3 {
     }
 
     public static final String NAME = "name";
+
+    public static final String[] ALL_COLUMNS = {
+      BaseColumns._ID,
+      NAME
+      };
+
+    public interface ColumnIndices {
+      int COL_ID = 0;
+      int COL_NAME = 1;
+    }
   }
 }
 

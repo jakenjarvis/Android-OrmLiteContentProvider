@@ -23,5 +23,13 @@ public final class PojoWithFields2Contract
   }
 
   public static final String NAMED_COLUMN = "namedColumn";
+
+  public static final String[] ALL_COLUMNS = {
+    NAMED_COLUMN
+    };
+
+  public interface ColumnIndices {
+    int COL_NAMED_COLUMN = 0;
+  }
 }
 
