@@ -28,6 +28,7 @@ import com.squareup.javawriter.JavaWriter;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.Contract;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
+import com.tojc.ormlite.android.cursor.EntityUtils;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -39,6 +40,8 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
@@ -78,6 +81,11 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String CONTRACT_AUTHORITY = "CONTRACT_AUTHORITY";
     private static final String CONTRACT_CLASS_SUFFIX = "Contract";
     private static final String MIMETYPE_NAME_SUFFIX = "provider";
+
+    private static final String CURSOR_COLUMN_TYPE_INTEGER = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_INTEGER";
+    private static final String CURSOR_COLUMN_TYPE_FLOAT = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_FLOAT";
+    private static final String CURSOR_COLUMN_TYPE_STRING = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_STRING";
+
     private int patternCode = 1;
 
     // http://stackoverflow.com/questions/8185331/forward-compatible-java-6-annotation-processor-and-supportedsourceversion
@@ -306,26 +314,34 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 .endMethod()
                 .emitEmptyLine();
 
-        final StringBuilder sbInitialValue = new StringBuilder();
+        final StringBuilder sbInitialColumnsValue = new StringBuilder();
+        final StringBuilder sbInitialTypesValue = new StringBuilder();
         boolean isEmittedField = false;
         final List<String> constantNames = new ArrayList<String>();
         final List<Element> fields = getAllElementsAnnotatedWith(DatabaseField.class, classElement);
         for (final Element field : fields) {
-            final String fieldName = field.getSimpleName().toString();
-            final DatabaseField databaseFieldAnnotation = field.getAnnotation(DatabaseField.class);
-            final String annotatedColumnName = databaseFieldAnnotation.columnName();
-            final String columnName = annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
+            final String columnName = getColumnName(field);
             final String constantName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
-            if (!("_id".equals(fieldName) || "_id".equals(annotatedColumnName))) {
+            final String cursorColumnTypeName = getCursorColumnTypeName(field);
+
+            if (!("_id".equals(columnName))) {
                 writer.emitField("String", constantName, EnumSet.of(STATIC, PUBLIC, FINAL), JavaWriter.stringLiteral(columnName));
-                if (sbInitialValue.length() > 0) {
-                    sbInitialValue.append(",\n");
+                if (sbInitialColumnsValue.length() > 0) {
+                    sbInitialColumnsValue.append(",\n");
                 }
-                sbInitialValue.append(constantName);
+                sbInitialColumnsValue.append(constantName);
+
+                if (sbInitialTypesValue.length() > 0) {
+                    sbInitialTypesValue.append(",\n");
+                }
+                sbInitialTypesValue.append(cursorColumnTypeName);
+
                 isEmittedField = true;
             } else {
-                sbInitialValue.append("BaseColumns._ID");
+                sbInitialColumnsValue.append("BaseColumns._ID");
+                sbInitialTypesValue.append(CURSOR_COLUMN_TYPE_INTEGER);
             }
+
             constantNames.add(constantName);
         }
 
@@ -333,7 +349,11 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             if (isEmittedField) {
                 writer.emitEmptyLine();
             }
-            writer.emitField("String[]", "ALL_COLUMNS", EnumSet.of(STATIC, PUBLIC, FINAL), "{\n" + sbInitialValue.toString() + "\n}");
+            writer.emitField("String[]", "ALL_COLUMNS", EnumSet.of(STATIC, PUBLIC, FINAL), "{\n" + sbInitialColumnsValue.toString() + "\n}");
+
+            writer.emitEmptyLine();
+
+            writer.emitField("int[]", "ALL_COLUMN_TYPES", EnumSet.of(STATIC, PUBLIC, FINAL), "{\n" + sbInitialTypesValue.toString() + "\n}");
 
             writer.emitEmptyLine();
 
@@ -344,9 +364,48 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 writer.emitField("int", indexName, EnumSet.noneOf(Modifier.class), String.valueOf(i));
             }
             writer.endType();
+
+            writer.emitEmptyLine();
+
+            writer.beginInitializer(true);
+            Class<EntityUtils> entityUtilsClass = EntityUtils.class;
+            String entityClassName = ((TypeElement) classElement).getQualifiedName().toString();
+            writer.emitStatement("%s.registerContractInfo(MIMETYPE_TYPE, %s.class, ALL_COLUMNS, ALL_COLUMN_TYPES)", entityUtilsClass.getCanonicalName(), entityClassName);
+            writer.endInitializer();
         }
 
         writer.endType();
+    }
+
+    private String getCursorColumnTypeName(Element field) {
+        final TypeMirror typeMirror = field.asType();
+        final TypeKind kind = typeMirror.getKind();
+        switch (kind) {
+            case INT:
+                return CURSOR_COLUMN_TYPE_INTEGER;
+            case FLOAT:
+                return CURSOR_COLUMN_TYPE_FLOAT;
+            case DECLARED:
+                Element typeElem = processingEnv.getTypeUtils().asElement(typeMirror);
+                if (typeElem instanceof TypeElement) {
+                    String className = ((TypeElement) typeElem).getQualifiedName().toString();
+                    if (className.equals("java.lang.Integer")) {
+                        return CURSOR_COLUMN_TYPE_INTEGER;
+                    } else if (className.equals("java.lang.Float")) {
+                        return CURSOR_COLUMN_TYPE_FLOAT;
+                    }
+                }
+                return CURSOR_COLUMN_TYPE_STRING;
+            default:
+                return CURSOR_COLUMN_TYPE_STRING;
+        }
+    }
+
+    private String getColumnName(Element field) {
+        final String fieldName = field.getSimpleName().toString();
+        final DatabaseField databaseFieldAnnotation = field.getAnnotation(DatabaseField.class);
+        final String annotatedColumnName = databaseFieldAnnotation.columnName();
+        return annotatedColumnName != null && annotatedColumnName.length() > 0 ? annotatedColumnName : fieldName;
     }
 
     private static final Comparator<Element> ELEMENT_COMPARATOR = new Comparator<Element>() {
