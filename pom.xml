@@ -92,6 +92,17 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+	<repositories>
+		<repository>
+			<id>android-support</id>
+			<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+		</repository>
+	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>oss.sonatype.org-jayway-snapshots</id>
@@ -116,8 +127,8 @@
 		<!-- Compilation dependencies, build.gradle -->
 		<android-sdk.version>19</android-sdk.version>
 		<android-buildtools.version>19.0.3</android-buildtools.version>
-		<android.version>4.1.1.4</android.version>
-		<android-support.version>r7</android-support.version>
+		<android.version>4.4.2_r4</android.version>
+		<android-support.version>19.1.0</android-support.version>
 
 		<!-- AndroidManifest -->
 		<android-min-sdk.version>7</android-min-sdk.version>
@@ -166,19 +177,19 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.google.android</groupId>
+				<groupId>com.android</groupId>
 				<artifactId>android</artifactId>
 				<version>${android.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.google.android</groupId>
+				<groupId>com.android</groupId>
 				<artifactId>android-test</artifactId>
 				<version>${android.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.google.android</groupId>
+				<groupId>com.android.support</groupId>
 				<artifactId>support-v4</artifactId>
 				<version>${android-support.version}</version>
 				<scope>provided</scope>

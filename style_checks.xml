@@ -176,6 +176,15 @@
 			<property name="tabWidth" value="4" />
 			<property name="basicOffset" value="4" />
 		</module>
+
+		<module name="FileContentsHolder" />
+	</module>
+
+	<module name="SuppressWithNearbyCommentFilter">
+		<property name="commentFormat" value="ignore"/>
+		<property name="checkFormat" value=".*"/>
+		<property name="influenceFormat" value="-1"/>
 	</module>
 
 </module>
+

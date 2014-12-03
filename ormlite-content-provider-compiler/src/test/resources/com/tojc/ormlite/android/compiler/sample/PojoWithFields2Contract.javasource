@@ -28,8 +28,16 @@ public final class PojoWithFields2Contract
     NAMED_COLUMN
     };
 
+  public static final int[] ALL_COLUMN_TYPES = {
+    com.tojc.ormlite.android.cursor.EntityUtils.FIELD_TYPE_STRING
+    };
+
   public interface ColumnIndices {
     int COL_NAMED_COLUMN = 0;
+  }
+
+  static {
+    com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(MIMETYPE_TYPE, com.tojc.ormlite.android.compiler.sample.PojoWithFields2.class, ALL_COLUMNS, ALL_COLUMN_TYPES);
   }
 }
 
