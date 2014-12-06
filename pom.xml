@@ -177,7 +177,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.android</groupId>
+				<groupId>android</groupId>
 				<artifactId>android</artifactId>
 				<version>${android.version}</version>
 				<scope>provided</scope>
