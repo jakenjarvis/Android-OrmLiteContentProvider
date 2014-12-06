@@ -61,10 +61,10 @@ public final class EntityUtils {
                     int columnType = contractInfo.columnTypes[columnIndex];
                     switch (columnType) {
                         case FIELD_TYPE_INTEGER:
-                            field.setInt(result, cursor.getInt(columnIndex));
+                            field.set(result, cursor.getInt(columnIndex));
                             break;
                         case FIELD_TYPE_FLOAT:
-                            field.setFloat(result, cursor.getFloat(columnIndex));
+                            field.set(result, cursor.getFloat(columnIndex));
                             break;
                         case FIELD_TYPE_STRING:
                         default:
@@ -97,10 +97,10 @@ public final class EntityUtils {
                 try {
                     switch (columnType) {
                         case FIELD_TYPE_INTEGER:
-                            values.put(columnName, field.getInt(entity));
+                            values.put(columnName, (Integer) field.get(entity));
                             break;
                         case FIELD_TYPE_FLOAT:
-                            values.put(columnName, field.getFloat(entity));
+                            values.put(columnName, (Float) field.get(entity));
                             break;
                         case FIELD_TYPE_STRING:
                         default:
