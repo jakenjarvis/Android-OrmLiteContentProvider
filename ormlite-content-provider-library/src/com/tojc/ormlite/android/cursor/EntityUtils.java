@@ -17,6 +17,7 @@ public final class EntityUtils {
     public static final int FIELD_TYPE_INTEGER = 1; // Cursor.FIELD_TYPE_INTEGER;
     public static final int FIELD_TYPE_STRING = 3; // Cursor.FIELD_TYPE_STRING;
     public static final int FIELD_TYPE_FLOAT = 2; // Cursor.FIELD_TYPE_FLOAT;
+    public static final int FIELD_TYPE_DOUBLE = 10; // not defined in Cursor class.
 
     public static class ContractInfo {
         final String[] columnNames;
@@ -67,6 +68,9 @@ public final class EntityUtils {
                         case FIELD_TYPE_FLOAT:
                             field.set(result, cursor.getFloat(columnIndex));
                             break;
+                        case FIELD_TYPE_DOUBLE:
+                            field.set(result, cursor.getDouble(columnIndex));
+                            break;
                         case FIELD_TYPE_STRING:
                         default:
                             field.set(result, cursor.getString(columnIndex));
@@ -102,6 +106,9 @@ public final class EntityUtils {
                             break;
                         case FIELD_TYPE_FLOAT:
                             values.put(columnName, (Float) field.get(entity));
+                            break;
+                        case FIELD_TYPE_DOUBLE:
+                            values.put(columnName, (Double) field.get(entity));
                             break;
                         case FIELD_TYPE_STRING:
                         default:

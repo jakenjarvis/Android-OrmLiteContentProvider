@@ -85,6 +85,7 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
     private static final String CURSOR_COLUMN_TYPE_INTEGER = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_INTEGER";
     private static final String CURSOR_COLUMN_TYPE_FLOAT = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_FLOAT";
     private static final String CURSOR_COLUMN_TYPE_STRING = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_STRING";
+    private static final String CURSOR_COLUMN_TYPE_DOUBLE = EntityUtils.class.getCanonicalName() + ".FIELD_TYPE_DOUBLE";
 
     private int patternCode = 1;
 
@@ -385,6 +386,8 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                 return CURSOR_COLUMN_TYPE_INTEGER;
             case FLOAT:
                 return CURSOR_COLUMN_TYPE_FLOAT;
+            case DOUBLE:
+                return CURSOR_COLUMN_TYPE_DOUBLE;
             case DECLARED:
                 Element typeElem = processingEnv.getTypeUtils().asElement(typeMirror);
                 if (typeElem instanceof TypeElement) {
@@ -393,6 +396,8 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                         return CURSOR_COLUMN_TYPE_INTEGER;
                     } else if (className.equals("java.lang.Float")) {
                         return CURSOR_COLUMN_TYPE_FLOAT;
+                    } else if (className.equals("java.lang.Double")) {
+                        return CURSOR_COLUMN_TYPE_DOUBLE;
                     }
                 }
                 return CURSOR_COLUMN_TYPE_STRING;
