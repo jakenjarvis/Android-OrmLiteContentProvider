@@ -2,6 +2,7 @@ package com.tojc.ormlite.android.cursor;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 import com.tojc.ormlite.android.annotation.OrmLiteAnnotationAccessor;
 
 import java.lang.reflect.Field;
@@ -56,7 +57,7 @@ public final class EntityUtils {
             Field[] fields = entityClass.getFields();
             for (Field field : fields) {
                 String columnName = OrmLiteAnnotationAccessor.getAnnotationColumnName(field);
-                if (columnName != null) {
+                if (!TextUtils.isEmpty(columnName)) {
                     int columnIndex = contractInfo.getColumnIndex(columnName);
                     int columnType = contractInfo.columnTypes[columnIndex];
                     switch (columnType) {
@@ -91,7 +92,7 @@ public final class EntityUtils {
         Field[] fields = entity.getClass().getFields();
         for (Field field : fields) {
             String columnName = OrmLiteAnnotationAccessor.getAnnotationColumnName(field);
-            if (columnName != null) {
+            if (!TextUtils.isEmpty(columnName)) {
                 int columnIndex = contractInfo.getColumnIndex(columnName);
                 int columnType = contractInfo.columnTypes[columnIndex];
                 try {
