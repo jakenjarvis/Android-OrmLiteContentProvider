@@ -105,7 +105,12 @@ public final class EntityUtils {
                             break;
                         case FIELD_TYPE_STRING:
                         default:
-                            values.put(columnName, field.get(entity).toString());
+                            Object value = field.get(entity);
+                            if (value != null) {
+                                values.put(columnName, value.toString());
+                            } else {
+                                values.put(columnName, (String) null);
+                            }
                             break;
                     }
                 } catch (IllegalAccessException e) { //NOPMD
