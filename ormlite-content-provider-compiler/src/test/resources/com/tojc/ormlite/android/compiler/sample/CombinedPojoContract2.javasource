@@ -45,10 +45,6 @@ public final class CombinedPojoContract2 {
       int COL_ID = 0;
       int COL_NAME = 1;
     }
-
-    static {
-      com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(MIMETYPE_TYPE, com.tojc.ormlite.android.compiler.sample.CombinedPojo3.class, ALL_COLUMNS, ALL_COLUMN_TYPES);
-    }
   }
 
   public static final class CombinedPojo4
@@ -85,10 +81,11 @@ public final class CombinedPojoContract2 {
       int COL_ID = 0;
       int COL_NAME = 1;
     }
+  }
 
-    static {
-      com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(MIMETYPE_TYPE, com.tojc.ormlite.android.compiler.sample.CombinedPojo4.class, ALL_COLUMNS, ALL_COLUMN_TYPES);
-    }
+  static {
+    com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(CombinedPojo3.MIMETYPE_TYPE, com.tojc.ormlite.android.compiler.sample.CombinedPojo3.class, CombinedPojo3.ALL_COLUMNS, CombinedPojo3.ALL_COLUMN_TYPES);
+    com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(CombinedPojo4.MIMETYPE_TYPE, com.tojc.ormlite.android.compiler.sample.CombinedPojo4.class, CombinedPojo4.ALL_COLUMNS, CombinedPojo4.ALL_COLUMN_TYPES);
   }
 }
 

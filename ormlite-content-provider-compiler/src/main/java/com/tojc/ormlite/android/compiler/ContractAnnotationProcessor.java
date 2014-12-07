@@ -161,6 +161,17 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
                     }
                 }
                 if (multipleClassesForContract) {
+                    writer.emitEmptyLine();
+
+                    writer.beginInitializer(true);
+                    Class<EntityUtils> entityUtilsClass = EntityUtils.class;
+                    for (final Element classElement : classElements) {
+                        String entityClassName = ((TypeElement) classElement).getQualifiedName().toString();
+                        String contractClassName = classElement.getSimpleName().toString(); // + CONTRACT_CLASS_SUFFIX;
+                        writer.emitStatement("%s.registerContractInfo(%s.MIMETYPE_TYPE, %s.class, %s.ALL_COLUMNS, %s.ALL_COLUMN_TYPES)", entityUtilsClass.getCanonicalName(), contractClassName, entityClassName, contractClassName, contractClassName);
+                    }
+                    writer.endInitializer();
+
                     writer.endType();
                 }
                 writer.emitEmptyLine();
@@ -366,13 +377,15 @@ public class ContractAnnotationProcessor extends AbstractProcessor {
             }
             writer.endType();
 
-            writer.emitEmptyLine();
+            if (!multipleClassesForContract) {
+                writer.emitEmptyLine();
 
-            writer.beginInitializer(true);
-            Class<EntityUtils> entityUtilsClass = EntityUtils.class;
-            String entityClassName = ((TypeElement) classElement).getQualifiedName().toString();
-            writer.emitStatement("%s.registerContractInfo(MIMETYPE_TYPE, %s.class, ALL_COLUMNS, ALL_COLUMN_TYPES)", entityUtilsClass.getCanonicalName(), entityClassName);
-            writer.endInitializer();
+                writer.beginInitializer(true);
+                Class<EntityUtils> entityUtilsClass = EntityUtils.class;
+                String entityClassName = ((TypeElement) classElement).getQualifiedName().toString();
+                writer.emitStatement("%s.registerContractInfo(MIMETYPE_TYPE, %s.class, ALL_COLUMNS, ALL_COLUMN_TYPES)", entityUtilsClass.getCanonicalName(), entityClassName);
+                writer.endInitializer();
+            }
         }
 
         writer.endType();

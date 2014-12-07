@@ -3,6 +3,8 @@ package com.tojc.ormlite.android.cursor;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
+
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
 import com.tojc.ormlite.android.annotation.OrmLiteAnnotationAccessor;
 
 import java.lang.reflect.Field;
@@ -52,6 +54,12 @@ public final class EntityUtils {
     }
 
     public static <T> T loadFromCursor(Cursor cursor, Class<T> entityClass) {
+        AdditionalAnnotation.Contract contract = entityClass.getAnnotation(AdditionalAnnotation.Contract.class);
+        try {
+            Class.forName(contract.contractClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         ContractInfo contractInfo = sEntityContractMap.get(entityClass.getCanonicalName());
         try {
             T result = entityClass.newInstance();
@@ -90,6 +98,13 @@ public final class EntityUtils {
     }
 
     public static <T> ContentValues createContentValues(T entity) {
+        Class<T> entityClass = (Class<T>) entity.getClass();
+        AdditionalAnnotation.Contract contract = entityClass.getAnnotation(AdditionalAnnotation.Contract.class);
+        try {
+            Class.forName(contract.contractClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         ContractInfo contractInfo = sEntityContractMap.get(entity.getClass().getCanonicalName());
         ContentValues values = new ContentValues();
 
