@@ -4,6 +4,7 @@ evaluationDependsOn(':ormlite-content-provider-library')
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -64,7 +65,7 @@ findbugs {
 
 pmd {
     ignoreFailures = true
-    ruleSets = ["basic", "design", "imports", "braces", "strings"]
+    ruleSets = ["java-basic", "java-design", "java-imports", "java-braces", "java-strings"]
 }
 
 afterEvaluate {

@@ -1,9 +1,10 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 evaluationDependsOn(':ormlite-content-provider-library')
 
 repositories{
     mavenCentral()
+    jcenter()
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
@@ -29,12 +30,14 @@ android {
 
     buildTypes {
         defaultConfig {
+            applicationId "${project.group}.test"
             minSdkVersion defaultConfigMinSdkVersion
             targetSdkVersion defaultConfigTargetSdkVersion
             versionCode 1
             versionName project.version
 
-            testPackageName "com.tojc.ormlite.android.test"
+            testApplicationId "${project.group}.test"
+
             testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
             testFunctionalTest true
         }
@@ -44,7 +47,7 @@ android {
         }
         release {
             debuggable false
-            runProguard false
+            minifyEnabled false
         }
     }
 
@@ -116,7 +119,7 @@ findbugs {
 
 pmd {
     ignoreFailures = true
-    ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
+    ruleSets = ["java-android", "java-basic", "java-design", "java-imports", "java-braces", "java-strings"]
 }
 
 artifacts {

@@ -1,9 +1,10 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 evaluationDependsOn(':ormlite-content-provider-library')
 
 repositories{
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -16,6 +17,7 @@ android {
 
     buildTypes {
         defaultConfig {
+            applicationId "${project.group}.ormlitecontentprovider.sample"
             minSdkVersion defaultConfigMinSdkVersion
             targetSdkVersion defaultConfigTargetSdkVersion
             versionCode 1
@@ -82,7 +84,7 @@ findbugs {
 
 pmd {
     ignoreFailures = true
-    ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
+    ruleSets = ["java-android", "java-basic", "java-design", "java-imports", "java-braces", "java-strings"]
 }
 
 artifacts {

@@ -1,9 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:1.1.+'
     }
 }
 
@@ -16,33 +17,35 @@ commonlibrary {
 
     // patch
     apply(project, "allprojectsPatchDisableLintOptionsAbortOnError")
-    apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
+    //apply(project, "allprojectsPatchEnableAaptOptionsUseAaptPngCruncher")
 }
 
 ext {
+    defaultJavaVersion = JavaVersion.VERSION_1_7
+
     //mavenRepository = file("${rootDir}/repository")
     localPublishing = false
 
     // android sdk
-    androidCompileSdkVersion = 19
-    androidBuildToolsVersion = "19.0.3"
+    androidCompileSdkVersion = 21
+    androidBuildToolsVersion = "21.1.2"
     androidVersion = "4.1.1.4"
     androidSupportVersion = "r7"
 
     // AndroidManifest.xml
     defaultConfigMinSdkVersion = 8
-    defaultConfigTargetSdkVersion = 19
+    defaultConfigTargetSdkVersion = 21
 
     // main dependencies
     ormliteVersion = "4.48"
 
     // compiler dependencies
-    javawriterVersion = "2.4.0"
-    springCoreVersion = "4.0.3.RELEASE"
+    javawriterVersion = "2.5.1"
+    springCoreVersion = "4.1.4.RELEASE"
 
     // test dependencies
-    junitVersion = "4.11"
-    doubleEspressoVersion = "1.1-r2"
+    junitVersion = "4.12"
+    doubleEspressoVersion = "1.1-r3"
     hamcrestVersion = "1.3"
 }
 
