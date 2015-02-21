@@ -1,3 +1,5 @@
+# Building an Android Project (beta)
+# http://docs.travis-ci.com/user/languages/android/
 language: java
 jdk:
     - oraclejdk7
@@ -17,7 +19,8 @@ env:
     #- ANDROID_TARGET=android-17  ANDROID_SDKS=android-17,build-tools-17.0.0,sysimg-17 ANDROID_BUILD_TOOLS_VERSION=17.0.0 ANDROID_ABI=armeabi-v7a
     #- ANDROID_TARGET=android-18  ANDROID_SDKS=android-18,build-tools-18.1.1,sysimg-18 ANDROID_BUILD_TOOLS_VERSION=18.1.1 ANDROID_ABI=armeabi-v7a
     #- ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.0,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.0 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.3,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.3 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.3,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.3 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-21  ANDROID_SDKS=android-21,build-tools-21.1.2,sysimg-21 ANDROID_BUILD_TOOLS_VERSION=21.1.2 ANDROID_ABI=armeabi-v7a
 
 before_install:
     # git submodules update
@@ -31,10 +34,10 @@ before_install:
     #- gem install travis-lint
     #- travis-lint
 
-    # Install gradle 1.11
-    - wget http://services.gradle.org/distributions/gradle-1.11-all.zip > /dev/null
-    - echo A | unzip gradle-1.11-all.zip > /dev/null
-    - export GRADLE_HOME=`pwd`/gradle-1.11
+    # Install gradle 2.2.1
+    - wget http://services.gradle.org/distributions/gradle-2.2.1-all.zip > /dev/null
+    - echo A | unzip gradle-2.2.1-all.zip > /dev/null
+    - export GRADLE_HOME=`pwd`/gradle-2.2.1
     - export PATH=${GRADLE_HOME}/bin/:${PATH}
     - gradle -v
 
@@ -55,8 +58,8 @@ before_install:
 
     #- wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz > /dev/null
     #- tar xzf android-sdk_r22.0.5-linux.tgz > /dev/null
-    - wget http://dl.google.com/android/android-sdk_r22.6.2-linux.tgz > /dev/null
-    - tar xzf android-sdk_r22.6.2-linux.tgz > /dev/null
+    - wget http://dl.google.com/android/android-sdk_r24.0.2-linux.tgz > /dev/null
+    - tar xzf android-sdk_r24.0.2-linux.tgz > /dev/null
 
     - export ANDROID_HOME=`pwd`/android-sdk-linux
     - export PATH=${PATH}:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
