@@ -20,7 +20,7 @@ env:
     #- ANDROID_TARGET=android-18  ANDROID_SDKS=android-18,build-tools-18.1.1,sysimg-18 ANDROID_BUILD_TOOLS_VERSION=18.1.1 ANDROID_ABI=armeabi-v7a
     #- ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.0,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.0 ANDROID_ABI=armeabi-v7a
     #- ANDROID_TARGET=android-19  ANDROID_SDKS=android-19,build-tools-19.0.3,sysimg-19 ANDROID_BUILD_TOOLS_VERSION=19.0.3 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-21  ANDROID_SDKS=android-21,build-tools-21.1.2,sysimg-21 ANDROID_BUILD_TOOLS_VERSION=21.1.2 ANDROID_ABI=default/armeabi-v7a
+    - ANDROID_TARGET=android-19  ANDROID_SDKS=android-21,build-tools-21.1.2,sysimg-21 ANDROID_BUILD_TOOLS_VERSION=21.1.2 ANDROID_ABI=armeabi-v7a
 
 before_install:
     # git submodules update
