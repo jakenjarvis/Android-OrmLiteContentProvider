@@ -65,12 +65,18 @@ before_install:
     - export PATH=${PATH}:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
 
     # Install required Android components.
-    - android list sdk --all --extended
+    - android list sdk --no-ui --all --extended
 
     # Install android sdk.
     - SDK_FILTERS=tools,platform-tools,extra-android-support,extra-android-m2repository,extra-google-m2repository,$ANDROID_SDKS
     - chmod +x ./android_update_sdk.sh
     - ./android_update_sdk.sh "--filter ${SDK_FILTERS} --no-ui --force"
+
+    # fix Download system-image. The path of URL is invalid...
+    - wget https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_arm-21_r01.zip > /dev/null
+    - echo A | unzip sysimg_arm-21_r01.zip > /dev/null
+    - mkdir ${ANDROID_HOME}/system-images/android-21/default/
+    - mv -f sysimg_arm-21_r01/armeabi-v7a ${ANDROID_HOME}/system-images/android-21/default/
 
     # avd target
     - android list targets
