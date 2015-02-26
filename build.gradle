@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.+'
+        classpath 'com.android.tools.build:gradle:1.1.1'
     }
 }
 
@@ -33,7 +33,8 @@ ext {
     androidSupportVersion = "r7"
 
     // AndroidManifest.xml
-    defaultConfigMinSdkVersion = 8
+    // Caused by: java.lang.RuntimeException: Manifest merger failed : uses-sdk:minSdkVersion 8 cannot be smaller than version 9 declared in library C:\Users\Jaken\git\Android-OrmLiteContentProvider\ormlite-content-provider-library-test\build\intermediates\exploded-aar\com.mapbox.mapboxsdk\mapbox-android-sdk\0.7.0\AndroidManifest.xml
+    defaultConfigMinSdkVersion = 9//8
     defaultConfigTargetSdkVersion = 21
 
     // main dependencies
@@ -45,8 +46,10 @@ ext {
 
     // test dependencies
     junitVersion = "4.12"
-    doubleEspressoVersion = "1.1-r3"
+    doubleEspressoVersion = "2.0"
     hamcrestVersion = "1.3"
+    testingSupportLibVersion = "0.1"
+
 }
 
 allprojects {

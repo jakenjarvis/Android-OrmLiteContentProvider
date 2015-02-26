@@ -15,9 +15,16 @@ dependencies {
 
     androidTestCompile project(":ormlite-content-provider-library")
 
+    // http://tools.android.com/tech-docs/unit-testing-support
+    // https://code.google.com/p/android-test-kit/wiki/EspressoSetupInstructions
+    // https://code.google.com/p/android/issues/detail?id=151673
     androidTestCompile "junit:junit:${junitVersion}"
-    androidTestCompile("com.jakewharton.espresso:espresso:${doubleEspressoVersion}") {
+    androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
+        transitive=true
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
         exclude group: "org.hamcrest"
+        transitive=true
     }
     androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
@@ -38,7 +45,7 @@ android {
 
             testApplicationId "${project.group}.test"
 
-            testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             testFunctionalTest true
         }
 
@@ -90,6 +97,15 @@ android {
         // for AndroidStudio's bug. duplication error of file below.
         pickFirst 'META-INF/LICENSE.txt'
         pickFirst 'LICENSE.txt'
+    }
+
+    // http://stackoverflow.com/questions/28640314/android-studio-fails-to-debug-with-error-org-gradle-process-internal-execexcepti
+    // http://hatti.tistory.com/m/post/93
+    // https://code.google.com/p/android-test-kit/issues/detail?id=119
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
+        preDexLibraries false
     }
 }
 
