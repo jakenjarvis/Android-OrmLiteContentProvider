@@ -75,39 +75,44 @@ public class TableInfo implements Validity {
         SortedMap<Integer, String> defaultSortOrderMap = new TreeMap<Integer, String>();
 
         this.idColumnInfo = null;
-        for (Field classfield : tableClassType.getDeclaredFields()) {
-            if (classfield.isAnnotationPresent(DatabaseField.class)) {
-                classfield.setAccessible(true); // private field accessible
 
-                ColumnInfo columnInfo = new ColumnInfo(classfield);
-                this.columns.put(columnInfo.getColumnName(), columnInfo);
+        Class<?> targetTableClassType = tableClassType;
+        while(targetTableClassType != null) {
+            for (Field classfield : targetTableClassType.getDeclaredFields()) {
+                if (classfield.isAnnotationPresent(DatabaseField.class)) {
+                    classfield.setAccessible(true); // private field accessible
 
-                // check id (generated or otherwise)
-                if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
-                    // MEMO: Conforms to the discretion of ORMLite.
-                    // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
-                    // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
-                    DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);
-                    if (databaseField != null && databaseField.persisted()) {
-                        boolean generatedId = databaseField.generatedId();
-                        boolean id = databaseField.id();
-                        if (generatedId || id) {
-                            this.idColumnInfo = columnInfo;
+                    ColumnInfo columnInfo = new ColumnInfo(classfield);
+                    this.columns.put(columnInfo.getColumnName(), columnInfo);
+
+                    // check id (generated or otherwise)
+                    if (columnInfo.getColumnName().equals(BaseColumns._ID)) {
+                        // MEMO: Conforms to the discretion of ORMLite.
+                        // See com.j256.ormlite.field.DatabaseFieldConfig#fromField
+                        // https://github.com/j256/ormlite-core/blob/master/src/main/java/com/j256/ormlite/field/DatabaseFieldConfig.java#L512
+                        DatabaseField databaseField = classfield.getAnnotation(DatabaseField.class);
+                        if (databaseField != null && databaseField.persisted()) {
+                            boolean generatedId = databaseField.generatedId();
+                            boolean id = databaseField.id();
+                            if (generatedId || id) {
+                                this.idColumnInfo = columnInfo;
+                            }
                         }
                     }
+
+                    // DefaultSortOrder
+                    SortOrderInfo defaultSortOrderInfo = columnInfo.getDefaultSortOrderInfo();
+                    if (defaultSortOrderInfo.isValid()) {
+                        defaultSortOrderMap.put(defaultSortOrderInfo.getWeight(),
+                                defaultSortOrderInfo.makeSqlOrderString(columnInfo.getColumnName()));
+                    }
+
+                    // ProjectionMap
+                    this.projectionMap.put(columnInfo.getProjectionColumnName(), columnInfo.getColumnName());
                 }
-
-                // DefaultSortOrder
-                SortOrderInfo defaultSortOrderInfo = columnInfo.getDefaultSortOrderInfo();
-                if (defaultSortOrderInfo.isValid()) {
-                    defaultSortOrderMap.put(defaultSortOrderInfo.getWeight(),
-                        defaultSortOrderInfo.makeSqlOrderString(columnInfo.getColumnName()));
-                }
-
-                // ProjectionMap
-                this.projectionMap.put(columnInfo.getProjectionColumnName(), columnInfo.getColumnName());
-
             }
+
+            targetTableClassType = targetTableClassType.getSuperclass();
         }
 
         if (this.idColumnInfo == null) {
