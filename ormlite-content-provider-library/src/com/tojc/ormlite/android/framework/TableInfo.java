@@ -77,7 +77,7 @@ public class TableInfo implements Validity {
         this.idColumnInfo = null;
 
         Class<?> targetTableClassType = tableClassType;
-        while(targetTableClassType != null) {
+        while (targetTableClassType != null) {
             for (Field classfield : targetTableClassType.getDeclaredFields()) {
                 if (classfield.isAnnotationPresent(DatabaseField.class)) {
                     classfield.setAccessible(true); // private field accessible

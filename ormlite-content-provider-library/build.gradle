@@ -1,7 +1,8 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -83,7 +84,7 @@ findbugs {
 
 pmd {
     ignoreFailures = true
-    ruleSets = ["android", "basic", "design", "imports", "braces", "strings"]
+    ruleSets = ["java-android", "java-basic", "java-design", "java-imports", "java-braces", "java-strings"]
 }
 
 artifacts {

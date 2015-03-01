@@ -33,33 +33,24 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder
  * Did you know ? All annotations and parameters are optionnal ! You just need the @Contract
  * @author SNI
  */
-@DatabaseTable(tableName = "accounts")
-@DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "accounts")
-@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "accounts")
-public class Account {
-
-    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
-    @DefaultSortOrder
-    protected int id;
-
+@DatabaseTable(tableName = "extendsaccounts")
+@DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "extendsaccounts")
+@DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "extendsaccounts")
+public class ExtendsAccount extends Account {
     @DatabaseField
-    protected String name;
+    private String address;
 
-    public Account() {
+    public ExtendsAccount() {
         // ORMLite needs a no-arg constructor
     }
 
-    public Account(String name) {
+    public ExtendsAccount(String name, String address) {
         this.id = 0;
         this.name = name;
+        this.address = address;
     }
 
-    public int getId() {
-        return id;
+    public String getAddress() {
+        return address;
     }
-
-    public String getName() {
-        return name;
-    }
-
 }
