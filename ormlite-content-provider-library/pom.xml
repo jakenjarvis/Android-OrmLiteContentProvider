@@ -21,12 +21,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>android</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.android.support</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>support-v4</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -67,7 +67,7 @@
 			</plugin>
 
 			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
 			</plugin>

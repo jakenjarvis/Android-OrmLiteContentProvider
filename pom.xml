@@ -122,13 +122,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 
 		<!-- Compilation dependencies, build.gradle -->
-		<android-sdk.version>19</android-sdk.version>
-		<android-buildtools.version>19.0.3</android-buildtools.version>
-		<android.version>4.4.2_r4</android.version>
-		<android-support.version>19.1.0</android-support.version>
+		<android-sdk.version>21</android-sdk.version>
+		<android-buildtools.version>21.1.2</android-buildtools.version>
+		<android.version>4.1.1.4</android.version>
+		<android-support.version>r7</android-support.version>
 
 		<!-- AndroidManifest -->
 		<android-min-sdk.version>7</android-min-sdk.version>
@@ -136,60 +136,60 @@
 
 		<!-- compiler dependencies -->
 		<ormlite.version>4.48</ormlite.version>
-		<javawriter.version>2.4.0</javawriter.version>
+		<javawriter.version>2.5.1</javawriter.version>
 		<guava.version>18.0</guava.version>
-		<spring-core.version>4.0.2.RELEASE</spring-core.version>
+		<spring-core.version>4.1.5.RELEASE</spring-core.version>
 
 		<!-- test dependencies -->
-		<junit.version>4.11</junit.version>
+		<junit.version>4.12</junit.version>
 
 		<!-- plugins -->
-		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
-		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
-		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+		<maven-checkstyle-plugin.version>2.14</maven-checkstyle-plugin.version>
+		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
+		<maven-pmd-plugin.version>3.4</maven-pmd-plugin.version>
 		<eclipse-lifecycle-plugin.version>1.0.0</eclipse-lifecycle-plugin.version>
-		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
-		<maven-release-plugin.version>2.4.1</maven-release-plugin.version>
+		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>3.9.0-rc.3</android-maven-plugin.version>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<android-maven-plugin.version>4.1.1</android-maven-plugin.version>
+		<maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
 		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
-		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-		<build-helper-maven-plugin.version>1.8</build-helper-maven-plugin.version>
-		<maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
-		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<build-helper-maven-plugin.version>1.9.1</build-helper-maven-plugin.version>
+		<maven-replacer-plugin.version>1.5.3</maven-replacer-plugin.version>
+		<exec-maven-plugin.version>1.3.2</exec-maven-plugin.version>
 
-		<maven-site-plugin.version>3.3</maven-site-plugin.version>
-		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
-		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
+		<maven-site-plugin.version>3.4</maven-site-plugin.version>
+		<maven-javadoc-plugin.version>2.10.1</maven-javadoc-plugin.version>
+		<maven-source-plugin.version>2.4</maven-source-plugin.version>
+		<maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
 
 		<!-- release-sign-artifacts -->
-		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 
 		<!--
 			$ mvn versions:display-dependency-updates
 			$ mvn versions:update-properties
 		-->
-		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
+		<versions-maven-plugin.version>2.1.4</versions-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>android</groupId>
+				<groupId>com.google.android</groupId>
 				<artifactId>android</artifactId>
 				<version>${android.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.android</groupId>
+				<groupId>com.google.android</groupId>
 				<artifactId>android-test</artifactId>
 				<version>${android.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.android.support</groupId>
+				<groupId>com.google.android</groupId>
 				<artifactId>support-v4</artifactId>
 				<version>${android-support.version}</version>
 				<scope>provided</scope>
@@ -244,7 +244,7 @@
 
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+										<groupId>com.simpligility.maven.plugins</groupId>
 										<artifactId>android-maven-plugin</artifactId>
 										<versionRange>[3.8.1,)</versionRange>
 										<goals>
@@ -273,8 +273,8 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.google.code.maven-replacer-plugin</groupId>
-										<artifactId>maven-replacer-plugin</artifactId>
-										<versionRange>[1.4.0,)</versionRange>
+										<artifactId>replacer</artifactId>
+										<versionRange>[1.5.0,)</versionRange>
 										<goals>
 											<goal>replace</goal>
 										</goals>
@@ -315,7 +315,7 @@
 
 				<!-- Android config -->
 				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<groupId>com.simpligility.maven.plugins</groupId>
 					<artifactId>android-maven-plugin</artifactId>
 					<version>${android-maven-plugin.version}</version>
 					<configuration>
@@ -347,7 +347,7 @@
 
 				<plugin>
 					<groupId>com.google.code.maven-replacer-plugin</groupId>
-					<artifactId>maven-replacer-plugin</artifactId>
+					<artifactId>replacer</artifactId>
 					<version>${maven-replacer-plugin.version}</version>
 				</plugin>
 
