@@ -18,17 +18,35 @@ dependencies {
     // http://tools.android.com/tech-docs/unit-testing-support
     // https://code.google.com/p/android-test-kit/wiki/EspressoSetupInstructions
     // https://code.google.com/p/android/issues/detail?id=151673
-    androidTestCompile "junit:junit:${junitVersion}"
+    //androidTestCompile("junit:junit:${junitVersion}") {
+        //exclude group: "org.hamcrest"
+        //transitive=true
+    //}
     androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
-        transitive=true
+        //exclude group: "org.hamcrest"
+        //exclude group: "junit:junit"
+        //transitive=true
     }
     androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
-        exclude group: "org.hamcrest"
-        transitive=true
+        //exclude group: "junit:junit"
+        //exclude group: "org.hamcrest"
+        //transitive=true
+        //exclude group: 'javax.inject'
     }
-    androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-    androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
+    //androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    //androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+    //androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
+
+    // Tests on Nexus5(AVD) - 4.4.2 failed: Instrumentation run failed due to 'java.lang.NoClassDefFoundError'
+    // 
+    // com.android.builder.testing.ConnectedDevice > hasTests[Nexus5(AVD) - 4.4.2] FAILED
+    // No tests found.
+    // :ormlite-content-provider-library-test:connectedAndroidTest FAILED
+    // 
+    // FAILURE: Build failed with an exception.
+    // http://stackoverflow.com/questions/27084948/com-android-builder-testing-connecteddevice-hasteststestavd-5-0-failed
+    // http://stackoverflow.com/questions/27234046/android-instrumentation-run-failed-due-to-java-lang-classnotfoundexception-n
+    // https://github.com/bryanstern/dagger-instrumentation-example/issues/1
 }
 
 android {
@@ -73,6 +91,8 @@ android {
         //instrumentTest.setRoot('tests')
         //androidTest.setRoot('tests')
         androidTest {
+            //setRoot('src')
+
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src', 'build/source/generated']
             resources.srcDirs = ['src']
