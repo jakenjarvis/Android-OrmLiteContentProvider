@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.2'
+        classpath 'com.android.tools.build:gradle:1.2.2'
     }
 }
 
@@ -28,15 +28,14 @@ ext {
     localPublishing = false
 
     // android sdk
-    androidCompileSdkVersion = 21
-    androidBuildToolsVersion = "21.1.2"
+    androidCompileSdkVersion = 22
+    androidBuildToolsVersion = "22.0.1"
     androidVersion = "4.1.1.4"
     androidSupportVersion = "r7"
 
     // AndroidManifest.xml
-    // Caused by: java.lang.RuntimeException: Manifest merger failed : uses-sdk:minSdkVersion 8 cannot be smaller than version 9 declared in library C:\Users\Jaken\git\Android-OrmLiteContentProvider\ormlite-content-provider-library-test\build\intermediates\exploded-aar\com.mapbox.mapboxsdk\mapbox-android-sdk\0.7.0\AndroidManifest.xml
-    defaultConfigMinSdkVersion = 9//8
-    defaultConfigTargetSdkVersion = 21
+    defaultConfigMinSdkVersion = 8
+    defaultConfigTargetSdkVersion = 22
 
     // main dependencies
     ormliteVersion = "4.48"

@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tojc.ormlite.android.test"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+    package="com.tojc.ormlite.android.test">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <uses-library android:name="android.test.runner" />
 
         <provider android:name="com.tojc.ormlite.android.test.provider.UnderTestSampleProvider"
             android:authorities="com.tojc.ormlite.android.test"
             android:exported="true"/>
     </application>
-
-    <instrumentation
-        android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="com.tojc.ormlite.android.test" />
-
 </manifest>

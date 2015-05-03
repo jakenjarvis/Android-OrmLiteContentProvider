@@ -21,13 +21,10 @@
  */
 package com.tojc.ormlite.android.test.model;
 
-import android.provider.BaseColumns;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder;
 
 /**
  * Did you know ? All annotations and parameters are optionnal ! You just need the @Contract

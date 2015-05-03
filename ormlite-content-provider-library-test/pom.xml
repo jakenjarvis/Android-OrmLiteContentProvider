@@ -38,7 +38,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ormlite-content-provider-library</artifactId>
 			<version>${project.version}</version>
-			<type>apklib</type>
+			<type>aar</type>
 		</dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -53,6 +53,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>${root.basedir}/style_checks.xml</configLocation>
+					<failOnViolation>true</failOnViolation>
+					<enableFilesSummary>true</enableFilesSummary>
+					<suppressionsLocation>${root.basedir}/style_checks_suppress.xml</suppressionsLocation>
+					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+				</configuration>
 			</plugin>
 
 			<plugin>

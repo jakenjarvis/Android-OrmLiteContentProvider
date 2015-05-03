@@ -20,7 +20,7 @@
 
 	<modules>
 		<module>ormlite-content-provider-library</module>
-		<!-- <module>ormlite-content-provider-library-test</module> -->
+		<module>ormlite-content-provider-library-test</module>
 		<module>ormlite-content-provider-compiler</module>
 		<module>ormlite-content-provider-sample</module>
 		<module>ormlite-content-provider-compiler-sample</module>
@@ -125,14 +125,14 @@
 		<java.version>1.7</java.version>
 
 		<!-- Compilation dependencies, build.gradle -->
-		<android-sdk.version>21</android-sdk.version>
-		<android-buildtools.version>21.1.2</android-buildtools.version>
+		<android-sdk.version>22</android-sdk.version>
+		<android-buildtools.version>22.0.1</android-buildtools.version>
 		<android.version>4.1.1.4</android.version>
 		<android-support.version>r7</android-support.version>
 
 		<!-- AndroidManifest -->
-		<android-min-sdk.version>7</android-min-sdk.version>
-		<android-target-sdk.version>19</android-target-sdk.version>
+		<android-min-sdk.version>8</android-min-sdk.version>
+		<android-target-sdk.version>22</android-target-sdk.version>
 
 		<!-- compiler dependencies -->
 		<ormlite.version>4.48</ormlite.version>
@@ -151,7 +151,7 @@
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
 
-		<android-maven-plugin.version>4.1.1</android-maven-plugin.version>
+		<android-maven-plugin.version>4.2.0</android-maven-plugin.version>
 		<maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
 		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
