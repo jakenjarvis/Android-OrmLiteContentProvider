@@ -21,16 +21,20 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import java.io.File;
-
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.tojc.ormlite.android.annotation.info.ContentMimeTypeVndInfo;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 
-@SmallTest
-public class MimeTypeVndTest extends AndroidTestCase {
+import org.junit.Test;
+
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+@MediumTest
+public class MimeTypeVndTest {
 
     private static final String CONTENT_MIME_TYPE_VND_NAME = "bar";
     private static final String CONTENT_MIME_TYPE_VND_TYPE = "foo";
@@ -38,6 +42,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
 
     private MimeTypeVnd mimeTypeVnd;
 
+    @Test
     public void testIsValid_returns_false_if_subtype_is_null() {
         // given
         mimeTypeVnd = new MimeTypeVnd(null, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, CONTENT_MIME_TYPE_VND_TYPE));
@@ -47,6 +52,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
         assertFalse(mimeTypeVnd.isValid());
     }
 
+    @Test
     public void testIsValid_returns_false_if_mime_type_has_null_or_empty_path() {
         // given
         mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(null, CONTENT_MIME_TYPE_VND_TYPE));
@@ -64,6 +70,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
         assertFalse(mimeTypeVnd.isValid());
     }
 
+    @Test
     public void testIsValid_returns_false_if_mime_type_has_null_or_empty_type() {
         // given
         mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, null));
@@ -81,6 +88,7 @@ public class MimeTypeVndTest extends AndroidTestCase {
         assertFalse(mimeTypeVnd.isValid());
     }
 
+    @Test
     public void testGetMimeTypeString() {
         mimeTypeVnd = new MimeTypeVnd(SubType.ITEM, new ContentMimeTypeVndInfo(CONTENT_MIME_TYPE_VND_NAME, CONTENT_MIME_TYPE_VND_TYPE));
 

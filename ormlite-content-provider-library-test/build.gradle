@@ -18,7 +18,7 @@ configurations.all {
 dependencies {
     compile project(":ormlite-content-provider-library")
 
-    //compile "com.android.support:support-annotations:${supportAnnotationsVersion}"
+    compile "com.android.support:support-annotations:${supportAnnotationsVersion}"
 
     //androidTestCompile project(":ormlite-content-provider-library")
 
@@ -29,18 +29,19 @@ dependencies {
     // https://code.google.com/p/android-test-kit/wiki/EspressoSetupInstructions
     // https://code.google.com/p/android/issues/detail?id=151673
     //androidTestCompile "junit:junit:${junitVersion}"
-    androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
-        transitive=true
-    }
+    //androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
+    //    transitive=true
+    //}
 
     // https://code.google.com/p/android-test-kit/wiki/ReleaseNotes
     // https://github.com/googlesamples/android-testing/blob/master/testrunner/AndroidJunitRunnerSample/app/build.gradle
-    //androidTestCompile "com.android.support.test:runner:${testingSupportLibVersion}"
-    //androidTestCompile "com.android.support.test:rules:${testingSupportLibVersion}"
+    androidTestCompile "com.android.support.test:runner:${testRunner}"
+    androidTestCompile "com.android.support.test:rules:${testRules}"
     androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
         exclude group: "org.hamcrest"
         transitive=true
     }
+    //androidTestCompile "com.android.support.test.espresso:espresso-contrib:${doubleEspressoVersion}"
     //androidTestCompile "com.android.support.test.espresso:espresso-intents:${doubleEspressoVersion}"
     //androidTestCompile "com.android.support.test.uiautomator:uiautomator-v18:2.1.0"
     androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
@@ -53,7 +54,7 @@ android {
     buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        applicationId "${project.group}.test"
+        applicationId "${project.group}"
         minSdkVersion defaultConfigMinSdkVersion
         targetSdkVersion defaultConfigTargetSdkVersion
         versionCode 1

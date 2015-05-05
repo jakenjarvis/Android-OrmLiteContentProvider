@@ -22,16 +22,20 @@
 package com.tojc.ormlite.android.framework;
 
 import android.provider.BaseColumns;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 import com.tojc.ormlite.android.framework.MimeTypeVnd.SubType;
 
-@SmallTest
-public class MatcherPatternTest extends AndroidTestCase {
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@MediumTest
+public class MatcherPatternTest {
 
     private static final String TEST_PATTERN = "foo";
 
@@ -41,6 +45,7 @@ public class MatcherPatternTest extends AndroidTestCase {
 
     private MatcherPattern matcherPattern;
 
+    @Test
     public void testIsValid_should_return_false_if_subtype_is_null() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
@@ -55,6 +60,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertFalse(matcherPattern.isValid(DEBUG));
     }
 
+    @Test
     public void testIsValid_should_return_false_if_pattern_is_null() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
@@ -69,6 +75,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertFalse(matcherPattern.isValid(DEBUG));
     }
 
+    @Test
     public void testIsValid_should_return_true_if_pattern_is_empty() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
@@ -83,6 +90,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertTrue(matcherPattern.isValid(DEBUG));
     }
 
+    @Test
     public void testIsValid_should_return_false_if_pattern_code_is_0_or_negative() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
@@ -107,6 +115,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertFalse(matcherPattern.isValid(DEBUG));
     }
 
+    @Test
     public void testIsValid_should_return_true_for_properly_defined_matcher_pattern() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotations.class);
@@ -121,6 +130,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertTrue(matcherPattern.isValid());
     }
 
+    @Test
     public void testIsValid_should_return_true_for_non_annotated_class() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithoutAnnotations.class);
@@ -135,6 +145,7 @@ public class MatcherPatternTest extends AndroidTestCase {
         assertTrue(matcherPattern.isValid());
     }
 
+    @Test
     public void testIsValid_should_return_true_for_class_annotated_with_params() {
         // given
         TableInfo tableInfo = new TableInfo(ClassUnderTestWithAnnotationsWithParams.class);

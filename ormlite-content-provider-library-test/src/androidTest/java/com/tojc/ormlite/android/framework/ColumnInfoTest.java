@@ -21,20 +21,27 @@
  */
 package com.tojc.ormlite.android.framework;
 
-import java.lang.reflect.Field;
-
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.j256.ormlite.field.DatabaseField;
 
-@SmallTest
-public class ColumnInfoTest extends AndroidTestCase {
+import org.junit.Test;
+
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+@MediumTest
+public class ColumnInfoTest {
     private static final String TEST_FIELD_NAME = "annotatedField";
     private static final String EMPTY = "";
     private ColumnInfo columnInfo;
 
-    public void testIsValid_returns_true_when_field_has_empty_column_name() throws NoSuchFieldException {
+    @Test
+    public void testIsValid_returns_true_when_field_has_empty_column_name()
+            throws NoSuchFieldException {
 
         // given
         Field field = ClassUnderTest.class.getDeclaredField("annotatedFieldWithEmptyColumnName");
@@ -46,6 +53,7 @@ public class ColumnInfoTest extends AndroidTestCase {
         assertTrue(columnInfo.isValid());
     }
 
+    @Test
     public void testIsValid_returns_true_when_field_has_no_column_name() throws NoSuchFieldException {
 
         // given
@@ -58,6 +66,7 @@ public class ColumnInfoTest extends AndroidTestCase {
         assertTrue(columnInfo.isValid());
     }
 
+    @Test
     public void testIsValid_returns_true_when_field_has_column_name() throws NoSuchFieldException {
 
         // given
@@ -70,7 +79,9 @@ public class ColumnInfoTest extends AndroidTestCase {
         assertTrue(columnInfo.isValid());
     }
 
-    public void testConstructor_throws_exception_when_field_is_not_annotated() throws NoSuchFieldException {
+    @Test
+    public void testConstructor_throws_exception_when_field_is_not_annotated()
+            throws NoSuchFieldException {
 
         // given
         Field field = ClassUnderTest.class.getDeclaredField("nonAnnotatedField");
@@ -86,7 +97,9 @@ public class ColumnInfoTest extends AndroidTestCase {
         }
     }
 
-    public void testGetProjectionColumnName_returns_field_name_when_has_no_column_name() throws NoSuchFieldException {
+    @Test
+    public void testGetProjectionColumnName_returns_field_name_when_has_no_column_name()
+            throws NoSuchFieldException {
         // given
         Field field = ClassUnderTest.class.getDeclaredField(TEST_FIELD_NAME);
 
@@ -97,7 +110,9 @@ public class ColumnInfoTest extends AndroidTestCase {
         assertEquals(TEST_FIELD_NAME, columnInfo.getColumnName());
     }
 
-    public void testGetProjectionColumnName_returns_field_name_when_has_column_name() throws NoSuchFieldException {
+    @Test
+    public void testGetProjectionColumnName_returns_field_name_when_has_column_name()
+            throws NoSuchFieldException {
         // given
         Field field = ClassUnderTest.class.getDeclaredField(TEST_FIELD_NAME);
 
@@ -108,7 +123,9 @@ public class ColumnInfoTest extends AndroidTestCase {
         assertEquals(TEST_FIELD_NAME, columnInfo.getColumnName());
     }
 
-    public void testGetProjectionColumnName_returns_field_name_when_has_empty_column_name() throws NoSuchFieldException {
+    @Test
+    public void testGetProjectionColumnName_returns_field_name_when_has_empty_column_name()
+            throws NoSuchFieldException {
         final String testFieldName = "annotatedFieldWithEmptyColumnName";
         // given
         Field field = ClassUnderTest.class.getDeclaredField(testFieldName);

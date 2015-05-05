@@ -21,20 +21,20 @@
  */
 package com.tojc.ormlite.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.app.Instrumentation;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
+import android.test.ProviderTestCase2;
 import android.test.mock.MockContentResolver;
-import android.test.mock.MockContext;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -43,30 +43,47 @@ import com.tojc.ormlite.android.test.provider.AccountContract;
 import com.tojc.ormlite.android.test.provider.SampleHelper;
 import com.tojc.ormlite.android.test.provider.UnderTestSampleProvider;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @MediumTest
-public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
+public class TestOrmLiteSimpleProvider extends ProviderTestCase2<UnderTestSampleProvider> {
 
     private static final String TEST_NAME_1 = "Yamada Tarou";
     private static final String TEST_NAME_2 = "Stephane Nicolas";
 
-    private MockContentResolver resolver;
+    //private Instrumentation mInstrumentation;
+    private ContentResolver resolver;
 
+    public TestOrmLiteSimpleProvider(Class<UnderTestSampleProvider> providerClass, String providerAuthority, MockContentResolver resolver) {
+        super(providerClass, providerAuthority);
+    }
+
+    public TestOrmLiteSimpleProvider() {
+        this(UnderTestSampleProvider.class, AccountContract.AUTHORITY, null);
+    }
+
+    private static class DDDD extends InstrumentationTestCase
+    {
+
+    }
+
+
+    @Before
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        this.resolver = this.getMockContext().getContentResolver();
+
+        //injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getHelper().resetAllTables();
-
-        UnderTestSampleProvider provider = new UnderTestSampleProvider();
-        provider.attachInfo(getInstrumentation().getContext(), null);
-
-        this.resolver = new MockContentResolver();
-        this.resolver.addProvider(AccountContract.AUTHORITY, provider);
     }
 
+    @Test
     public void testOnInsert() {
         // given
         ContentValues values = new ContentValues();
@@ -83,6 +100,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(TEST_NAME_1, accountList.get(0).getName());
     }
 
+    @Test
     public void testOnDelete() {
         // given
         Account account = new Account(TEST_NAME_2);
@@ -99,6 +117,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(0, accountList.size());
     }
 
+    @Test
     public void testOnUpdate() {
         // given
         Account account = new Account(TEST_NAME_1);
@@ -120,6 +139,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(TEST_NAME_2, accountList.get(0).getName());
     }
 
+    @Test
     public void testOnQuery() {
         // given
         Account account1 = new Account(TEST_NAME_1);
@@ -131,7 +151,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(2, accountList.size());
 
         // when
-        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, null);
+        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[]{BaseColumns._ID, AccountContract.NAME}, null, null, null);
         accountList = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account(cursor.getString(1));
@@ -145,6 +165,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(TEST_NAME_2, accountList.get(1).getName());
     }
 
+    @Test
     public void testOnQueryWithOrder() {
         // given
         Account account1 = new Account(TEST_NAME_1);
@@ -157,7 +178,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
 
         // when
         String order = BaseColumns._ID + " DESC";
-        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[] {BaseColumns._ID, AccountContract.NAME}, null, null, order);
+        Cursor cursor = this.resolver.query(AccountContract.CONTENT_URI, new String[]{BaseColumns._ID, AccountContract.NAME}, null, null, order);
         accountList = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account(cursor.getString(1));
@@ -171,6 +192,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(TEST_NAME_1, accountList.get(1).getName());
     }
 
+    @Test
     public void testContentProviderAcquisition() throws RemoteException {
         // given
         Account account1 = new Account(TEST_NAME_1);
@@ -199,6 +221,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         assertEquals(TEST_NAME_2, accountList.get(1).getName());
     }
 
+    @Test
     public void testBulkInsert() {
         // given
         final int testAccountCount = 10;
@@ -222,6 +245,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
         }
     }
 
+    @Test
     public void testApplyBatch() throws RemoteException, OperationApplicationException {
         // given
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
@@ -240,6 +264,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
     }
 
     private SampleHelper getHelper() {
-        return new SampleHelper(getInstrumentation().getTargetContext());
+        //return new SampleHelper(getInstrumentation().getTargetContext());
+        return this.getProvider().getHelper();
     }
 }

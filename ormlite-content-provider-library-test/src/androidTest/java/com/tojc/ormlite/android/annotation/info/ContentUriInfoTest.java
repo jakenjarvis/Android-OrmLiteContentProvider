@@ -21,15 +21,20 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
-import java.util.Locale;
-
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUri;
 
-@SmallTest
-public class ContentUriInfoTest extends AndroidTestCase {
+import org.junit.Test;
+
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@MediumTest
+public class ContentUriInfoTest {
 
     private static final String TEST_AUTHORITY = "foo";
     private static final String TEST_PATH = "bar";
@@ -37,6 +42,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
 
     private ContentUriInfo contentUriInfo;
 
+    @Test
     public void testIsValidValue_returns_false_for_null_or_empty_package_or_class() {
         // given
         contentUriInfo = new ContentUriInfo(null, null);
@@ -78,6 +84,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertFalse(contentUriInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_true() {
         // given
         contentUriInfo = new ContentUriInfo(TEST_AUTHORITY, TEST_PATH);
@@ -87,6 +94,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertTrue(contentUriInfo.isValidValue());
     }
 
+    @Test
     public void testgetAuthority() {
         // given
         contentUriInfo = new ContentUriInfo(TEST_AUTHORITY, TEST_PATH);
@@ -96,6 +104,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertEquals(TEST_AUTHORITY, contentUriInfo.getAuthority());
     }
 
+    @Test
     public void testgetPath() {
         // given
         contentUriInfo = new ContentUriInfo(TEST_AUTHORITY, TEST_PATH);
@@ -105,6 +114,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertEquals(TEST_PATH, contentUriInfo.getPath());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_annotated_element_without_params() {
         // given
         contentUriInfo = new ContentUriInfo(AnnotatedClassUnderTestNoParams.class);
@@ -116,6 +126,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertTrue(contentUriInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_annotated_element_with_params() {
         // given
         contentUriInfo = new ContentUriInfo(AnnotatedClassUnderTestWithParams.class);
@@ -127,6 +138,7 @@ public class ContentUriInfoTest extends AndroidTestCase {
         assertTrue(contentUriInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_non_annotated_element() {
         // given
         contentUriInfo = new ContentUriInfo(NonAnnotatedClassUnderTest.class);

@@ -21,15 +21,20 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
-import java.util.Locale;
-
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentMimeTypeVnd;
 
-@SmallTest
-public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
+import org.junit.Test;
+
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@MediumTest
+public class ContentMimeTypeVndInfoTest {
 
     private static final String TEST_NAME = "foo";
     private static final String TEST_TYPE = "bar";
@@ -37,6 +42,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
 
     private ContentMimeTypeVndInfo contentMimeTypeVndInfo;
 
+    @Test
     public void testIsValidValue_returns_false_for_null_or_empty_package_or_class() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(null, null);
@@ -78,6 +84,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertFalse(contentMimeTypeVndInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_true() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, TEST_TYPE);
@@ -87,6 +94,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 
+    @Test
     public void testGetName() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, TEST_TYPE);
@@ -96,6 +104,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertEquals(TEST_NAME, contentMimeTypeVndInfo.getName());
     }
 
+    @Test
     public void testGetType() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, TEST_TYPE);
@@ -105,6 +114,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertEquals(TEST_TYPE, contentMimeTypeVndInfo.getType());
     }
 
+    @Test
     public void testGetVndProviderSpecificString() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(TEST_NAME, TEST_TYPE);
@@ -114,6 +124,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertEquals(ContentMimeTypeVndInfo.VND + "." + TEST_NAME + "." + TEST_TYPE, contentMimeTypeVndInfo.getVndProviderSpecificString());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_annotated_element_without_params() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(AnnotatedClassUnderTestNoParams.class);
@@ -125,6 +136,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_annotated_element_with_params() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(AnnotatedClassUnderTestWithParams.class);
@@ -136,6 +148,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
         assertTrue(contentMimeTypeVndInfo.isValidValue());
     }
 
+    @Test
     public void testIsValidValue_returns_right_values_for_non_annotated_element() {
         // given
         contentMimeTypeVndInfo = new ContentMimeTypeVndInfo(NonAnnotatedClassUnderTest.class);
@@ -150,7 +163,7 @@ public class ContentMimeTypeVndInfoTest extends AndroidTestCase {
     // ----------------------------------
     //  CLASSES UNDER TESTS
     // ----------------------------------
-    
+
     /**
      * Annotated class under test.
      */

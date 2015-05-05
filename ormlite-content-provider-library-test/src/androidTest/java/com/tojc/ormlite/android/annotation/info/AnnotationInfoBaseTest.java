@@ -21,14 +21,20 @@
  */
 package com.tojc.ormlite.android.annotation.info;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
-@SmallTest
-public class AnnotationInfoBaseTest extends AndroidTestCase {
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+@MediumTest
+public class AnnotationInfoBaseTest {
 
     private DummyAnnotationInfoBase dummyAnnotationInfoBase;
 
+    @Test
     public void testIsValid_should_return_false_until_validated() {
         // given
         dummyAnnotationInfoBase = new DummyAnnotationInfoBase(true);
@@ -45,6 +51,7 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
         assertTrue(dummyAnnotationInfoBase.isValid());
     }
 
+    @Test
     public void testIsValid_throws_exception_or_not() {
         // given
         dummyAnnotationInfoBase = new DummyAnnotationInfoBase(true);
@@ -67,6 +74,7 @@ public class AnnotationInfoBaseTest extends AndroidTestCase {
 
     /**
      * Class under test.
+     *
      * @author SNI
      */
     private static class DummyAnnotationInfoBase extends AnnotationInfoBase {
