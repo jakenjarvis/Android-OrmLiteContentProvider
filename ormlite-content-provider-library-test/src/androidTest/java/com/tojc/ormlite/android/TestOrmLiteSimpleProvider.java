@@ -27,12 +27,14 @@ import java.util.List;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.test.InstrumentationTestCase;
 import android.test.mock.MockContentResolver;
+import android.test.mock.MockContext;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -40,6 +42,9 @@ import com.tojc.ormlite.android.test.model.Account;
 import com.tojc.ormlite.android.test.provider.AccountContract;
 import com.tojc.ormlite.android.test.provider.SampleHelper;
 import com.tojc.ormlite.android.test.provider.UnderTestSampleProvider;
+
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
 @MediumTest
 public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
@@ -52,6 +57,7 @@ public class TestOrmLiteSimpleProvider extends InstrumentationTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getHelper().resetAllTables();
 
         UnderTestSampleProvider provider = new UnderTestSampleProvider();

@@ -10,22 +10,39 @@ repositories{
     }
 }
 
+// Temporary workaround for bug: https://code.google.com/p/android-test-kit/issues/detail?id=136
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:${supportAnnotationsVersion}"
+}
+
 dependencies {
     compile project(":ormlite-content-provider-library")
 
-    androidTestCompile project(":ormlite-content-provider-library")
+    //compile "com.android.support:support-annotations:${supportAnnotationsVersion}"
+
+    //androidTestCompile project(":ormlite-content-provider-library")
+
+    // java.lang.NoClassDefFoundError: junit/framework/TestCase
+    //compile "junit:junit:${junitVersion}"
 
     // http://tools.android.com/tech-docs/unit-testing-support
     // https://code.google.com/p/android-test-kit/wiki/EspressoSetupInstructions
     // https://code.google.com/p/android/issues/detail?id=151673
-    androidTestCompile "junit:junit:${junitVersion}"
+    //androidTestCompile "junit:junit:${junitVersion}"
     androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
         transitive=true
     }
+
+    // https://code.google.com/p/android-test-kit/wiki/ReleaseNotes
+    // https://github.com/googlesamples/android-testing/blob/master/testrunner/AndroidJunitRunnerSample/app/build.gradle
+    //androidTestCompile "com.android.support.test:runner:${testingSupportLibVersion}"
+    //androidTestCompile "com.android.support.test:rules:${testingSupportLibVersion}"
     androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
         exclude group: "org.hamcrest"
         transitive=true
     }
+    //androidTestCompile "com.android.support.test.espresso:espresso-intents:${doubleEspressoVersion}"
+    //androidTestCompile "com.android.support.test.uiautomator:uiautomator-v18:2.1.0"
     androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
@@ -72,6 +89,19 @@ android {
         jumboMode true
         javaMaxHeapSize "4g"
         preDexLibraries false
+    }
+
+    sourceSets {
+        androidTest {
+            //setRoot('src/test')
+        }
+    }
+
+    // http://stackoverflow.com/questions/28960898/getting-context-in-androidtestcase-or-instrumentationtestcase-in-android-studio/29063736#29063736
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
     }
 }
 
