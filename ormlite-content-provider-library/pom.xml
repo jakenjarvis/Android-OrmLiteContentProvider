@@ -11,7 +11,7 @@
 
 	<artifactId>ormlite-content-provider-library</artifactId>
 	<name>Android-OrmLiteContentProvider Library</name>
-	<packaging>apklib</packaging>
+	<packaging>aar</packaging>
 	<description>This is a library that easy to make using ContentProvider with OrmLite.</description>
 
 	<properties>
@@ -21,12 +21,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>android</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.android.support</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>support-v4</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -41,33 +41,9 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
-
 		<plugins>
 			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>maven-replacer-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<ignoreMissingFile>true</ignoreMissingFile>
-					<file>target/generated-sources/r/com/tojc/ormlite/android/OrmLiteContentProvider/R.java</file>
-					<outputFile>target/generated-sources/r/com/tojc/ormlite/android/OrmLiteContentProvider/R.java</outputFile>
-					<regex>false</regex>
-					<token>static final int</token>
-					<value>static int</value>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
 			</plugin>
@@ -121,10 +97,12 @@
 									<type>jar</type>
 									<file>${project.build.directory}/${project.build.finalName}.jar</file>
 								</artifact>
+<!--
 								<artifact>
 									<type>aar</type>
-									<file>${project.basedir}/build/libs/${project.artifactId}.aar</file>
+									<file>${project.basedir}/build/outputs/aar/${project.artifactId}.aar</file>
 								</artifact>
+-->
 							</artifacts>
 						</configuration>
 					</execution>
@@ -134,6 +112,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>${root.basedir}/style_checks.xml</configLocation>
+					<failOnViolation>true</failOnViolation>
+					<enableFilesSummary>true</enableFilesSummary>
+					<suppressionsLocation>${root.basedir}/style_checks_suppress.xml</suppressionsLocation>
+					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+				</configuration>
 			</plugin>
 
 			<plugin>

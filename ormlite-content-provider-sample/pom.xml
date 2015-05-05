@@ -20,12 +20,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>android</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.android.support</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>support-v4</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -33,38 +33,22 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ormlite-content-provider-library</artifactId>
 			<version>${project.version}</version>
-			<type>apklib</type>
+			<type>aar</type>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/</sourceDirectory>
 		<plugins>
-
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>maven-replacer-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<ignoreMissingFile>false</ignoreMissingFile>
-					<file>target/generated-sources/r/com/tojc/ormlite/android/ormlitecontentprovider/sample/R.java</file>
-					<outputFile>target/generated-sources/r/com/tojc/ormlite/android/ormlitecontentprovider/sample/R.java</outputFile>
-					<regex>false</regex>
-					<token>static final int</token>
-					<value>static int</value>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>${root.basedir}/style_checks.xml</configLocation>
+					<failOnViolation>true</failOnViolation>
+					<enableFilesSummary>true</enableFilesSummary>
+					<suppressionsLocation>${root.basedir}/style_checks_suppress.xml</suppressionsLocation>
+					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -77,7 +61,7 @@
 			</plugin>
 			<plugin>
 				<extensions>true</extensions>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 			</plugin>
 			<plugin>

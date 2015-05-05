@@ -10,63 +10,63 @@ repositories{
     }
 }
 
+// Temporary workaround for bug: https://code.google.com/p/android-test-kit/issues/detail?id=136
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:${supportAnnotationsVersion}"
+}
+
 dependencies {
     compile project(":ormlite-content-provider-library")
 
-    androidTestCompile project(":ormlite-content-provider-library")
+    compile "com.android.support:support-annotations:${supportAnnotationsVersion}"
+
+    //androidTestCompile project(":ormlite-content-provider-library")
+
+    // java.lang.NoClassDefFoundError: junit/framework/TestCase
+    //compile "junit:junit:${junitVersion}"
 
     // http://tools.android.com/tech-docs/unit-testing-support
     // https://code.google.com/p/android-test-kit/wiki/EspressoSetupInstructions
     // https://code.google.com/p/android/issues/detail?id=151673
-    //androidTestCompile("junit:junit:${junitVersion}") {
-        //exclude group: "org.hamcrest"
-        //transitive=true
+    //androidTestCompile "junit:junit:${junitVersion}"
+    //androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
+    //    transitive=true
     //}
-    androidTestCompile("com.android.support.test:testing-support-lib:${testingSupportLibVersion}") {
-        //exclude group: "org.hamcrest"
-        //exclude group: "junit:junit"
-        //transitive=true
-    }
-    androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
-        //exclude group: "junit:junit"
-        //exclude group: "org.hamcrest"
-        //transitive=true
-        //exclude group: 'javax.inject'
-    }
-    //androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-    //androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    //androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
 
-    // Tests on Nexus5(AVD) - 4.4.2 failed: Instrumentation run failed due to 'java.lang.NoClassDefFoundError'
-    // 
-    // com.android.builder.testing.ConnectedDevice > hasTests[Nexus5(AVD) - 4.4.2] FAILED
-    // No tests found.
-    // :ormlite-content-provider-library-test:connectedAndroidTest FAILED
-    // 
-    // FAILURE: Build failed with an exception.
-    // http://stackoverflow.com/questions/27084948/com-android-builder-testing-connecteddevice-hasteststestavd-5-0-failed
-    // http://stackoverflow.com/questions/27234046/android-instrumentation-run-failed-due-to-java-lang-classnotfoundexception-n
-    // https://github.com/bryanstern/dagger-instrumentation-example/issues/1
+    // https://code.google.com/p/android-test-kit/wiki/ReleaseNotes
+    // https://github.com/googlesamples/android-testing/blob/master/testrunner/AndroidJunitRunnerSample/app/build.gradle
+    androidTestCompile "com.android.support.test:runner:${testRunner}"
+    androidTestCompile "com.android.support.test:rules:${testRules}"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:${doubleEspressoVersion}") {
+        exclude group: "org.hamcrest"
+        transitive=true
+    }
+    //androidTestCompile "com.android.support.test.espresso:espresso-contrib:${doubleEspressoVersion}"
+    //androidTestCompile "com.android.support.test.espresso:espresso-intents:${doubleEspressoVersion}"
+    //androidTestCompile "com.android.support.test.uiautomator:uiautomator-v18:2.1.0"
+    androidTestCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+    androidTestCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+    androidTestCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
 }
 
 android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
 
+    defaultConfig {
+        applicationId "${project.group}"
+        minSdkVersion defaultConfigMinSdkVersion
+        targetSdkVersion defaultConfigTargetSdkVersion
+        versionCode 1
+        versionName project.version
+
+        testApplicationId "${project.group}.test"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testFunctionalTest true
+    }
+
     buildTypes {
-        defaultConfig {
-            applicationId "${project.group}.test"
-            minSdkVersion defaultConfigMinSdkVersion
-            targetSdkVersion defaultConfigTargetSdkVersion
-            versionCode 1
-            versionName project.version
-
-            testApplicationId "${project.group}.test"
-
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            testFunctionalTest true
-        }
-
         debug {
             debuggable true
         }
@@ -74,42 +74,6 @@ android {
             debuggable false
             minifyEnabled false
         }
-    }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src', 'build/source/generated']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-
-        // Move the tests to tests/java, tests/res, etc...
-        //instrumentTest.setRoot('tests')
-        //androidTest.setRoot('tests')
-        androidTest {
-            //setRoot('src')
-
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src', 'build/source/generated']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-
-        // Move the build types to build-types/<type>
-        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
-        // This moves them out of them default location under src/<type>/... which would
-        // conflict with src/ being used by the main source set.
-        // Adding new build types or product flavors should be accompanied
-        // by a similar customization.
-        debug.setRoot('build-types/debug')
-        release.setRoot('build-types/release')
     }
 
     packagingOptions {
@@ -126,6 +90,19 @@ android {
         jumboMode true
         javaMaxHeapSize "4g"
         preDexLibraries false
+    }
+
+    sourceSets {
+        androidTest {
+            //setRoot('src/test')
+        }
+    }
+
+    // http://stackoverflow.com/questions/28960898/getting-context-in-androidtestcase-or-instrumentationtestcase-in-android-studio/29063736#29063736
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
     }
 }
 
