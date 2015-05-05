@@ -40,11 +40,29 @@
 			<version>${project.version}</version>
 			<type>aar</type>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.android.support.test</groupId>
+			<artifactId>runner</artifactId>
+			<type>aar</type>
+			<version>${runner.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.android.support.test</groupId>
+			<artifactId>rules</artifactId>
+			<version>${rules.version}</version>
+			<type>aar</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -85,6 +103,11 @@
 				<extensions>true</extensions>
 				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
+				<configuration>
+					<test>
+						<skip>false</skip>
+					</test>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

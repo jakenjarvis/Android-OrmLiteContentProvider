@@ -142,6 +142,8 @@
 
 		<!-- test dependencies -->
 		<junit.version>4.12</junit.version>
+		<runner.version>0.2</runner.version>
+		<rules.version>0.2</rules.version>
 
 		<!-- plugins -->
 		<maven-checkstyle-plugin.version>2.14</maven-checkstyle-plugin.version>
@@ -523,6 +525,17 @@
 	</reporting>
 
 	<profiles>
+		<profile>
+			<id>support_test</id>
+			<repositories>
+				<repository>
+					<id>android-m2</id>
+					<name>Android M2</name>
+					<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
+				</repository>
+			</repositories>
+		</profile>
+
 		<profile>
 			<id>release-sign-artifacts</id>
 			<activation>
