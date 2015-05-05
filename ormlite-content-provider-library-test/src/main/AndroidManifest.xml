@@ -11,5 +11,12 @@
         <provider android:name="com.tojc.ormlite.android.test.provider.UnderTestSampleProvider"
             android:authorities="com.tojc.ormlite.android.test"
             android:exported="true"/>
+
+        <uses-library android:name="android.test.runner" />
     </application>
+
+    <instrumentation
+        android:name="android.support.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.tojc.ormlite.android" />
+
 </manifest>

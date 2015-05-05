@@ -41,7 +41,7 @@ public class ColumnInfoTest {
 
     @Test
     public void testIsValid_returns_true_when_field_has_empty_column_name()
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
 
         // given
         Field field = ClassUnderTest.class.getDeclaredField("annotatedFieldWithEmptyColumnName");
@@ -81,7 +81,7 @@ public class ColumnInfoTest {
 
     @Test
     public void testConstructor_throws_exception_when_field_is_not_annotated()
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
 
         // given
         Field field = ClassUnderTest.class.getDeclaredField("nonAnnotatedField");
@@ -99,7 +99,7 @@ public class ColumnInfoTest {
 
     @Test
     public void testGetProjectionColumnName_returns_field_name_when_has_no_column_name()
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
         // given
         Field field = ClassUnderTest.class.getDeclaredField(TEST_FIELD_NAME);
 
@@ -112,7 +112,7 @@ public class ColumnInfoTest {
 
     @Test
     public void testGetProjectionColumnName_returns_field_name_when_has_column_name()
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
         // given
         Field field = ClassUnderTest.class.getDeclaredField(TEST_FIELD_NAME);
 
@@ -125,7 +125,7 @@ public class ColumnInfoTest {
 
     @Test
     public void testGetProjectionColumnName_returns_field_name_when_has_empty_column_name()
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
         final String testFieldName = "annotatedFieldWithEmptyColumnName";
         // given
         Field field = ClassUnderTest.class.getDeclaredField(testFieldName);

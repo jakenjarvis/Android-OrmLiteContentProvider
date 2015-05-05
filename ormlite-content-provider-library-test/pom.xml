@@ -48,7 +48,7 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/</sourceDirectory>
+		<!-- <sourceDirectory>src/androidTest/java</sourceDirectory> -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -59,27 +59,6 @@
 					<enableFilesSummary>true</enableFilesSummary>
 					<suppressionsLocation>${root.basedir}/style_checks_suppress.xml</suppressionsLocation>
 					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>maven-replacer-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<ignoreMissingFile>false</ignoreMissingFile>
-					<file>target/generated-sources/r/com/tojc/ormlite/android/test/R.java</file>
-					<outputFile>target/generated-sources/r/com/tojc/ormlite/android/test/R.java</outputFile>
-					<regex>false</regex>
-					<token>static final int</token>
-					<value>static int</value>
 				</configuration>
 			</plugin>
 

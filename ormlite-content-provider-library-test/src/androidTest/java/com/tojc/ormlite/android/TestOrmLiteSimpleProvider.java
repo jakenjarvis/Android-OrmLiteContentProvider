@@ -24,7 +24,6 @@ package com.tojc.ormlite.android;
 import android.app.Instrumentation;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
@@ -32,8 +31,6 @@ import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.InstrumentationTestCase;
-import android.test.ProviderTestCase2;
 import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.MediumTest;
 
@@ -50,37 +47,41 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(AndroidJUnit4.class)
 @MediumTest
-public class TestOrmLiteSimpleProvider extends ProviderTestCase2<UnderTestSampleProvider> {
+public class TestOrmLiteSimpleProvider {
 
     private static final String TEST_NAME_1 = "Yamada Tarou";
     private static final String TEST_NAME_2 = "Stephane Nicolas";
 
-    //private Instrumentation mInstrumentation;
-    private ContentResolver resolver;
+    private Instrumentation instrumentation;
+    private MockContentResolver resolver;
 
-    public TestOrmLiteSimpleProvider(Class<UnderTestSampleProvider> providerClass, String providerAuthority, MockContentResolver resolver) {
-        super(providerClass, providerAuthority);
+    public void injectInstrumentation(Instrumentation instrumentation) {
+        this.instrumentation = instrumentation;
+        assertNotNull(this.instrumentation);
+        assertNotNull(this.instrumentation.getContext());
+        assertNotNull(this.instrumentation.getTargetContext());
     }
 
-    public TestOrmLiteSimpleProvider() {
-        this(UnderTestSampleProvider.class, AccountContract.AUTHORITY, null);
+    public Instrumentation getInstrumentation() {
+        return this.instrumentation;
     }
-
-    private static class DDDD extends InstrumentationTestCase
-    {
-
-    }
-
 
     @Before
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        this.resolver = this.getMockContext().getContentResolver();
-
-        //injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+    public void setUp() throws Exception {
+        //super.setUp();
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getHelper().resetAllTables();
+
+        UnderTestSampleProvider provider = new UnderTestSampleProvider();
+        provider.attachInfo(getInstrumentation().getTargetContext(), null);
+
+        this.resolver = new MockContentResolver();
+        this.resolver.addProvider(AccountContract.AUTHORITY, provider);
     }
 
     @Test
@@ -264,7 +265,6 @@ public class TestOrmLiteSimpleProvider extends ProviderTestCase2<UnderTestSample
     }
 
     private SampleHelper getHelper() {
-        //return new SampleHelper(getInstrumentation().getTargetContext());
-        return this.getProvider().getHelper();
+        return new SampleHelper(getInstrumentation().getTargetContext());
     }
 }
