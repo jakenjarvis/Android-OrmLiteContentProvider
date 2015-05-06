@@ -33,7 +33,7 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultContentUr
 @DatabaseTable(tableName = "extendsaccounts")
 @DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "extendsaccounts")
 @DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "extendsaccounts")
-public class ExtendsAccount extends Account {
+public class ExtendsAccount extends AbstractAccount {
     @DatabaseField
     private String address;
 
@@ -41,9 +41,8 @@ public class ExtendsAccount extends Account {
         // ORMLite needs a no-arg constructor
     }
 
-    public ExtendsAccount(String name, String address) {
-        this.id = 0;
-        this.name = name;
+    public ExtendsAccount(String name, String comment, String address) {
+        super(name, comment);
         this.address = address;
     }
 

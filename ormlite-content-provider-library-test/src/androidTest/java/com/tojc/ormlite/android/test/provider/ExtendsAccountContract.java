@@ -41,5 +41,6 @@ public final class ExtendsAccountContract implements BaseColumns {
     public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
     public static final String NAME = "name";
+    public static final String COMMENT = "comment";
     public static final String ADDRESS = "address";
 }

@@ -30,11 +30,12 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.tojc.ormlite.android.test.model.Account;
+import com.tojc.ormlite.android.test.model.ExtendsAccount;
 import com.tojc.ormlite.android.test.model.Membership;
 
 public class SampleHelper extends OrmLiteSqliteOpenHelper {
 
-    /* package-private */static final Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class};
+    /* package-private */static final Class<?>[] CLASS_LIST = new Class<?>[] {Account.class, Membership.class, ExtendsAccount.class};
 
     public SampleHelper(Context context) {
         super(context, "MyDatabase", null, 1);
@@ -46,6 +47,7 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
             resetAllTables();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalStateException("An error occurred in the execution of resetAllTables().", e);
         }
     }
 
@@ -55,6 +57,7 @@ public class SampleHelper extends OrmLiteSqliteOpenHelper {
             resetAllTables();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalStateException("An error occurred in the execution of resetAllTables().", e);
         }
     }
 

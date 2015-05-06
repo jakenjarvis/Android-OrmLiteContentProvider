@@ -37,7 +37,6 @@ import com.tojc.ormlite.android.annotation.AdditionalAnnotation.DefaultSortOrder
 @DefaultContentUri(authority = "com.tojc.ormlite.android.test", path = "accounts")
 @DefaultContentMimeTypeVnd(name = "com.tojc.ormlite.android.test.provider", type = "accounts")
 public class Account {
-
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
     @DefaultSortOrder
     protected int id;
