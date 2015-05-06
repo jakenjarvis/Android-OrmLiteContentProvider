@@ -49,6 +49,16 @@ modifyPom {
                 }
                 timezone "+1"
             }
+
+            contributor {
+                name "HIDAKA Takahiro"
+                email "takahr@gmail.com"
+                url "https://github.com/takahr"
+                roles {
+                    role "developer"
+                }
+                timezone "+9"
+            }
         }
 
         licenses {

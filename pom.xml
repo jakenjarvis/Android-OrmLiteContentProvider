@@ -59,6 +59,16 @@
 			</roles>
 			<timezone>+1</timezone>
 		</contributor>
+
+		<contributor>
+			<name>HIDAKA Takahiro</name>
+			<email>takahr@gmail.com</email>
+			<url>https://github.com/takahr</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+9</timezone>
+		</contributor>
 	</contributors>
 
 	<licenses>

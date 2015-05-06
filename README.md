@@ -3,6 +3,15 @@ Android-OrmLiteContentProvider [![Continuous Integration status](https://travis-
 
 # Overview
 ## What's new
+### Ver1.0.5
+* Supports @DatabaseField(columnName="xxx") annotation parameter.
+* In the generated Contract class, we added the following items:
+  - ALL_COLUMNS: Array of column names.  
+  - ALL_COLUMN_TYPES: Array of column types.  
+  - ColumnIndices: Interface of column indices.  
+* Supports inherited class that conforms to the ORMLite. See [Issue #15](https://github.com/jakenjarvis/Android-OrmLiteContentProvider/issues/15)
+* Fixed minor bugs.
+
 ### Ver1.0.4
 * Throw away the Maven, I adopted the Gradle build system. I suffer from these, spent a lot of time...
 * Extended the automatic generation of the Contract class.
@@ -154,13 +163,11 @@ There is no need for special difficult. You add the @Contract annotation. And Sh
 
 Compiler generates the following from this definition. You do not have to write this.
 
-    public final class AccountContract implements BaseColumns
-    {
+    public final class AccountContract implements BaseColumns {
         public static final String TABLE_NAME = "accounts";
 
-        public static final String AUTHORITY = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample";
-
         public static final String CONTENT_URI_PATH = "accounts";
+        public static final String AUTHORITY = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample";
 
         public static final String MIMETYPE_TYPE = "accounts";
         public static final String MIMETYPE_NAME = "com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.provider";
@@ -168,17 +175,31 @@ Compiler generates the following from this definition. You do not have to write 
         public static final int CONTENT_URI_PATTERN_MANY = 1;
         public static final int CONTENT_URI_PATTERN_ONE = 2;
 
-        public static final Uri CONTENT_URI = new Uri.Builder()
-            .scheme(ContentResolver.SCHEME_CONTENT)
-            .authority(AUTHORITY)
-            .appendPath(CONTENT_URI_PATH)
-            .build();
+        public static final Uri CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).appendPath(CONTENT_URI_PATH).build();
 
-        private AccountContract()
-        {
+        private AccountContract() {
         }
 
         public static final String NAME = "name";
+
+        public static final String[] ALL_COLUMNS = {
+            BaseColumns._ID,
+            NAME
+        };
+
+        public static final int[] ALL_COLUMN_TYPES = {
+            com.tojc.ormlite.android.cursor.EntityUtils.FIELD_TYPE_INTEGER,
+            com.tojc.ormlite.android.cursor.EntityUtils.FIELD_TYPE_STRING
+        };
+
+        public interface ColumnIndices {
+            int COL_ID = 0;
+            int COL_NAME = 1;
+        }
+
+        static {
+            com.tojc.ormlite.android.cursor.EntityUtils.registerContractInfo(MIMETYPE_TYPE, com.tojc.ormlite.android.ormlitecontentprovider.compiler.sample.model.Account.class, ALL_COLUMNS, ALL_COLUMN_TYPES);
+        }
     }
 
 ### Implementing the OrmLiteSqliteOpenHelper Class
@@ -360,7 +381,7 @@ If you use maven to build your Android project you can simply add a dependency f
         <groupId>com.tojc.ormlite.android</groupId>
         <artifactId>ormlite-content-provider-library</artifactId>
         <version>${version}</version>
-        <type>jar</type> <!-- or apklib -->
+        <type>jar</type> <!-- or aar, apklib -->
     </dependency>
 
 * If you specify the 'apklib', you will need to imported the ormlite-content-provider-library to local workspace.
@@ -456,6 +477,7 @@ See [m2e-apt](https://github.com/jbosstools/m2e-apt/)
 # Contributor
 Thanks to contributors!  
 * [Stéphane NICOLAS](https://github.com/stephanenicolas)  
+* [HIDAKA Takahiro](https://github.com/takahr)  
 * [Joel Steres](https://github.com/jasco)  
 * [Michael Cramer](https://github.com/BigMichi1)  
 * [Andrew Clunis](https://github.com/orospakr)  
