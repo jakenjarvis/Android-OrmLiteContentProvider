@@ -420,6 +420,19 @@ If you perform the automatic generation of Contract Class, Additional compiler i
     [gradle-apt-plugin](https://github.com/Jimdo/gradle-apt-plugin)  
 
 
+## Gradle setup (using snapshots)
+
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+
+    dependencies {
+        compile "com.tojc.ormlite.android:ormlite-content-provider-library:${version}-SNAPSHOT"
+    }
+
+
 ## Manual setup
 If you’re using the Eclipse with the ADT plugin, you can include a library project and compiler project.  
 

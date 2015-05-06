@@ -31,6 +31,18 @@ before_install:
     # Required Android components. for log confirmation.
     - android list sdk --all --extended
 
+    # Install gradle 2.3
+    - wget https://services.gradle.org/distributions/gradle-2.3-all.zip > /dev/null
+    - echo A | unzip gradle-2.3-all.zip > /dev/null
+    - export GRADLE_HOME=`pwd`/gradle-2.3
+    - export PATH=${GRADLE_HOME}/bin/:${PATH}
+
+    # Install Maven 3.3.3
+    - wget http://ftp.kddilabs.jp/infosystems/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null
+    - tar xvf apache-maven-3.3.3-bin.tar.gz > /dev/null
+    - export M2_HOME=`pwd`/apache-maven-3.3.3
+    - export PATH=${M2_HOME}/bin/:${PATH}
+
     # Version check
     - gradle -v
     - mvn --version
@@ -38,10 +50,10 @@ before_install:
     # MAVEN_OPTS
     - export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
 
-    # Maven Test Build
+install:
+    # Maven Build
     - mvn clean install
 
-install:
     # Gradle build
     - gradle clean build
 
