@@ -12,8 +12,6 @@ git:
 
 # Turn off caching to avoid any caching problems
 cache: false
-# Use the Travis Container-Based Infrastructure
-sudo: false
 
 env:
   global:
@@ -21,7 +19,7 @@ env:
     - ADB_INSTALL_TIMEOUT=8 # minutes (2 minutes by default)
 
   matrix:
-    - ANDROID_SDK_TARGET=android-22 ANDROID_BUILD_TOOLS_VERSION=22.0.1 ANDROID_EMULATOR_TARGET=android-22 ANDROID_EMULATOR_ABI=armeabi-v7a
+    - ANDROID_SDK_TARGET=android-22 ANDROID_BUILD_TOOLS_VERSION=22.0.1 ANDROID_EMULATOR_TARGET=android-19 ANDROID_EMULATOR_ABI=armeabi-v7a
 
 android:
   components:
@@ -46,13 +44,13 @@ before_install:
     - export GRADLE_HOME=`pwd`/gradle-2.3
     - export PATH=${GRADLE_HOME}/bin/:${PATH}
 
-    # Install Maven 3.3.3
-    - wget http://ftp.kddilabs.jp/infosystems/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null
-    - tar xvf apache-maven-3.3.3-bin.tar.gz > /dev/null
-    - export M2_HOME=`pwd`/apache-maven-3.3.3
-    - export M2=${M2_HOME}/bin
-    - export PATH=${PATH}:${M2}
-    - export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
+    ## Install Maven 3.3.3
+    #- wget http://ftp.kddilabs.jp/infosystems/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null
+    #- tar xvf apache-maven-3.3.3-bin.tar.gz > /dev/null
+    #- export M2_HOME=`pwd`/apache-maven-3.3.3
+    #- export M2=${M2_HOME}/bin
+    #- export PATH=${PATH}:${M2}
+    #- export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
 
     # Version check
     - java -version
