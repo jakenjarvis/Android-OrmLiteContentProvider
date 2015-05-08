@@ -41,14 +41,14 @@ before_install:
     - wget http://ftp.kddilabs.jp/infosystems/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null
     - tar xvf apache-maven-3.3.3-bin.tar.gz > /dev/null
     - export M2_HOME=`pwd`/apache-maven-3.3.3
-    - export PATH=${M2_HOME}/bin/:${PATH}
+    - export M2=${M2_HOME}/bin
+    - export PATH=${PATH}:${M2}
+    - export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
 
     # Version check
+    - java -version
     - gradle -v
     - mvn --version
-
-    # MAVEN_OPTS
-    - export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
 
 install:
     # Maven Build
